@@ -19,9 +19,24 @@ public class Robot extends TimedRobot {
   private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
 
   @Override
+  public void robotInit(){
+
+  }
+
+  @Override
+  public void autonomousInit() {
+
+  }
+
+  @Override
   public void autonomousPeriodic() {
     driveWithJoystick(false);
     m_swerve.updateOdometry();
+  }
+
+  @Override
+  public void teleopInit() {
+
   }
 
   @Override
@@ -53,4 +68,34 @@ public class Robot extends TimedRobot {
 
     m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative, getPeriod());
   }
+
+   /** This function is called once when the robot is disabled. */
+   @Override
+   public void disabledInit() {
+   }
+ 
+   /** This function is called periodically when disabled. */
+   @Override
+   public void disabledPeriodic() {
+   }
+ 
+   /** This function is called once when test mode is enabled. */
+   @Override
+   public void testInit() {
+   }
+ 
+   /** This function is called periodically during test mode. */
+   @Override
+   public void testPeriodic() {
+   }
+ 
+   /** This function is called once when the robot is first started up. */
+   @Override
+   public void simulationInit() {
+   }
+ 
+   /** This function is called periodically whilst in simulation. */
+   @Override
+   public void simulationPeriodic() {
+   }
 }
