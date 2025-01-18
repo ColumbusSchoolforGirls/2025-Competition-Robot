@@ -16,6 +16,8 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 
+import frc.robot.Constants; 
+
 public class Robot extends TimedRobot {
   private final XboxController controller = new XboxController(0);
   private final Drivetrain swerve = new Drivetrain();
@@ -56,14 +58,14 @@ public class Robot extends TimedRobot {
     // negative values when we push forward.
     final double xSpeed =
         -xspeedLimiter.calculate(MathUtil.applyDeadband(controller.getLeftY(), 0.02))
-            * Drivetrain.kMaxSpeed;
+            * Constants.DriveConstants.MAX_SPEED;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
     final double ySpeed =
         -yspeedLimiter.calculate(MathUtil.applyDeadband(controller.getLeftX(), 0.02))
-            * Drivetrain.kMaxSpeed;
+            * Constants.DriveConstants.MAX_SPEED;
 
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left (remember, CCW is positive in
@@ -71,7 +73,7 @@ public class Robot extends TimedRobot {
     // the right by default.
     final double rot =
         -rotLimiter.calculate(MathUtil.applyDeadband(controller.getRightX(), 0.02))
-            * Drivetrain.kMaxAngularSpeed;
+            * Constants.DriveConstants.MAX_ANGULAR_SPEED;
 
     swerve.drive(xSpeed, ySpeed, rot, fieldRelative, getPeriod());
   }

@@ -21,13 +21,6 @@ import frc.robot.Constants;
 
 // TODO: make a reset button for the turnRelativeEncoder (based off the absEncoder) to account for drift mid-match
 public class SwerveModule {
-  private static final double kWheelRadius = Constants.WHEEL_RADIUS;
-  private static final int kEncoderResolution = Constants.ENCODER_RES;
-// TODO check 2 below
-  private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
-  private static final double kModuleMaxAngularAcceleration =
-      2 * Math.PI; // radians per second squared
-
   private final SparkMax driveMotor;
   private final SparkMax turnMotor;
 
@@ -102,8 +95,10 @@ public class SwerveModule {
     Rotation2d encoderRotation = new Rotation2d(turnRelativeEncoder.getPosition());
     desiredState.optimize(encoderRotation);
 
-    // Scale speed by cosine of angle error. This scales down movement perpendicular to the desired
-    // direction of travel that can occur when modules change directions. This results in smoother
+    // Scale speed by cosine of angle error. This scales down movement perpendicular
+    // to the desired
+    // direction of travel that can occur when modules change directions. This
+    // results in smoother
     // driving.
     desiredState.cosineScale(encoderRotation);
 

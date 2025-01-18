@@ -11,23 +11,25 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogGyro;
+import frc.robot.Constants;
 
 // TODO: when getting encoder posiition, do .getPosition() / Constants.GEAR_RATIO * Constants.WHEEL_CIRCUMFERENCE math
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain {
-  public static final double kMaxSpeed = 3.0; // 3 meters per second
-  public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
+  //public static final double kMaxSpeed = 3.0; // 3 meters per second
+  //public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
-  private final Translation2d frontLeftLocation = new Translation2d(0.381, 0.381);
-  private final Translation2d frontRightLocation = new Translation2d(0.381, -0.381);
-  private final Translation2d backLeftLocation = new Translation2d(-0.381, 0.381);
-  private final Translation2d backRightLocation = new Translation2d(-0.381, -0.381);
+  private final Translation2d frontLeftLocation = new Translation2d(Constants.DriveConstants.TRANSLATION_2D_OFFSET, Constants.DriveConstants.TRANSLATION_2D_OFFSET);
+  private final Translation2d frontRightLocation = new Translation2d(Constants.DriveConstants.TRANSLATION_2D_OFFSET, -Constants.DriveConstants.TRANSLATION_2D_OFFSET);
+  private final Translation2d backLeftLocation = new Translation2d(-Constants.DriveConstants.TRANSLATION_2D_OFFSET, Constants.DriveConstants.TRANSLATION_2D_OFFSET);
+  private final Translation2d backRightLocation = new Translation2d(-Constants.DriveConstants.TRANSLATION_2D_OFFSET, -Constants.DriveConstants.TRANSLATION_2D_OFFSET);
 
-  private final SwerveModule frontLeft = new SwerveModule(1, 2, 0, 1, 2, 3);
-  private final SwerveModule frontRight = new SwerveModule(3, 4, 4, 5, 6, 7);
-  private final SwerveModule backLeft = new SwerveModule(5, 6, 8, 9, 10, 11);
-  private final SwerveModule backRight = new SwerveModule(7, 8, 12, 13, 14, 15);
+  // TODO: change ids to constants
+  private final SwerveModule frontLeft = new SwerveModule(1, 2, 0, 1);
+  private final SwerveModule frontRight = new SwerveModule(3, 4, 4, 7);
+  private final SwerveModule backLeft = new SwerveModule(5, 6, 8, 11);
+  private final SwerveModule backRight = new SwerveModule(7, 8, 12, 15);
 
   private final AnalogGyro gyro = new AnalogGyro(0);
 
@@ -68,7 +70,7 @@ public class Drivetrain {
                         xSpeed, ySpeed, rot, gyro.getRotation2d())
                     : new ChassisSpeeds(xSpeed, ySpeed, rot),
                 periodSeconds));
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.DriveConstants.MAX_SPEED);
     frontLeft.setDesiredState(swerveModuleStates[0]);
     frontRight.setDesiredState(swerveModuleStates[1]);
     backLeft.setDesiredState(swerveModuleStates[2]);
