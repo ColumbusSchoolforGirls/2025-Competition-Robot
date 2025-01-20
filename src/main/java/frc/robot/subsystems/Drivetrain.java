@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -11,27 +12,29 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.SPI;
 import frc.robot.Constants;
+import frc.robot.Constants.DriveConstants;
+import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
+
 
 // TODO: when getting encoder posiition, do .getPosition() / Constants.GEAR_RATIO * Constants.WHEEL_CIRCUMFERENCE math
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain {
-  //public static final double kMaxSpeed = 3.0; // 3 meters per second
-  //public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
-
   private final Translation2d frontLeftLocation = new Translation2d(Constants.DriveConstants.TRANSLATION_2D_OFFSET, Constants.DriveConstants.TRANSLATION_2D_OFFSET);
   private final Translation2d frontRightLocation = new Translation2d(Constants.DriveConstants.TRANSLATION_2D_OFFSET, -Constants.DriveConstants.TRANSLATION_2D_OFFSET);
   private final Translation2d backLeftLocation = new Translation2d(-Constants.DriveConstants.TRANSLATION_2D_OFFSET, Constants.DriveConstants.TRANSLATION_2D_OFFSET);
   private final Translation2d backRightLocation = new Translation2d(-Constants.DriveConstants.TRANSLATION_2D_OFFSET, -Constants.DriveConstants.TRANSLATION_2D_OFFSET);
 
   // TODO: change ids to constants
-  private final SwerveModule frontLeft = new SwerveModule(1, 2, 0, 1);
-  private final SwerveModule frontRight = new SwerveModule(3, 4, 4, 7);
-  private final SwerveModule backLeft = new SwerveModule(5, 6, 8, 11);
-  private final SwerveModule backRight = new SwerveModule(7, 8, 12, 15);
+  private final SwerveModule frontLeft = new SwerveModule(DriveConstants.FL_DRIVE_ID, DriveConstants.FL_TURN_ID, DriveConstants.FL_DIO, DriveConstants.FL_CHASSIS_ANGULAR_OFFSET);
+  private final SwerveModule frontRight = new SwerveModule(DriveConstants.FR_DRIVE_ID, DriveConstants.FR_TURN_ID, DriveConstants.FR_DIO, DriveConstants.FR_CHASSIS_ANGULAR_OFFSET);
+  private final SwerveModule backLeft = new SwerveModule(DriveConstants.BL_DRIVE_ID, DriveConstants.BL_TURN_ID, DriveConstants.BL_DIO, DriveConstants.BL_CHASSIS_ANGULAR_OFFSET);
+  private final SwerveModule backRight = new SwerveModule(DriveConstants.BR_DRIVE_ID, DriveConstants.BR_TURN_ID, DriveConstants.BR_DIO, DriveConstants.BR_CHASSIS_ANGULAR_OFFSET);
 
-  private final AnalogGyro gyro = new AnalogGyro(0);
+  private final AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
 
   private final SwerveDriveKinematics kinematics =
       new SwerveDriveKinematics(
@@ -48,8 +51,8 @@ public class Drivetrain {
             backRight.getPosition()
           });
 
+  // TODO: add initializations here
   public Drivetrain() {
-    gyro.reset();
   }
 
   /**
@@ -77,6 +80,7 @@ public class Drivetrain {
     backRight.setDesiredState(swerveModuleStates[3]);
   }
 
+  // TODO: call in robot periodic
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
     odometry.update(
@@ -87,5 +91,16 @@ public class Drivetrain {
           backLeft.getPosition(),
           backRight.getPosition()
         });
+  }
+
+  public void resetEncoders() {
+    frontLeft.resetEncoder();
+    frontRight.resetEncoder();
+    backLeft.resetEncoder();
+    backRight.resetEncoder();
+  }
+
+  public void zeroHeading() {
+    gyro.reset();
   }
 }
