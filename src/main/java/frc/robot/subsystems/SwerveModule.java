@@ -58,6 +58,10 @@ public class SwerveModule {
     driveEncoder.setPosition(0);
   }
 
+  public void setRelativeTurnEncoder() {
+    turnRelativeEncoder.setPosition(turnAbsoluteEncoder.get() + chassisAngularOffset);
+  }
+
   /**
    * Returns the current state of the module.
    *

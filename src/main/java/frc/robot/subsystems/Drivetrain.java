@@ -55,11 +55,18 @@ public class Drivetrain {
           backRight.getPosition()
       });
 
-  public void getEncoders() {
+  public void getDriveEncoders() {
     frontLeft.getDrivePositionInches();
     frontRight.getDrivePositionInches();
     backLeft.getDrivePositionInches();
     backRight.getDrivePositionInches();
+  }
+
+  public void getTurnEncoders() {
+    frontLeft.setRelativeTurnEncoder();
+    frontRight.setRelativeTurnEncoder();
+    backLeft.setRelativeTurnEncoder();
+    backRight.setRelativeTurnEncoder();
   }
 
   // TODO: add initializations here
