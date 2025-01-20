@@ -17,6 +17,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 
 // TODO: when getting encoder posiition, do .getPosition() / Constants.GEAR_RATIO * Constants.WHEEL_CIRCUMFERENCE math
 
@@ -99,11 +101,23 @@ public class Drivetrain {
     backRight.setDesiredState(swerveModuleStates[3]);
   }
 
-  // TODO: call in robot periodic
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
     odometry.update(
         gyro.getRotation2d(),
+        new SwerveModulePosition[] {
+            frontLeft.getPosition(),
+            frontRight.getPosition(),
+            backLeft.getPosition(),
+            backRight.getPosition()
+        });
+  }
+  
+  // TODO: remove if this is only used in time based
+  public void periodic() {
+    // Update the odometry in the periodic block
+    odometry.update(
+        Rotation2d.fromDegrees(gyro.getAngle()),
         new SwerveModulePosition[] {
             frontLeft.getPosition(),
             frontRight.getPosition(),

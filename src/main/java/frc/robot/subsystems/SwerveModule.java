@@ -49,7 +49,6 @@ public class SwerveModule {
     turnRelativeEncoder = turnMotor.getEncoder();
     turnAbsoluteEncoder = new DutyCycleEncoder(turnDIOPin);
 
-    // TODO: check if these need gains since they're a pid system
     driveClosedLoopController = driveMotor.getClosedLoopController();
     turnClosedLoopController = turnMotor.getClosedLoopController();
 
