@@ -26,7 +26,7 @@ public class SwerveModule {
 
   private final RelativeEncoder driveEncoder;
   private final RelativeEncoder turnRelativeEncoder;
-  private final DutyCycleEncoder turnAbsoluteEncoder; // CTRE SRX Mag Encoder using pulses, used only at RobotInit
+  private final DutyCycleEncoder turnAbsoluteEncoder; // CTRE SRX Mag Encoder using pulses, used only at RobotInit to reset relative encoder
 
   private final SparkClosedLoopController driveClosedLoopController;
   private final SparkClosedLoopController turnClosedLoopController;
@@ -45,9 +45,9 @@ public class SwerveModule {
     driveMotor = new SparkMax(driveMotorID, MotorType.kBrushless);
     turnMotor = new SparkMax(turnMotorID, MotorType.kBrushless);
 
-    driveEncoder = driveMotor.getEncoder();
-    turnAbsoluteEncoder = new DutyCycleEncoder(turnDIOPin);
+    driveEncoder = driveMotor.getEncoder(); // Drive motor only has a relative encoder
     turnRelativeEncoder = turnMotor.getEncoder();
+    turnAbsoluteEncoder = new DutyCycleEncoder(turnDIOPin);
 
     // TODO: check if these need gains since they're a pid system
     driveClosedLoopController = driveMotor.getClosedLoopController();
@@ -96,10 +96,8 @@ public class SwerveModule {
     desiredState.optimize(encoderRotation);
 
     // Scale speed by cosine of angle error. This scales down movement perpendicular
-    // to the desired
-    // direction of travel that can occur when modules change directions. This
-    // results in smoother
-    // driving.
+    // to the desired direction of travel that can occur when modules change directions.
+    // This results in smoother driving.
     desiredState.cosineScale(encoderRotation);
 
     driveClosedLoopController.setReference(correctedDesiredState.speedMetersPerSecond, ControlType.kVelocity);
@@ -126,8 +124,8 @@ public class SwerveModule {
     this.desiredState = desiredState;
   }
 
-  /** Zeroes all the SwerveModule encoders. */
-  public void resetEncoders() {
+  /** Zeroes all the SwerveModule drive encoders. */
+  public void resetEncoder() {
     driveEncoder.setPosition(0);
   }
 }
