@@ -64,4 +64,10 @@ public class Constants {
         
     }   
 
+    public static final class CoralConstants {
+
+        public static final int INTAKE_LIMIT_SWITCH_CHANNEL = 1; //TODO: change value
+
+    }
+
 }
