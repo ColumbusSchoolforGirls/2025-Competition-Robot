@@ -7,8 +7,7 @@ import frc.robot.subsystems.Drivetrain;
 public class Constants {
 
     public static final class SwerveConstants {
-        public static final double WHEEL_RADIUS = 0.0508; //TODO: change value 
-        public static final int ENCODER_RES = 4096; //TODO: change value
+        public static final double WHEEL_RADIUS = 0.0508; //TODO: change value
         public static final double MODULE_MAX_ANGULAR_VELOCITY = DriveConstants.MAX_ANGULAR_SPEED;
         public static final double MODULE_MAX_ANGULAR_ACCELERATION = 2 * Math.PI; // radians per second squared
 
