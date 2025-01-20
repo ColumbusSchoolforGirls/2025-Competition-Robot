@@ -80,6 +80,10 @@ public class SwerveModule {
         driveEncoder.getPosition(), new Rotation2d(turnRelativeEncoder.getPosition()));
   }
 
+  public double getDrivePositionInches() {
+    return driveEncoder.getPosition() / Constants.DriveConstants.GEAR_RATIO * Constants.DriveConstants.WHEEL_CIRCUMFERENCE;
+  }
+
   /**
    * Sets the desired state for the module.
    *

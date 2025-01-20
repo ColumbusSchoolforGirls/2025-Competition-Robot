@@ -58,6 +58,11 @@ public class Constants {
         public static final int BR_TURN_ID = 2;
         public static final int BR_DIO = 1;
         public static final int BR_CHASSIS_ANGULAR_OFFSET = 2;
+
+        //Encoder calculations
+        public static final double GEAR_RATIO = 8.14;
+        public static final int WHEEL_CIRCUMFERENCE = 4;
+        
     }   
 
 }
