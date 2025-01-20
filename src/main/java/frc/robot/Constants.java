@@ -12,12 +12,7 @@ public class Constants {
         public static final double MODULE_MAX_ANGULAR_VELOCITY = DriveConstants.MAX_ANGULAR_SPEED;
         public static final double MODULE_MAX_ANGULAR_ACCELERATION = 2 * Math.PI; // radians per second squared
 
-        //PID Constants //TODO: change values
-        public static final int PROPORTIONAL_COEFFICIENT = 1;
-        public static final int INTEGRAL_COEFFICIENT = 0;
-        public static final int DERIVATIVE_COEFFICIENT = 0;
-
-        //feed forward constants //TODO: change values
+        //feed forward constants //TODO: change values if we use feedforward
         public static final int STATIC_GAIN_DRIVE = 1;
         public static final int VELOCITY_GAIN_DRIVE = 3;
         public static final int STATIC_GAIN_TURN = 1;
@@ -43,11 +38,11 @@ public class Constants {
             new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
             new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
-
+        // TODO: change ports when the electrical board is finalized
         public static final int FL_DRIVE_ID = 1;
         public static final int FL_TURN_ID = 2;
         public static final int FL_DIO = 1;
-        public static final int FL_CHASSIS_ANGULAR_OFFSET = 2;
+        public static final int FL_CHASSIS_ANGULAR_OFFSET = 2; // probably some pi value
 
         public static final int FR_DRIVE_ID = 1;
         public static final int FR_TURN_ID = 2;

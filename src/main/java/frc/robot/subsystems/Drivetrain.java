@@ -28,7 +28,6 @@ public class Drivetrain {
   private final Translation2d backLeftLocation = new Translation2d(-Constants.DriveConstants.TRANSLATION_2D_OFFSET, Constants.DriveConstants.TRANSLATION_2D_OFFSET);
   private final Translation2d backRightLocation = new Translation2d(-Constants.DriveConstants.TRANSLATION_2D_OFFSET, -Constants.DriveConstants.TRANSLATION_2D_OFFSET);
 
-  // TODO: change ids to constants
   private final SwerveModule frontLeft = new SwerveModule(DriveConstants.FL_DRIVE_ID, DriveConstants.FL_TURN_ID, DriveConstants.FL_DIO, DriveConstants.FL_CHASSIS_ANGULAR_OFFSET);
   private final SwerveModule frontRight = new SwerveModule(DriveConstants.FR_DRIVE_ID, DriveConstants.FR_TURN_ID, DriveConstants.FR_DIO, DriveConstants.FR_CHASSIS_ANGULAR_OFFSET);
   private final SwerveModule backLeft = new SwerveModule(DriveConstants.BL_DRIVE_ID, DriveConstants.BL_TURN_ID, DriveConstants.BL_DIO, DriveConstants.BL_CHASSIS_ANGULAR_OFFSET);
@@ -53,6 +52,7 @@ public class Drivetrain {
 
   // TODO: add initializations here
   public Drivetrain() {
+    
   }
 
   /**
