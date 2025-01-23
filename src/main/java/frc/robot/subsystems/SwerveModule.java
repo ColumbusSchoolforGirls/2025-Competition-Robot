@@ -16,10 +16,9 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
-import frc.robot.Constants;
+import frc.robot.Constants.SwerveConstants;
 
 
-// TODO: make a reset button for the turnRelativeEncoder (based off the absEncoder) to account for drift mid-match
 public class SwerveModule {
   private final SparkMax driveMotor;
   private final SparkMax turnMotor;
@@ -84,7 +83,7 @@ public class SwerveModule {
   }
 
   public double getDrivePositionInches() {
-    return driveEncoder.getPosition() / Constants.DriveConstants.GEAR_RATIO * Constants.DriveConstants.WHEEL_CIRCUMFERENCE;
+    return driveEncoder.getPosition() / SwerveConstants.GEAR_RATIO * SwerveConstants.WHEEL_CIRCUMFERENCE;
   }
 
   /**

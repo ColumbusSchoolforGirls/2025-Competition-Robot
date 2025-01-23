@@ -2,21 +2,19 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import frc.robot.subsystems.Drivetrain;
 
 public class Constants {
 
     public static final class SwerveConstants {
-        public static final double WHEEL_RADIUS = 0.0508; //TODO: change value
-        public static final double MODULE_MAX_ANGULAR_VELOCITY = DriveConstants.MAX_ANGULAR_SPEED;
-        public static final double MODULE_MAX_ANGULAR_ACCELERATION = 2 * Math.PI; // radians per second squared
-
         //feed forward constants //TODO: change values if we use feedforward
         public static final int STATIC_GAIN_DRIVE = 1;
         public static final int VELOCITY_GAIN_DRIVE = 3;
         public static final int STATIC_GAIN_TURN = 1;
         public static final double VELOCITY_GAIN_TURN = 0.5;
 
+        //Encoder calculations
+        public static final double GEAR_RATIO = 8.14;
+        public static final int WHEEL_CIRCUMFERENCE = 4;
     }
 
     public static final class DriveConstants {  
@@ -58,9 +56,8 @@ public class Constants {
         public static final int BR_DIO = 1;
         public static final int BR_CHASSIS_ANGULAR_OFFSET = 2;
 
-        //Encoder calculations
-        public static final double GEAR_RATIO = 8.14;
-        public static final int WHEEL_CIRCUMFERENCE = 4;
+        //Gyro Reversed
+        public static final boolean kGyroReversed = false; //TODO: is this always false?????
         
     }   
 
