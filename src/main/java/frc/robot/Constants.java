@@ -64,9 +64,17 @@ public class Constants {
         
     }   
 
-    public static final class CoralConstants {
+    public static final class CoralConstants { //TODO: need to change all of the values!
 
-        public static final int INTAKE_LIMIT_SWITCH_CHANNEL = 1; //TODO: change value
+        public static final int ELEVATOR_TOLERANCE = 1; //TODO: Need to change when testing elevator
+        
+        public static final double L2_HEIGHT = 24.5;
+        public static final double L3_HEIGHT = 34.5;
+        public static final double L4_HEIGHT = 44.5;
+
+        public static final int SHOOT_ID = 10; 
+
+        public static final double SHOOT_MOTOR_SPEED = 0.5;
 
     }
 
