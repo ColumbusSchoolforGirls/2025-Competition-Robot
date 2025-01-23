@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -11,16 +12,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.AnalogGyro;
-import edu.wpi.first.wpilibj.SPI;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-
-// TODO: when getting encoder posiition, do .getPosition() / Constants.GEAR_RATIO * Constants.WHEEL_CIRCUMFERENCE math
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain {
@@ -64,16 +60,11 @@ public class Drivetrain {
     backRight.getDrivePositionInches();
   }
 
-  public void getTurnEncoders() {
+  public void setTurnEncoders() {
     frontLeft.setRelativeTurnEncoder();
     frontRight.setRelativeTurnEncoder();
     backLeft.setRelativeTurnEncoder();
     backRight.setRelativeTurnEncoder();
-  }
-
-  // TODO: add initializations here
-  public Drivetrain() {
-
   }
 
   /**
@@ -101,6 +92,16 @@ public class Drivetrain {
     backRight.setDesiredState(swerveModuleStates[3]);
   }
 
+   /**
+   * Sets the wheels into an X formation to prevent movement.
+   */
+  public void setX() {
+    frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+    frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+    backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+    backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+  }
+
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
     odometry.update(
@@ -113,9 +114,34 @@ public class Drivetrain {
         });
   }
   
-  // TODO: remove if this is only used in time based
+  /**
+   * Returns the currently-estimated pose of the robot.
+   *
+   * @return The pose.
+   */
+  public Pose2d getPose() {
+    return odometry.getPoseMeters();
+  }
+
+  /**
+   * Resets the odometry to the specified pose.
+   *
+   * @param pose The pose to which to set the odometry.
+   */
+  public void resetOdometry(Pose2d pose) {
+    odometry.resetPosition(
+        Rotation2d.fromDegrees(gyro.getAngle()),
+        new SwerveModulePosition[] {
+            frontLeft.getPosition(),
+            frontRight.getPosition(),
+            backLeft.getPosition(),
+            backRight.getPosition()
+        },
+        pose);
+  }
+
+  /**Update the odometry in the periodic block */
   public void periodic() {
-    // Update the odometry in the periodic block
     odometry.update(
         Rotation2d.fromDegrees(gyro.getAngle()),
         new SwerveModulePosition[] {
@@ -135,5 +161,23 @@ public class Drivetrain {
 
   public void zeroHeading() {
     gyro.reset();
+  }
+
+    /**
+   * Returns the heading of the robot.
+   *
+   * @return the robot's heading in degrees, from -180 to 180
+   */
+  public double getHeading() {
+    return Rotation2d.fromDegrees(gyro.getAngle()).getDegrees();
+  }
+
+  /**
+   * Returns the turn rate of the robot.
+   *
+   * @return The turn rate of the robot, in degrees per second
+   */
+  public double getTurnRate() {
+    return gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 }
