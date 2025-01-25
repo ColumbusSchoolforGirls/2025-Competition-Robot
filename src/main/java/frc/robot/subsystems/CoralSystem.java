@@ -25,6 +25,8 @@ public class CoralSystem {
         return 0; //encoder things for height value //return height
     }
 
+    public static XboxController aux = new XboxController(1); // 1 is the aux controller
+
     public void updateTargetHeight() {
 
         if (aux.getAButtonPressed()) {
@@ -67,8 +69,6 @@ public class CoralSystem {
     }
 
     // TODO: add coral motor and elevator motors
-
-    public static XboxController aux = new XboxController(1); // 1 is the aux controller
 
     // TODO: add coral system encoders?
 
