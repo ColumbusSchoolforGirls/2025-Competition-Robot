@@ -79,5 +79,21 @@ public class Constants {
 
     }
 
-   
+    public static final class ClimbConstants {
+
+        public static final int CLIMBER_ID = 1; //TODO: change id
+
+        public static final double CLIMB_SPEED = 0.5;
+
+    }
+
+    public static final class ControllerConstants {
+
+        public static final int DRIVING_ID = 0;
+        public static final int AUX_ID = 1;
+        public static final int RESET_CLIMBER_ID = 2;
+
+        public static final double TRIGGER_DEADZONE = 0.1;
+
+    }
 }
