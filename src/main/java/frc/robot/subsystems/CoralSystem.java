@@ -6,6 +6,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 public class CoralSystem {
@@ -18,11 +21,14 @@ public class CoralSystem {
     private double difference;
 
     public WPI_TalonSRX shootMotor = new WPI_TalonSRX(Constants.CoralConstants.SHOOT_ID);
+    public SparkMax elevatorMotor = new SparkMax(Constants.CoralConstants.ELEVATOR_ID, MotorType.kBrushless);
+
+    private final RelativeEncoder elevatorEncoder = elevatorMotor.getEncoder();
 
     private double targetHeight;
 
     public double getHeight() {
-        return 0; //encoder things for height value //return height
+        return elevatorEncoder.getPosition() * Constants.CoralConstants.TICKS_TO_INCHES; //returns height in inches
     }
 
     public void updateTargetHeight() {
@@ -50,11 +56,11 @@ public class CoralSystem {
         difference = (targetHeight - getHeight());
 
         if (difference < Constants.CoralConstants.ELEVATOR_TOLERANCE) {
-            // elevatorSpeed = 0;
+            elevatorMotor.set(0);
         } else if (difference > 0) {
-            // elevatorSpeed = 0-1
+            elevatorMotor.set(Constants.CoralConstants.ELEVATOR_SPEED);
         } else if (difference < 0) {
-            // elevatorSpeed = some -1-0
+            elevatorMotor.set(-Constants.CoralConstants.ELEVATOR_SPEED);
         }
 
     }
@@ -65,6 +71,8 @@ public class CoralSystem {
         }
 
     }
+
+    //TODO: implement into auto
 
     // TODO: add coral motor and elevator motors
 
