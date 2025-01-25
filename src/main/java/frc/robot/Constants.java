@@ -70,8 +70,12 @@ public class Constants {
         public static final double L4_HEIGHT = 44.5;
 
         public static final int SHOOT_ID = 10; 
+        public static final int ELEVATOR_ID = 9;
 
         public static final double SHOOT_MOTOR_SPEED = 0.5;
+        public static final double ELEVATOR_SPEED = 0.5;
+
+        public static final double TICKS_TO_INCHES = 0.02;
 
     }
 
