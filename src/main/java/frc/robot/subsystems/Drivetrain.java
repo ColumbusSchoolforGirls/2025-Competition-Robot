@@ -12,22 +12,22 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.robot.Constants;
-import frc.robot.Constants.DriveConstants;
+
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
+import frc.robot.Constants.DriveConstants;
 
-/** Represents a swerve drive style drivetrain. */
+
 public class Drivetrain {
-  private final Translation2d frontLeftLocation = new Translation2d(Constants.DriveConstants.TRANSLATION_2D_OFFSET,
-      Constants.DriveConstants.TRANSLATION_2D_OFFSET);
-  private final Translation2d frontRightLocation = new Translation2d(Constants.DriveConstants.TRANSLATION_2D_OFFSET,
-      -Constants.DriveConstants.TRANSLATION_2D_OFFSET);
-  private final Translation2d backLeftLocation = new Translation2d(-Constants.DriveConstants.TRANSLATION_2D_OFFSET,
-      Constants.DriveConstants.TRANSLATION_2D_OFFSET);
-  private final Translation2d backRightLocation = new Translation2d(-Constants.DriveConstants.TRANSLATION_2D_OFFSET,
-      -Constants.DriveConstants.TRANSLATION_2D_OFFSET);
+  private final Translation2d frontLeftLocation = new Translation2d(DriveConstants.TRANSLATION_2D_OFFSET,
+      DriveConstants.TRANSLATION_2D_OFFSET);
+  private final Translation2d frontRightLocation = new Translation2d(DriveConstants.TRANSLATION_2D_OFFSET,
+      -DriveConstants.TRANSLATION_2D_OFFSET);
+  private final Translation2d backLeftLocation = new Translation2d(-DriveConstants.TRANSLATION_2D_OFFSET,
+      DriveConstants.TRANSLATION_2D_OFFSET);
+  private final Translation2d backRightLocation = new Translation2d(-DriveConstants.TRANSLATION_2D_OFFSET,
+      -DriveConstants.TRANSLATION_2D_OFFSET);
 
   private final SwerveModule frontLeft = new SwerveModule(DriveConstants.FL_DRIVE_ID, DriveConstants.FL_TURN_ID,
       DriveConstants.FL_DIO, DriveConstants.FL_CHASSIS_ANGULAR_OFFSET);
@@ -85,16 +85,14 @@ public class Drivetrain {
                     xSpeed, ySpeed, rot, gyro.getRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot),
             periodSeconds));
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.DriveConstants.MAX_SPEED);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.MAX_SPEED);
     frontLeft.setDesiredState(swerveModuleStates[0]);
     frontRight.setDesiredState(swerveModuleStates[1]);
     backLeft.setDesiredState(swerveModuleStates[2]);
     backRight.setDesiredState(swerveModuleStates[3]);
   }
 
-   /**
-   * Sets the wheels into an X formation to prevent movement.
-   */
+   /** Sets the wheels into an X formation to prevent movement. */
   public void setX() {
     frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
     frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
@@ -114,11 +112,7 @@ public class Drivetrain {
         });
   }
   
-  /**
-   * Returns the currently-estimated pose of the robot.
-   *
-   * @return The pose.
-   */
+  /** Returns the currently-estimated pose of the robot. */
   public Pose2d getPose() {
     return odometry.getPoseMeters();
   }
@@ -140,7 +134,7 @@ public class Drivetrain {
         pose);
   }
 
-  /**Update the odometry in the periodic block */
+  /** Update the odometry in the periodic block. */
   public void periodic() {
     odometry.update(
         Rotation2d.fromDegrees(gyro.getAngle()),
@@ -163,20 +157,12 @@ public class Drivetrain {
     gyro.reset();
   }
 
-    /**
-   * Returns the heading of the robot.
-   *
-   * @return the robot's heading in degrees, from -180 to 180
-   */
+  /** Returns the heading of the robot in degrees from -180 to 180. */
   public double getHeading() {
     return Rotation2d.fromDegrees(gyro.getAngle()).getDegrees();
   }
 
-  /**
-   * Returns the turn rate of the robot.
-   *
-   * @return The turn rate of the robot, in degrees per second
-   */
+  /** Returns the turn rate of the robot in degrees per second. */
   public double getTurnRate() {
     return gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }

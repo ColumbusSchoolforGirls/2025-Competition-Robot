@@ -8,13 +8,14 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+
 import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 import frc.robot.Constants.SwerveConstants;
 
@@ -37,9 +38,7 @@ public class SwerveModule {
   // private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(1, 3);
   // private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
 
-  /**
-   * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
-   */
+  /** Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder. */
   public SwerveModule(int driveMotorID, int turnMotorID, int turnDIOPin, double chassisAngularOffset) {
     driveMotor = new SparkMax(driveMotorID, MotorType.kBrushless);
     turnMotor = new SparkMax(turnMotorID, MotorType.kBrushless);
@@ -60,11 +59,7 @@ public class SwerveModule {
     turnRelativeEncoder.setPosition(turnAbsoluteEncoder.get() + chassisAngularOffset);
   }
 
-  /**
-   * Returns the current state of the module.
-   *
-   * @return The current state of the module.
-   */
+  /** Returns the current state of the module. */
   public SwerveModuleState getState() {
     // Apply chassis angular offset to the encoder position to get the position
     // relative to the chassis.
@@ -72,11 +67,7 @@ public class SwerveModule {
         driveEncoder.getVelocity(), new Rotation2d(turnRelativeEncoder.getPosition()));
   }
 
-  /**
-   * Returns the current position of the module.
-   *
-   * @return The current position of the module.
-   */
+  /** Returns the current position of the module. */
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
         driveEncoder.getPosition(), new Rotation2d(turnRelativeEncoder.getPosition()));

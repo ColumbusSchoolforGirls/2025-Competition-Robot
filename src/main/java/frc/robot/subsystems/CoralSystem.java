@@ -1,38 +1,37 @@
 package frc.robot.subsystems;
 
-import java.util.IllegalFormatPrecisionException;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants;
+
 import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.ControllerConstants;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 
 public class CoralSystem {
 
     // public SparkPIDController coralPidController;
     //https://docs.wpilib.org/en/2020/docs/software/wpilib-overview/3rd-party-libraries.html
 
-    double startTime;
+    public final WPI_TalonSRX shootMotor = new WPI_TalonSRX(CoralConstants.SHOOT_ID);
+    public final SparkMax elevatorMotor = new SparkMax(CoralConstants.ELEVATOR_ID, MotorType.kBrushless);
 
-    private double difference;
-
-    public WPI_TalonSRX shootMotor = new WPI_TalonSRX(CoralConstants.SHOOT_ID);
-    public SparkMax elevatorMotor = new SparkMax(CoralConstants.ELEVATOR_ID, MotorType.kBrushless);
-
-    public static final XboxController aux = new XboxController(ControllerConstants.AUX_ID); // 1 is the aux controller
+    public static final XboxController aux = new XboxController(ControllerConstants.AUX_ID);
 
     private final RelativeEncoder elevatorEncoder = elevatorMotor.getEncoder();
 
     private double targetHeight;
+    private double difference;
+    double startTime; //TODO: why is startTime not private?
 
+    /** Returns the current height of elevator in inches.*/
     public double getHeight() {
-        return elevatorEncoder.getPosition() * CoralConstants.TICKS_TO_INCHES; //returns height in inches
+        return elevatorEncoder.getPosition() * CoralConstants.TICKS_TO_INCHES;
     }
 
     public void setShootMotorCoast() {
@@ -43,15 +42,11 @@ public class CoralSystem {
 
         if (aux.getAButtonPressed()) {
             targetHeight = CoralConstants.L2_HEIGHT;
-
         } else if (aux.getBButtonPressed()) {
             targetHeight = CoralConstants.L3_HEIGHT;
-
         } else if (aux.getYButtonPressed()) {
             targetHeight = CoralConstants.L4_HEIGHT;
-
         }
-
     }
 
     public boolean elevatorComplete() {
@@ -70,21 +65,15 @@ public class CoralSystem {
         } else if (difference < 0) {
             elevatorMotor.set(-CoralConstants.ELEVATOR_SPEED);
         }
-
     }
 
     public void shoot() {
         if (aux.getXButtonPressed()) {
             shootMotor.set(CoralConstants.SHOOT_MOTOR_SPEED);
         }
-
     }
 
     //TODO: implement into auto
-
-    // TODO: add coral motor and elevator motors
-
-    // TODO: add coral system encoders?
 
     // TODO: add limelight stuff
 

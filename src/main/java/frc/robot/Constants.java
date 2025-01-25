@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
+
 public class Constants {
 
     public static final class SwerveConstants {
@@ -58,7 +59,6 @@ public class Constants {
 
         //Gyro Reversed
         public static final boolean kGyroReversed = false; //TODO: is this always false?????
-        
     }   
 
     public static final class CoralConstants { //TODO: need to change all of the values!
@@ -76,7 +76,6 @@ public class Constants {
         public static final double ELEVATOR_SPEED = 0.5;
 
         public static final double TICKS_TO_INCHES = 0.02;
-
     }
 
     public static final class ClimbConstants {
@@ -84,7 +83,6 @@ public class Constants {
         public static final int CLIMBER_ID = 1; //TODO: change id
 
         public static final double CLIMB_SPEED = 0.5;
-
     }
 
     public static final class ControllerConstants {
@@ -94,6 +92,5 @@ public class Constants {
         public static final int RESET_CLIMBER_ID = 2;
 
         public static final double TRIGGER_DEADZONE = 0.1;
-
     }
 }

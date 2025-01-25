@@ -28,13 +28,11 @@ public class Robot extends TimedRobot {
   private final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
 
   @Override
-  public void robotInit(){
-
+  public void robotInit() {
   }
 
   @Override
   public void autonomousInit() {
-
   }
 
   @Override
@@ -45,7 +43,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-
   }
 
   @Override

@@ -23,16 +23,15 @@ public class Limelight {
 
     public Limelight(Drivetrain drive) {
         this.driveTrain = drive;
-
     }
 
     public void updateLimelight() {
 
     }
 
+    /** Get rotation z value from botpose array. */
     public double getRotation() {
-        return pos.getDoubleArray(new double[6])[5]; // get rotation z value from botpose array
-
+        return pos.getDoubleArray(new double[6])[5];
     }
 
     public double getX() {
@@ -41,14 +40,9 @@ public class Limelight {
 
     public double getY() {
         return ty.getDouble(0);
-
     }
 
     public double getA() {
         return ta.getDouble(0);
-
     }
-
 }
-
-
