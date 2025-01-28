@@ -16,13 +16,12 @@ public class Limelight {
     NetworkTableEntry pos1 = table.getEntry("target-pose_cameraspace");
     NetworkTableEntry pos2 = table.getEntry("target-pose_robotspace");
 
-    Drivetrain driveTrain;
     double ySpeed = 0;
     double rotationSpeed = 0;
     long lastTargetTime = 0;
 
-    public Limelight(Drivetrain drive) {
-        this.driveTrain = drive;
+    public Limelight() {
+     
     }
 
     public void updateLimelight() {
@@ -34,15 +33,15 @@ public class Limelight {
         return pos.getDoubleArray(new double[6])[5];
     }
 
-    public double getX() {
+    public double getTX() {
         return tx.getDouble(0);
     }
 
-    public double getY() {
+    public double getTY() {
         return ty.getDouble(0);
     }
 
-    public double getA() {
+    public double getTA() {
         return ta.getDouble(0);
     }
 }
