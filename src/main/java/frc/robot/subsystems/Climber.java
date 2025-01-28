@@ -7,14 +7,14 @@ import edu.wpi.first.wpilibj.XboxController;
 
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.ControllerConstants;
+import static frc.robot.Constants.ControllerConstants.AUX;
 
 
 public class Climber {
 
     private final WPI_TalonSRX climbMotor = new WPI_TalonSRX(ClimbConstants.CLIMBER_ID);
 
-    public static final XboxController aux  = new XboxController(ControllerConstants.AUX_ID);
-    public static final XboxController reverseClimbController = new XboxController(ControllerConstants.DRIVING_ID);
+    public static final XboxController reverseClimbController = new XboxController(ControllerConstants.REVERSE_CLIMBER_ID);
 
     public void setClimb() {
         climbMotor.set(0);
@@ -25,7 +25,7 @@ public class Climber {
     }
 
     public void climb() {
-        if (aux.getLeftTriggerAxis() > ControllerConstants.TRIGGER_DEADZONE) {
+        if (AUX.getLeftTriggerAxis() > ControllerConstants.TRIGGER_DEADZONE) {
             climbMotor.set(ClimbConstants.CLIMB_SPEED);
         } else if (reverseClimbController.getRightTriggerAxis() > ControllerConstants.TRIGGER_DEADZONE) {
             climbMotor.set(-ClimbConstants.CLIMB_SPEED);

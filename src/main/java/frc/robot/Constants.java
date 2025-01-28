@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj.XboxController;
 
 
 public class Constants {
@@ -87,10 +88,22 @@ public class Constants {
 
     public static final class ControllerConstants {
 
-        public static final int DRIVING_ID = 0;
-        public static final int AUX_ID = 1;
-        public static final int RESET_CLIMBER_ID = 2;
+        public static final XboxController DRIVE_CONTROLLER = new XboxController(0);
+        public static final XboxController AUX = new XboxController(1);
+
+        public static final int REVERSE_CLIMBER_ID = 2;
 
         public static final double TRIGGER_DEADZONE = 0.1;
+    }
+
+    public static final class AlgaeConstants {
+
+        public static final int ALGAE_UPPER_ID = 3;
+        public static final int ALGAE_LOWER_ID = 4;
+
+        public static final double ALGAE_SPEED = 0.5;
+
+        public static final double ALGAE_TIME = 2; //TODO: change time
+
     }
 }

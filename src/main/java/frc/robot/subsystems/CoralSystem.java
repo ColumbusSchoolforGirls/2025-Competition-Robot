@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.XboxController;
 
 import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.ControllerConstants;
+import static frc.robot.Constants.ControllerConstants.AUX;
 
 
 public class CoralSystem {
@@ -20,8 +21,6 @@ public class CoralSystem {
 
     public final WPI_TalonSRX shootMotor = new WPI_TalonSRX(CoralConstants.SHOOT_ID);
     public final SparkMax elevatorMotor = new SparkMax(CoralConstants.ELEVATOR_ID, MotorType.kBrushless);
-
-    public static final XboxController aux = new XboxController(ControllerConstants.AUX_ID);
 
     private final RelativeEncoder elevatorEncoder = elevatorMotor.getEncoder();
 
@@ -40,11 +39,11 @@ public class CoralSystem {
 
     public void updateTargetHeight() {
 
-        if (aux.getAButtonPressed()) {
+        if (AUX.getAButtonPressed()) {
             targetHeight = CoralConstants.L2_HEIGHT;
-        } else if (aux.getBButtonPressed()) {
+        } else if (AUX.getBButtonPressed()) {
             targetHeight = CoralConstants.L3_HEIGHT;
-        } else if (aux.getYButtonPressed()) {
+        } else if (AUX.getYButtonPressed()) {
             targetHeight = CoralConstants.L4_HEIGHT;
         }
     }
@@ -68,7 +67,7 @@ public class CoralSystem {
     }
 
     public void shoot() {
-        if (aux.getXButtonPressed()) {
+        if (AUX.getXButtonPressed()) {
             shootMotor.set(CoralConstants.SHOOT_MOTOR_SPEED);
         }
     }
