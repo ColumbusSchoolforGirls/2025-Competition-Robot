@@ -4,20 +4,18 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.ControllerConstants.DRIVE_CONTROLLER; // Noah HATES this, but says it's not a bad use . . .
+
 import java.util.HashMap;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Limelight;
-import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DriverStation;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Limelight;
 
-import static frc.robot.Constants.ControllerConstants.DRIVE_CONTROLLER;
 
 public class Robot extends TimedRobot {
   private final Drivetrain swerve = new Drivetrain();
@@ -89,14 +87,14 @@ public class Robot extends TimedRobot {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
     var xSpeed =
-        -xspeedLimiter.calculate(MathUtil.applyDeadband(controller.getLeftY(), 0.02))
+        -xspeedLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getLeftY(), 0.02))
             * Constants.DriveConstants.MAX_SPEED;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
     var ySpeed =
-        -yspeedLimiter.calculate(MathUtil.applyDeadband(controller.getLeftX(), 0.02))
+        -yspeedLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getLeftX(), 0.02))
             * Constants.DriveConstants.MAX_SPEED;
 
     // Get the rate of angular rotation. We are inverting this because we want a
@@ -104,11 +102,11 @@ public class Robot extends TimedRobot {
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default.
     var rot =
-        -rotLimiter.calculate(MathUtil.applyDeadband(controller.getRightX(), 0.02))
+        -rotLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getRightX(), 0.02))
             * Constants.DriveConstants.MAX_ANGULAR_SPEED;
 
     // while the A-button is pressed, overwrite some of the driving values with the output of our limelight methods
-    if(controller.getAButton())
+    if(DRIVE_CONTROLLER.getAButton())
     {
         final var rot_limelight = limelight_aim_proportional();
         rot = rot_limelight;

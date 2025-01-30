@@ -7,10 +7,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.wpilibj.XboxController;
-
 import frc.robot.Constants.CoralConstants;
-import frc.robot.Constants.ControllerConstants;
 import static frc.robot.Constants.ControllerConstants.AUX;
 
 
@@ -26,10 +23,9 @@ public class CoralSystem {
 
     private double targetHeight;
     private double difference;
-    double startTime; //TODO: why is startTime not private?
 
     /** Returns the current height of elevator in inches.*/
-    public double getHeight() {
+    private double getHeight() {
         return elevatorEncoder.getPosition() * CoralConstants.TICKS_TO_INCHES;
     }
 
@@ -66,8 +62,9 @@ public class CoralSystem {
         }
     }
 
+    // TODO: Change this to time-based if needed (driver visibility)
     public void shoot() {
-        if (AUX.getXButtonPressed()) {
+        if (AUX.getXButton()) {
             shootMotor.set(CoralConstants.SHOOT_MOTOR_SPEED);
         }
     }
@@ -75,7 +72,4 @@ public class CoralSystem {
     //TODO: implement into auto
 
     // TODO: add limelight stuff
-
-    // set states
-
 }

@@ -85,11 +85,7 @@ public class Drivetrain {
                     xSpeed, ySpeed, rot, gyro.getRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot),
             periodSeconds));
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.MAX_SPEED);
-    frontLeft.setDesiredState(swerveModuleStates[0]);
-    frontRight.setDesiredState(swerveModuleStates[1]);
-    backLeft.setDesiredState(swerveModuleStates[2]);
-    backRight.setDesiredState(swerveModuleStates[3]);
+    setModuleStates(swerveModuleStates);
   }
 
    /** Sets the wheels into an X formation to prevent movement. */
@@ -98,6 +94,20 @@ public class Drivetrain {
     frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
     backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
     backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+  }
+
+  /**
+   * Sets the swerve ModuleStates.
+   *
+   * @param desiredStates The desired SwerveModule states.
+   */
+  public void setModuleStates(SwerveModuleState[] desiredStates) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+      desiredStates, DriveConstants.MAX_SPEED);
+      frontLeft.setDesiredState(desiredStates[0]);
+      frontRight.setDesiredState(desiredStates[1]);
+      backLeft.setDesiredState(desiredStates[2]);
+      backRight.setDesiredState(desiredStates[3]);
   }
 
   /** Updates the field relative position of the robot. */

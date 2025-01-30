@@ -14,9 +14,9 @@ public class AlgaeSystem {
     private final WPI_TalonSRX upperMotor = new WPI_TalonSRX(AlgaeConstants.ALGAE_UPPER_ID);
     private final WPI_TalonSRX lowerMotor = new WPI_TalonSRX(AlgaeConstants.ALGAE_LOWER_ID);
 
-    double startTime;
-    boolean algaeLowerArmUp = true;
-    boolean algaeUpperArmUp = true;
+    private double startTime;
+    private boolean algaeLowerArmUp = true;
+    private boolean algaeUpperArmUp = true;
 
     public void stopAlgaeArms() { // TODO: probably unneeded
         upperMotor.set(0);
