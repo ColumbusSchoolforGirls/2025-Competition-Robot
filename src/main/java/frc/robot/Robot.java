@@ -6,20 +6,25 @@ package frc.robot;
 
 import static frc.robot.Constants.ControllerConstants.DRIVE_CONTROLLER; // Noah HATES this, but says it's not a bad use . . .
 
-import java.util.HashMap;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.CoralSystem;
+import frc.robot.subsystems.Climber;
 
 
 public class Robot extends TimedRobot {
   private final Drivetrain swerve = new Drivetrain();
   private final Limelight limelight = new Limelight();
+  private final CoralSystem coralSystem = new CoralSystem();
+  private final Climber climber = new Climber();
+
+  private final AutoPaths autoPaths = new AutoPaths();
+
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
@@ -27,6 +32,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    autoPaths.setAutoPaths();
+  }
+
+  @Override
+  public void robotPeriodic() {
+    coralSystem.elevator();
+    climber.climb();
   }
 
   @Override
