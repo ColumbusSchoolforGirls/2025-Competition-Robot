@@ -49,6 +49,7 @@ public class Robot extends TimedRobot {
     coralSystem.elevator();
     climber.climb();
     limelight.updateLimelight();
+    swerve.updateOdometry();
   }
 
   @Override
@@ -59,7 +60,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     driveWithJoystick(false);
-    swerve.updateOdometry();
+
   }
 
   @Override
@@ -70,6 +71,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     driveWithJoystick(true);
+    
   }
   
   private void driveWithJoystick(boolean fieldRelative) {

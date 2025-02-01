@@ -145,7 +145,7 @@ public class Drivetrain {
   }
 
   /** Update the odometry in the periodic block. */
-  public void periodic() {
+  public void periodic() { //TODO: use
     odometry.update(
         Rotation2d.fromDegrees(gyro.getAngle()),
         new SwerveModulePosition[] {
@@ -197,6 +197,7 @@ public class Drivetrain {
     zeroHeading();
     resetEncoders();
     resetTurnEncoders();
+    resetOdometry(getPose());
     // TODO: MAYBE add setBrakeMode() here
   }
 }
