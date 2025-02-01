@@ -47,8 +47,8 @@ public class Constants {
         public static final int FR_DIO = 3;
         public static final int FR_CHASSIS_ANGULAR_OFFSET = 0;
 
-        public static final int BL_DRIVE_ID = 6;
-        public static final int BL_TURN_ID = 7;
+        public static final int BL_DRIVE_ID = 1;
+        public static final int BL_TURN_ID = 2;
         public static final int BL_DIO = 1;
         public static final int BL_CHASSIS_ANGULAR_OFFSET = 0;
 
