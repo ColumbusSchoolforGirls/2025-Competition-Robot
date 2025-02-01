@@ -40,7 +40,6 @@ public class Robot extends TimedRobot {
     // Record both DS control and joystick data
     DriverStation.startDataLog(DataLogManager.getLog());
 
-    autoPaths.setAutoPaths();
     swerve.driveInit();
   }
 
@@ -59,8 +58,26 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    driveWithJoystick(false);
-
+    if (autoPaths.currentAutoAction == AutoAction.TURN_TOWARD_REEF) {
+      float initialTurnAngle = autoPaths.getInitialTurnAngle();
+      // do the turn
+      // if the turn is complete, transition to the next state
+    } else if (autoPaths.currentAutoAction == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
+      // raise the coral to the desired height
+      // run AprilTag auto alignment
+      // check elevator and drivetrain, and transition to the next state
+    } else if (autoPaths.currentAutoAction == AutoAction.SHOOT_CORAL) {
+       // shoot the coral
+       // give a delay
+       // go to the next state
+    } else if (autoPaths.currentAutoAction == AutoAction.ADDITIONAL_DRIVE_ACTIONS) {
+      // bring the elevator back down
+      // get turn angle to where you want to go next
+      // get distance to travel
+      // execute drive
+      // go to next state
+    }
+    
   }
 
   @Override
@@ -71,20 +88,21 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     driveWithJoystick(true);
-    
   }
-  
+
+  private void goToNextState()
+
   private void driveWithJoystick(boolean fieldRelative) {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
-    double xSpeed =
+    final double xSpeed =
         -xspeedLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getLeftY(), 0.02))
             * Constants.DriveConstants.MAX_SPEED;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
-    double ySpeed =
+    final double ySpeed =
         -yspeedLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getLeftX(), 0.02))
             * Constants.DriveConstants.MAX_SPEED;
 
@@ -92,21 +110,9 @@ public class Robot extends TimedRobot {
     // positive value when we pull to the left (remember, CCW is positive in
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default.
-    double rot =
+    final double rot =
         -rotLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getRightX(), 0.02))
             * Constants.DriveConstants.MAX_ANGULAR_SPEED;
-
-    // While the A-button is pressed, overwrite some of the driving values with the output of our limelight methods
-    if(DRIVE_CONTROLLER.getAButton())
-    {
-        rot = limelight.limelight_aim_proportional();
-
-        // Translational value for alignment, ySpeed isn't needed
-        xSpeed = limelight.limelight_range_proportional();
-
-        // While using Limelight, turn off field-relative driving
-        fieldRelative = false;
-    }
 
     swerve.drive(xSpeed, ySpeed, rot, fieldRelative, getPeriod());
   }

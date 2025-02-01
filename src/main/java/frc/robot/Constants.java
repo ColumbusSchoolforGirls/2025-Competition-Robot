@@ -37,23 +37,24 @@ public class Constants {
             new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
             new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
-        public static final int FL_DRIVE_ID = 2;
-        public static final int FL_TURN_ID = 3;
+        // TODO: change ports when the electrical board is finalized
+        public static final int FL_DRIVE_ID = 1;
+        public static final int FL_TURN_ID = 2;
         public static final int FL_DIO = 1;
         public static final int FL_CHASSIS_ANGULAR_OFFSET = 2; // probably some pi value
 
-        public static final int FR_DRIVE_ID = 4;
-        public static final int FR_TURN_ID = 5;
+        public static final int FR_DRIVE_ID = 1;
+        public static final int FR_TURN_ID = 2;
         public static final int FR_DIO = 1;
         public static final int FR_CHASSIS_ANGULAR_OFFSET = 2;
 
-        public static final int BL_DRIVE_ID = 6;
-        public static final int BL_TURN_ID = 7;
+        public static final int BL_DRIVE_ID = 1;
+        public static final int BL_TURN_ID = 2;
         public static final int BL_DIO = 1;
         public static final int BL_CHASSIS_ANGULAR_OFFSET = 2;
 
-        public static final int BR_DRIVE_ID = 8;
-        public static final int BR_TURN_ID = 9;
+        public static final int BR_DRIVE_ID = 1;
+        public static final int BR_TURN_ID = 2;
         public static final int BR_DIO = 1;
         public static final int BR_CHASSIS_ANGULAR_OFFSET = 2;
 
