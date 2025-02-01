@@ -66,6 +66,8 @@ public class CoralSystem {
     public void shoot() {
         if (AUX.getXButton()) {
             shootMotor.set(CoralConstants.SHOOT_MOTOR_SPEED);
+        } else {
+            shootMotor.set(0);
         }
     }
 
