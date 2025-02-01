@@ -14,7 +14,7 @@ public class Climber {
 
     private final WPI_TalonSRX climbMotor = new WPI_TalonSRX(ClimbConstants.CLIMBER_ID);
 
-    public static final XboxController reverseClimbController = new XboxController(ControllerConstants.REVERSE_CLIMBER_ID);
+    public static final XboxController reverseClimbController = new XboxController(ControllerConstants.REVERSE_CLIMBER_AUX_PORT);
 
     public void setClimb() {
         climbMotor.set(0);

@@ -22,8 +22,8 @@ import frc.robot.subsystems.Climber;
 public class Robot extends TimedRobot {
   private final Drivetrain swerve = new Drivetrain();
   private final Limelight limelight = new Limelight();
-  private final CoralSystem coralSystem = new CoralSystem();
-  private final Climber climber = new Climber();
+  // private final CoralSystem coralSystem = new CoralSystem(); ?? TODO: ADD BACK
+  // private final Climber climber = new Climber();
 
   private final AutoPaths autoPaths = new AutoPaths();
 
@@ -46,8 +46,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    coralSystem.elevator();
-    climber.climb();
+    // coralSystem.elevator();
+    // climber.climb();
     limelight.updateLimelight();
     swerve.updateOdometry();
   }
