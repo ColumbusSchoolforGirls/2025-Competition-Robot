@@ -8,6 +8,8 @@ import static frc.robot.Constants.ControllerConstants.DRIVE_CONTROLLER; // Noah 
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -32,6 +34,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    // Starts recording to data log
+    DataLogManager.start(); // TODO: maybe remove one, because logs double
+    
+    // Record both DS control and joystick data
+    DriverStation.startDataLog(DataLogManager.getLog());
+
     autoPaths.setAutoPaths();
   }
 
