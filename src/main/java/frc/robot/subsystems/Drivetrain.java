@@ -60,11 +60,11 @@ public class Drivetrain {
     backRight.getDrivePositionInches();
   }
 
-  public void setTurnEncoders() {
-    frontLeft.setRelativeTurnEncoder();
-    frontRight.setRelativeTurnEncoder();
-    backLeft.setRelativeTurnEncoder();
-    backRight.setRelativeTurnEncoder();
+  public void resetTurnEncoders() {
+    frontLeft.resetRelativeTurnEncoder();
+    frontRight.resetRelativeTurnEncoder();
+    backLeft.resetRelativeTurnEncoder();
+    backRight.resetRelativeTurnEncoder();
   }
 
   /**
@@ -177,7 +177,7 @@ public class Drivetrain {
     backRight.setCoastMode();
   }
 
-  // TODO: use after aligning with AprilTag (to make sure we're at 0)
+  // TODO: use after aligning with AprilTag (to make sure we're at 0)?
   public void zeroHeading() {
     gyro.reset();
   }
@@ -190,5 +190,13 @@ public class Drivetrain {
   /** Returns the turn rate of the robot in degrees per second. */
   public double getTurnRate() {
     return gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+
+  public void driveInit() {
+    // TODO: make the robot align with the AprilTag first to make sure we're at 0
+    zeroHeading();
+    resetEncoders();
+    resetTurnEncoders();
+    // TODO: MAYBE add setBrakeMode() here
   }
 }

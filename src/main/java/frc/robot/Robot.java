@@ -41,6 +41,7 @@ public class Robot extends TimedRobot {
     DriverStation.startDataLog(DataLogManager.getLog());
 
     autoPaths.setAutoPaths();
+    swerve.driveInit();
   }
 
   @Override
