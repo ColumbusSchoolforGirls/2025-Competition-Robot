@@ -163,6 +163,21 @@ public class Drivetrain {
     backRight.resetEncoder();
   }
 
+  public void setBrakeMode() {
+    frontLeft.setBrakeMode();
+    frontRight.setBrakeMode();
+    backLeft.setBrakeMode();
+    backRight.setBrakeMode();
+  }
+
+  public void setCoastMode() {
+    frontLeft.setCoastMode();
+    frontRight.setCoastMode();
+    backLeft.setCoastMode();
+    backRight.setCoastMode();
+  }
+
+  // TODO: use after aligning with AprilTag (to make sure we're at 0)
   public void zeroHeading() {
     gyro.reset();
   }

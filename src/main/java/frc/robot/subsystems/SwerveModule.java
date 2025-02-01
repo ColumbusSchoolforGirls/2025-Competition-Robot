@@ -13,10 +13,12 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.SparkBase;
 
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-
 import frc.robot.Constants.SwerveConstants;
 
 
@@ -30,6 +32,8 @@ public class SwerveModule {
 
   private final SparkClosedLoopController driveClosedLoopController;
   private final SparkClosedLoopController turnClosedLoopController;
+  
+  SparkMaxConfig config = new SparkMaxConfig();
 
   private double chassisAngularOffset = 0;
   private SwerveModuleState desiredState = new SwerveModuleState(0.0, new Rotation2d());
@@ -49,6 +53,8 @@ public class SwerveModule {
 
     driveClosedLoopController = driveMotor.getClosedLoopController();
     turnClosedLoopController = turnMotor.getClosedLoopController();
+
+    setBrakeMode();
 
     this.chassisAngularOffset = chassisAngularOffset;
     desiredState.angle = new Rotation2d(turnRelativeEncoder.getPosition());
@@ -124,5 +130,17 @@ public class SwerveModule {
   /** Zeroes all the SwerveModule drive encoders. */
   public void resetEncoder() {
     driveEncoder.setPosition(0);
+  }
+
+  public void setBrakeMode(){ // Should only run on init
+    config.idleMode(SparkBaseConfig.IdleMode.kBrake);
+    driveMotor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+    turnMotor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+  }
+
+  public void setCoastMode(){ // Should only run on disable
+    config.idleMode(SparkBaseConfig.IdleMode.kCoast);
+    driveMotor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+    turnMotor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
   }
 }
