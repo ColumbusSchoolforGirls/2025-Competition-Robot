@@ -34,11 +34,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    // Starts recording to data log
-    DataLogManager.start(); // TODO: maybe remove one, because logs double
+    // // Starts recording to data log
+    // DataLogManager.start(); // TODO: maybe remove one, because logs double
     
-    // Record both DS control and joystick data
-    DriverStation.startDataLog(DataLogManager.getLog());
+    // // Record both DS control and joystick data
+    // DriverStation.startDataLog(DataLogManager.getLog());
 
     swerve.driveInit();
   }
