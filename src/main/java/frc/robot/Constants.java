@@ -27,15 +27,15 @@ public class Constants {
         public static final double TRANSLATION_2D_OFFSET = 0.381;
         
         // Chassis configuration
-        public static final double kTrackWidth = 0.381; // (meters) //TODO: change units
+        public static final double TrackWidth = 0.381; // (meters) //TODO: change units
         // Distance between centers of right and left wheels on robot
-        public static final double kWheelBase = 0.381; // (meters) //TODO: change units
+        public static final double WheelBase = 0.381; // (meters) //TODO: change units
         // Distance between front and back wheels on robot
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-            new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-            new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-            new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-            new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+            new Translation2d(WheelBase / 2, TrackWidth / 2),
+            new Translation2d(WheelBase / 2, -TrackWidth / 2),
+            new Translation2d(-WheelBase / 2, TrackWidth / 2),
+            new Translation2d(-WheelBase / 2, -TrackWidth / 2));
 
         public static final int FL_DRIVE_ID = 2;
         public static final int FL_TURN_ID = 3;
