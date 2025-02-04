@@ -34,11 +34,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    // Starts recording to data log
-    DataLogManager.start(); // TODO: maybe remove one, because logs double
+    // // Starts recording to data log
+    // DataLogManager.start(); // TODO: maybe remove one, because logs double
     
-    // Record both DS control and joystick data
-    DriverStation.startDataLog(DataLogManager.getLog());
+    // // Record both DS control and joystick data
+    // DriverStation.startDataLog(DataLogManager.getLog());
 
     swerve.driveInit();
   }
@@ -47,8 +47,9 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     // coralSystem.elevator();
     // climber.climb();
-    limelight.updateLimelight();
+    // limelight.updateLimelight();
     swerve.updateOdometry();
+    swerve.periodic();
   }
 
   @Override
@@ -58,25 +59,25 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    if (autoPaths.currentAutoAction == AutoAction.TURN_TOWARD_REEF) {
-      float initialTurnAngle = autoPaths.getInitialTurnAngle();
-      // do the turn
-      // if the turn is complete, transition to the next state
-    } else if (autoPaths.currentAutoAction == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
-      // raise the coral to the desired height
-      // run AprilTag auto alignment
-      // check elevator and drivetrain, and transition to the next state
-    } else if (autoPaths.currentAutoAction == AutoAction.SHOOT_CORAL) {
-       // shoot the coral
-       // give a delay
-       // go to the next state
-    } else if (autoPaths.currentAutoAction == AutoAction.ADDITIONAL_DRIVE_ACTIONS) {
-      // bring the elevator back down
-      // get turn angle to where you want to go next
-      // get distance to travel
-      // execute drive
-      // go to next state
-    }
+  //   if (autoPaths.currentAutoAction == AutoAction.TURN_TOWARD_REEF) {
+  //     float initialTurnAngle = autoPaths.getInitialTurnAngle();
+  //     // do the turn
+  //     // if the turn is complete, transition to the next state
+  //   } else if (autoPaths.currentAutoAction == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
+  //     // raise the coral to the desired height
+  //     // run AprilTag auto alignment
+  //     // check elevator and drivetrain, and transition to the next state
+  //   } else if (autoPaths.currentAutoAction == AutoAction.SHOOT_CORAL) {
+  //      // shoot the coral
+  //      // give a delay
+  //      // go to the next state
+  //   } else if (autoPaths.currentAutoAction == AutoAction.ADDITIONAL_DRIVE_ACTIONS) {
+  //     // bring the elevator back down
+  //     // get turn angle to where you want to go next
+  //     // get distance to travel
+  //     // execute drive
+  //     // go to next state
+  //   }
     
   }
 
@@ -93,6 +94,8 @@ public class Robot extends TimedRobot {
   private void goToNextState(){
     
   }
+
+
 
   private void driveWithJoystick(boolean fieldRelative) {
     // Get the x speed. We are inverting this because Xbox controllers return

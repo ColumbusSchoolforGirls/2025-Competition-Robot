@@ -12,12 +12,14 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
-
 
 public class Drivetrain {
   private final Translation2d frontLeftLocation = new Translation2d(DriveConstants.TRANSLATION_2D_OFFSET,
@@ -88,7 +90,7 @@ public class Drivetrain {
     setModuleStates(swerveModuleStates);
   }
 
-   /** Sets the wheels into an X formation to prevent movement. */
+  /** Sets the wheels into an X formation to prevent movement. */
   public void setX() {
     frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
     frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
@@ -103,11 +105,11 @@ public class Drivetrain {
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-      desiredStates, DriveConstants.MAX_SPEED);
-      frontLeft.setDesiredState(desiredStates[0]);
-      frontRight.setDesiredState(desiredStates[1]);
-      backLeft.setDesiredState(desiredStates[2]);
-      backRight.setDesiredState(desiredStates[3]);
+        desiredStates, DriveConstants.MAX_SPEED);
+    frontLeft.setDesiredState(desiredStates[0]);
+    frontRight.setDesiredState(desiredStates[1]);
+    backLeft.setDesiredState(desiredStates[2]);
+    backRight.setDesiredState(desiredStates[3]);
   }
 
   /** Updates the field relative position of the robot. */
@@ -121,7 +123,7 @@ public class Drivetrain {
             backRight.getPosition()
         });
   }
-  
+
   /** Returns the currently-estimated pose of the robot. */
   public Pose2d getPose() {
     return odometry.getPoseMeters();
@@ -154,6 +156,20 @@ public class Drivetrain {
             backLeft.getPosition(),
             backRight.getPosition()
         });
+
+    if (Constants.ControllerConstants.DRIVE_CONTROLLER.getAButton()) {
+      System.out.println("WORKED!"); 
+      // backLeft.driveMotor.set(0.2);
+      // frontLeft.driveMotor.set(0.2);
+      // backRight.driveMotor.set(0.2);
+      // frontRight.driveMotor.set(0.2);
+
+      SmartDashboard.putNumber("BL Encoder", backLeft.turnRelativeEncoder.getPosition());
+      SmartDashboard.putNumber("FL Encoder", frontLeft.turnRelativeEncoder.getPosition());
+      SmartDashboard.putNumber("BR Encoder", backRight.turnRelativeEncoder.getPosition());
+      SmartDashboard.putNumber("FR Encoder", frontRight.turnRelativeEncoder.getPosition());
+
+    }
   }
 
   public void resetEncoders() {
