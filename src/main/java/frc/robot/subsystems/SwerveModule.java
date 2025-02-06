@@ -32,7 +32,7 @@ public class SwerveModule {
 
   public RelativeEncoder driveEncoder;
   public RelativeEncoder turnRelativeEncoder;
-  private DutyCycleEncoder turnAbsoluteEncoder; // CTRE SRX Mag Encoder using pulses, used only at RobotInit to reset relative encoder
+  public DutyCycleEncoder turnAbsoluteEncoder; // CTRE SRX Mag Encoder using pulses, used only at RobotInit to reset relative encoder
 
   private SparkClosedLoopController driveClosedLoopController;
   private SparkClosedLoopController turnClosedLoopController;
@@ -65,7 +65,7 @@ public class SwerveModule {
         PersistMode.kPersistParameters);
     turnMotor.configure(Configs.MAXSwerveModule.turningConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
-    setBrakeMode();
+    // setBrakeMode();
 
     this.chassisAngularOffset = chassisAngularOffset;
     desiredState.angle = new Rotation2d(turnRelativeEncoder.getPosition());
@@ -109,6 +109,7 @@ public class SwerveModule {
 
      SmartDashboard.putNumber("desiredState", correctedDesiredState.speedMetersPerSecond);
      SmartDashboard.putNumber("AbsEncoder", turnAbsoluteEncoder.get());
+    
 
     
     // Optimize the reference state to avoid spinning further than 90 degrees.
@@ -151,13 +152,13 @@ public class SwerveModule {
 
   public void setBrakeMode(){ // Should only run on init
     config.idleMode(SparkBaseConfig.IdleMode.kBrake);
-    driveMotor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-    turnMotor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+    driveMotor.configure(config, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+    turnMotor.configure(config, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
   }
 
   public void setCoastMode(){ // Should only run on disable
     config.idleMode(SparkBaseConfig.IdleMode.kCoast);
-    driveMotor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-    turnMotor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+    driveMotor.configure(config, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+    turnMotor.configure(config, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
   }
 }

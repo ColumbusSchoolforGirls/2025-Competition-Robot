@@ -58,22 +58,22 @@ public class Constants {
         public static final int FL_DRIVE_ID = 2;
         public static final int FL_TURN_ID = 3;
         public static final int FL_DIO = 2;
-        public static final int FL_CHASSIS_ANGULAR_OFFSET = 0; // probably some pi value
+        public static final double FL_CHASSIS_ANGULAR_OFFSET = 0.802; //TODO: need to check after Chole fix 
 
         public static final int FR_DRIVE_ID = 4;
         public static final int FR_TURN_ID = 5;
         public static final int FR_DIO = 3;
-        public static final int FR_CHASSIS_ANGULAR_OFFSET = 0;
+        public static final double FR_CHASSIS_ANGULAR_OFFSET = 0.294;
 
         public static final int BL_DRIVE_ID = 6;
         public static final int BL_TURN_ID = 7;
         public static final int BL_DIO = 1;
-        public static final int BL_CHASSIS_ANGULAR_OFFSET = 0;
+        public static final double BL_CHASSIS_ANGULAR_OFFSET = 0.918; //TODO: check later 
 
         public static final int BR_DRIVE_ID = 8;
         public static final int BR_TURN_ID = 9;
         public static final int BR_DIO = 0;
-        public static final int BR_CHASSIS_ANGULAR_OFFSET = 0;
+        public static final double BR_CHASSIS_ANGULAR_OFFSET = 0.950
 
         //Gyro Reversed
         public static final boolean kGyroReversed = false; //TODO: is this always false?????

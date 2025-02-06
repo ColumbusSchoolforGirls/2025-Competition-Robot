@@ -157,20 +157,17 @@ public class Drivetrain {
             backRight.getPosition()
         });
 
-    if (Constants.ControllerConstants.DRIVE_CONTROLLER.getAButton()) {
-      System.out.println("WORKED!"); 
-      // backLeft.driveMotor.set(0.2);
-      // frontLeft.driveMotor.set(0.2);
-      // backRight.driveMotor.set(0.2);
-      // frontRight.driveMotor.set(0.2);
-
       SmartDashboard.putNumber("BL Encoder", backLeft.turnRelativeEncoder.getPosition());
       SmartDashboard.putNumber("FL Encoder", frontLeft.turnRelativeEncoder.getPosition());
       SmartDashboard.putNumber("BR Encoder", backRight.turnRelativeEncoder.getPosition());
       SmartDashboard.putNumber("FR Encoder", frontRight.turnRelativeEncoder.getPosition());
 
-    }
-  }
+      SmartDashboard.putNumber("FLAngularOffset", backLeft.turnAbsoluteEncoder.get());
+      SmartDashboard.putNumber("BLAngularOffset", frontLeft.turnAbsoluteEncoder.get());
+      SmartDashboard.putNumber("FRAngularOffset", backRight.turnAbsoluteEncoder.get() );
+      SmartDashboard.putNumber("BRAngularOffset", frontRight.turnAbsoluteEncoder.get()); 
+
+      }
 
   public void resetEncoders() {
     frontLeft.resetEncoder();
