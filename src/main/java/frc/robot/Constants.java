@@ -73,7 +73,7 @@ public class Constants {
         public static final int BR_DRIVE_ID = 8;
         public static final int BR_TURN_ID = 9;
         public static final int BR_DIO = 0;
-        public static final double BR_CHASSIS_ANGULAR_OFFSET = 0.950
+        public static final double BR_CHASSIS_ANGULAR_OFFSET = 0.950;
 
         //Gyro Reversed
         public static final boolean kGyroReversed = false; //TODO: is this always false?????
