@@ -4,22 +4,21 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+
 // import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.SparkBase;
-import com.ctre.phoenix.motorcontrol.IFollower;
-import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Configs;
@@ -39,7 +38,7 @@ public class SwerveModule {
   
   SparkMaxConfig config = new SparkMaxConfig();
 
-  private double chassisAngularOffset = 0;
+  private double chassisAngularOffset; // This comes from constants
   private SwerveModuleState desiredState = new SwerveModuleState(0.0, new Rotation2d());
 
   // TODO: add later for precision
@@ -74,7 +73,8 @@ public class SwerveModule {
   }
 
   public void resetRelativeTurnEncoder() {
-    turnRelativeEncoder.setPosition(turnAbsoluteEncoder.get()*2*Math.PI/SwerveConstants.turningFactor + chassisAngularOffset);
+
+    turnRelativeEncoder.setPosition((turnAbsoluteEncoder.get()*2*Math.PI + chassisAngularOffset) / SwerveConstants.turningFactor);
   }
 
   
