@@ -20,6 +20,7 @@ import com.studica.frc.AHRS.NavXComType;
 
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import static frc.robot.Constants.ControllerConstants.DRIVE_CONTROLLER;
 
 public class Drivetrain {
   private final Translation2d frontLeftLocation = new Translation2d(DriveConstants.TRANSLATION_2D_OFFSET,
@@ -69,6 +70,17 @@ public class Drivetrain {
     backRight.resetRelativeTurnEncoder();
   }
 
+  public void setZero() {
+    if (DRIVE_CONTROLLER.getAButtonPressed()) {
+      frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
+      frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
+      backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
+      backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
+
+  }
+
+  }
+  
   /**
    * Method to drive the robot using joystick info.
    *
@@ -162,10 +174,10 @@ public class Drivetrain {
       SmartDashboard.putNumber("BR Encoder", backRight.turnRelativeEncoder.getPosition());
       SmartDashboard.putNumber("FR Encoder", frontRight.turnRelativeEncoder.getPosition());
 
-      SmartDashboard.putNumber("FLAngularOffset", backLeft.turnAbsoluteEncoder.get());
-      SmartDashboard.putNumber("BLAngularOffset", frontLeft.turnAbsoluteEncoder.get());
-      SmartDashboard.putNumber("FRAngularOffset", backRight.turnAbsoluteEncoder.get() );
-      SmartDashboard.putNumber("BRAngularOffset", frontRight.turnAbsoluteEncoder.get()); 
+      SmartDashboard.putNumber("BLAngOfset", backLeft.turnAbsoluteEncoder.get()*360);
+      SmartDashboard.putNumber("FLAngOfset", frontLeft.turnAbsoluteEncoder.get()*360);
+      SmartDashboard.putNumber("BRAngOfset", backRight.turnAbsoluteEncoder.get()*360 );
+      SmartDashboard.putNumber("FRAngOfset", frontRight.turnAbsoluteEncoder.get()*360); 
 
       }
 
@@ -202,7 +214,7 @@ public class Drivetrain {
 
   /** Returns the turn rate of the robot in degrees per second. */
   public double getTurnRate() {
-    return gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    return gyro.getRate() * (DriveConstants.GyroReversed ? -1.0 : 1.0);
   }
 
   public void driveInit() {

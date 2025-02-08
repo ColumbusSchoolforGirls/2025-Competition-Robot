@@ -17,24 +17,30 @@ public class Constants {
         // The MAXSwerve module can be configured with one of three pinion gears: 12T,
         // 13T, or 14T. This changes the drive speed of the module (a pinion gear with
         // more teeth will result in a robot that drives faster).
-        public static final int kDrivingMotorPinionTeeth = 14;
+        public static final int DrivingMotorPinionTeeth = 14;
 
-        public static final double kFreeSpeedRpm = 5676;
+        public static final double FreeSpeedRpm = 5676;
 
         // Calculations required for driving motor conversion factors and feed forward
-        public static final double kDrivingMotorFreeSpeedRps = kFreeSpeedRpm / 60;
-        public static final double kWheelDiameterMeters = 0.0762;
-        public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
+        public static final double DrivingMotorFreeSpeedRps = FreeSpeedRpm / 60;
+        public static final double WheelDiameterMeters = 0.0762;
+        public static final double WheelCircumferenceMeters = WheelDiameterMeters * Math.PI;
         // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
         // teeth on the bevel pinion
-        public static final double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
-        public static final double kDriveWheelFreeSpeedRps = (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters)
-            / kDrivingMotorReduction;
+        public static final double DrivingMotorReduction = (45.0 * 22) / (DrivingMotorPinionTeeth * 15);
+        public static final double DriveWheelFreeSpeedRps = (DrivingMotorFreeSpeedRps * WheelCircumferenceMeters)
+            / DrivingMotorReduction;
 
         //Encoder calculations
         public static final double GEAR_RATIO = 8.14;
         public static final int WHEEL_CIRCUMFERENCE = 4; // inches
         public static final double WHEEL_DIAMETER = 4 / Math.PI; //inches
+
+        public static final double drivingFactor = Constants.SwerveConstants.WheelDiameterMeters * Math.PI
+        / Constants.SwerveConstants.DrivingMotorReduction;
+        public static final double turningFactor = 2 * Math.PI/12.8*0.6;
+        public static final double drivingVelocityFeedForward = 1 / Constants.SwerveConstants.DriveWheelFreeSpeedRps;
+        
     }
 
     public static final class DriveConstants {  
@@ -49,7 +55,7 @@ public class Constants {
         // Distance between centers of right and left wheels on robot
         public static final double WheelBase = 0.381; // (meters) //TODO: change units
         // Distance between front and back wheels on robot
-        public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+        public static final SwerveDriveKinematics DriveKinematics = new SwerveDriveKinematics(
             new Translation2d(WheelBase / 2, TrackWidth / 2),
             new Translation2d(WheelBase / 2, -TrackWidth / 2),
             new Translation2d(-WheelBase / 2, TrackWidth / 2),
@@ -76,7 +82,7 @@ public class Constants {
         public static final double BR_CHASSIS_ANGULAR_OFFSET = 0.950;
 
         //Gyro Reversed
-        public static final boolean kGyroReversed = false; //TODO: is this always false?????
+        public static final boolean GyroReversed = false; //TODO: is this always false?????
     }   
 
     public static final class CoralConstants { //TODO: need to change all of the values!

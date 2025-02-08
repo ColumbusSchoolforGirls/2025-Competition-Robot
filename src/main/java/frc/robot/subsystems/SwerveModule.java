@@ -70,10 +70,11 @@ public class SwerveModule {
     this.chassisAngularOffset = chassisAngularOffset;
     desiredState.angle = new Rotation2d(turnRelativeEncoder.getPosition());
     driveEncoder.setPosition(0);
+    
   }
 
   public void resetRelativeTurnEncoder() {
-    turnRelativeEncoder.setPosition(turnAbsoluteEncoder.get() + chassisAngularOffset);
+    turnRelativeEncoder.setPosition(turnAbsoluteEncoder.get()*2*Math.PI/SwerveConstants.turningFactor + chassisAngularOffset);
   }
 
   
@@ -84,6 +85,7 @@ public class SwerveModule {
     // relative to the chassis.
     return new SwerveModuleState(
         driveEncoder.getVelocity(), new Rotation2d(turnRelativeEncoder.getPosition()));
+      
   }
 
   /** Returns the current position of the module. */
