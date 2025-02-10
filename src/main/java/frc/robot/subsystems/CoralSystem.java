@@ -33,7 +33,7 @@ public class CoralSystem {
         shootMotor.setNeutralMode(NeutralMode.Coast);
     }
 
-    public void updateTargetHeight() {
+    public void controllerInputTargetHeight() {
 
         if (AUX.getAButtonPressed()) {
             targetHeight = CoralConstants.L2_HEIGHT;
@@ -43,6 +43,12 @@ public class CoralSystem {
             targetHeight = CoralConstants.L4_HEIGHT;
         }
     }
+
+    public void setAutoTargetHeight(double targetHeight){
+        this.targetHeight = targetHeight;
+        
+    }
+
 
     public boolean elevatorComplete() {
         difference = (targetHeight - getHeight());
