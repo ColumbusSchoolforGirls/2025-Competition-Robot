@@ -16,6 +16,10 @@ public class AutoPaths { // obviously need to add more
         L1, L2, L4 // L1 and L2 are at the same height but different alighment, L3 is always the blocked, L2 is sometimes blocked
     }
 
+    public enum EndPosition{
+        leftCoralStation, rightCoralStation, stayAtCoral, awayFromCoral // awayFromCoral is in between the 2 coral stations
+    }
+
     boolean knockOffAlgae;
 
     // the drop down menu to choose a path on the dashboard
@@ -37,6 +41,11 @@ public class AutoPaths { // obviously need to add more
         SmartDashboard.putData("Coral Position", coralPositionChooser);
         for (CoralPosition coralPosition: CoralPosition.values()) {
             coralPositionChooser.addOption(coralPosition.name(), coralPosition.name());
+        }
+
+        SmartDashboard.putData("End Position", endPositionChooser);
+        for (EndPosition endPosition: EndPosition.values()) {
+            coralPositionChooser.addOption(endPosition.name(), endPosition.name());
         }
 
         this.currentAutoAction = null;
@@ -73,7 +82,15 @@ public class AutoPaths { // obviously need to add more
     // coral alignment is the same for L2 and L4, different for L1 --> put this into a function
 
 
+    public void knockOffAlgae(){
 
+        if (knockOffAlgaeFlag.getSelected() == true) {
+            // do the knock off algae action
+        } else {
+            // do nothing
+        }
+    
+    }
     // Updates the currentAutoAction. This handles all state transitions. All actions are in Robot.java
     public AutoAction goToNextState() {
         if (this.currentAutoAction == null) {
