@@ -4,41 +4,38 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
-
 // import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.SparkBase;
+
+import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Configs;
 import frc.robot.Constants.SwerveConstants;
 
 
 public class SwerveModule {
-  public SparkMax driveMotor;
-  public SparkMax turnMotor;
+  private final SparkMax driveMotor;
+  private final SparkMax turnMotor;
 
-  public RelativeEncoder driveEncoder;
-  public RelativeEncoder turnRelativeEncoder;
-  public DutyCycleEncoder turnAbsoluteEncoder; // CTRE SRX Mag Encoder using pulses, used only at RobotInit to reset relative encoder
+  private final RelativeEncoder driveEncoder;
+  public final RelativeEncoder turnRelativeEncoder;
+  public final DutyCycleEncoder turnAbsoluteEncoder; // CTRE SRX Mag Encoder using pulses, used only at RobotInit to reset relative encoder
 
-  private SparkClosedLoopController driveClosedLoopController;
-  private SparkClosedLoopController turnClosedLoopController;
+  private final SparkClosedLoopController driveClosedLoopController;
+  private final SparkClosedLoopController turnClosedLoopController;
   
   SparkMaxConfig config = new SparkMaxConfig();
 
-  private double chassisAngularOffset; // This comes from constants
+  private double chassisAngularOffset = 0;
   private SwerveModuleState desiredState = new SwerveModuleState(0.0, new Rotation2d());
 
   // TODO: add later for precision
@@ -57,27 +54,16 @@ public class SwerveModule {
     driveClosedLoopController = driveMotor.getClosedLoopController();
     turnClosedLoopController = turnMotor.getClosedLoopController();
 
-     // Apply the respective configurations to the SPARKS. Reset parameters before
-    // applying the configuration to bring the SPARK to a known good state. Persist
-    // the settings to the SPARK to avoid losing them on a power cycle.
-    driveMotor.configure(Configs.MAXSwerveModule.drivingConfig, ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
-    turnMotor.configure(Configs.MAXSwerveModule.turningConfig, ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
-    // setBrakeMode();
+    setBrakeMode();
 
     this.chassisAngularOffset = chassisAngularOffset;
     desiredState.angle = new Rotation2d(turnRelativeEncoder.getPosition());
     driveEncoder.setPosition(0);
-    
   }
 
   public void resetRelativeTurnEncoder() {
-
-    turnRelativeEncoder.setPosition((turnAbsoluteEncoder.get()*2*Math.PI + chassisAngularOffset) / SwerveConstants.turningFactor);
+    turnRelativeEncoder.setPosition(turnAbsoluteEncoder.get() + chassisAngularOffset);
   }
-
-  
 
   /** Returns the current state of the module. */
   public SwerveModuleState getState() {
@@ -85,7 +71,6 @@ public class SwerveModule {
     // relative to the chassis.
     return new SwerveModuleState(
         driveEncoder.getVelocity(), new Rotation2d(turnRelativeEncoder.getPosition()));
-      
   }
 
   /** Returns the current position of the module. */
@@ -108,11 +93,6 @@ public class SwerveModule {
     SwerveModuleState correctedDesiredState = new SwerveModuleState();
     correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
     correctedDesiredState.angle = desiredState.angle.plus(Rotation2d.fromRadians(chassisAngularOffset));
-
-     SmartDashboard.putNumber("desiredState", correctedDesiredState.speedMetersPerSecond);
-     SmartDashboard.putNumber("AbsEncoder", turnAbsoluteEncoder.get());
-    
-
     
     // Optimize the reference state to avoid spinning further than 90 degrees.
     Rotation2d encoderRotation = new Rotation2d(turnRelativeEncoder.getPosition());
@@ -154,13 +134,13 @@ public class SwerveModule {
 
   public void setBrakeMode(){ // Should only run on init
     config.idleMode(SparkBaseConfig.IdleMode.kBrake);
-    driveMotor.configure(config, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-    turnMotor.configure(config, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+    driveMotor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+    turnMotor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
   }
 
   public void setCoastMode(){ // Should only run on disable
     config.idleMode(SparkBaseConfig.IdleMode.kCoast);
-    driveMotor.configure(config, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-    turnMotor.configure(config, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+    driveMotor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+    turnMotor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
   }
 }

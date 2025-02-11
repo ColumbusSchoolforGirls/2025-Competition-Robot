@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -23,6 +24,11 @@ import frc.robot.Constants.DriveConstants;
 import static frc.robot.Constants.ControllerConstants.DRIVE_CONTROLLER;
 
 public class Drivetrain {
+  private double gyroDifference;
+  private double targetAngle;
+  private double driveDifference;
+  private double targetDistance;
+
   private final Translation2d frontLeftLocation = new Translation2d(DriveConstants.TRANSLATION_2D_OFFSET,
       DriveConstants.TRANSLATION_2D_OFFSET);
   private final Translation2d frontRightLocation = new Translation2d(DriveConstants.TRANSLATION_2D_OFFSET,
@@ -224,4 +230,56 @@ public class Drivetrain {
     resetTurnEncoders();
     // TODO: MAYBE add setBrakeMode() here
   }
+//This is for auto turning
+  public void setAutoTargetAngle(double targetAngle) {
+    this.targetAngle = targetAngle;
+
+
+  }
+
+  
+    public boolean turnComplete() {
+        gyroDifference = (getHeading() - targetAngle);
+
+        return Math.abs(gyroDifference) < Constants.DriveConstants.TURN_TOLERANCE;
+    }
+
+    public boolean driveComplete() {
+        driveDifference = targetDistance - frontLeft.getDrivePositionInches(); //change to make better
+        if (Math.abs(driveDifference) < Constants.DriveConstants.DISTANCE_TOLERANCE) {
+            return true;    
+          //if (frontLeftEncoder.getVelocity() < 0.03) { // to prevent skidding bc of turning before drive is complete
+                //return true;
+            //}
+        //} else if (Math.abs(gyro.getVelocityY()) < Constants.AUTO_DRIVE_VELOCITY_THRESHHOLD && Timer.getFPGATimestamp() - startAutoDriveTime > 0.5) { // change: test //change                                                                                
+            //System.out.println("Drive stalled - TESTING");
+            //return true;
+        }
+        return false;
+    }
+
+    public void startTurn(double angle) {
+        this.targetAngle = (angle + getHeading());
+    }
+
+    public void resetGyro() {
+        gyro.reset();
+    }
+
+    public void startDrive(double distanceInches) {
+        resetEncoders();
+        targetDistance = distanceInches;
+    }
+
+    public void gyroTurn(double periodSeconds) {
+        gyroDifference = (getHeading() - targetAngle);
+
+        if (Math.abs(gyroDifference) < Constants.DriveConstants.TURN_TOLERANCE) {
+            drive(0,0,0,true, periodSeconds);
+        } else if (gyroDifference < 0) {
+          drive(0,0,  0.0035 * Math.abs(gyroDifference) + 0.05,true, periodSeconds) ;
+        } else if (gyroDifference > 0) {
+          drive(0,0, -0.0035 * Math.abs(gyroDifference) - 0.05,true, periodSeconds);
+        }
+    }
 }
