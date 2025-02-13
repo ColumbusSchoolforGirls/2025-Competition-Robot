@@ -8,6 +8,7 @@ import static frc.robot.Constants.ControllerConstants.DRIVE_CONTROLLER; // Noah 
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -22,8 +23,8 @@ import frc.robot.subsystems.Climber;
 public class Robot extends TimedRobot {
   private final Drivetrain swerve = new Drivetrain();
   private final Limelight limelight = new Limelight();
-  // private final CoralSystem coralSystem = new CoralSystem(); ?? TODO: ADD BACK
-  // private final Climber climber = new Climber();
+  private final CoralSystem coralSystem = new CoralSystem(); 
+  private final Climber climber = new Climber();
 
   private final AutoPaths autoPaths = new AutoPaths();
 
@@ -34,6 +35,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+
+    
     // // Starts recording to data log
     // DataLogManager.start(); // TODO: maybe remove one, because logs double
     
@@ -50,6 +53,9 @@ public class Robot extends TimedRobot {
     // limelight.updateLimelight();
     swerve.updateOdometry();
     swerve.periodic();
+
+
+
   }
 
   @Override
@@ -63,7 +69,17 @@ public class Robot extends TimedRobot {
       float initialTurnAngle = autoPaths.getInitialTurnAngle();
       // do the turn
       // if the turn is complete, transition to the next state
+      swerve.startTurn(initialTurnAngle);
+      if(swerve.turnComplete()){
+        goToNextState();
+      }
+
     } else if (autoPaths.currentAutoAction == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
+  
+      coralSystem.setAutoTargetHeight(autoPaths.getAutoTargetHeight());
+      if(coralSystem.elevatorComplete()){
+        goToNextState();
+      }
       // raise the coral to the desired height
       // run AprilTag auto alignment
       // check elevator and drivetrain, and transition to the next state
@@ -71,7 +87,20 @@ public class Robot extends TimedRobot {
        // shoot the coral
        // give a delay
        // go to the next state
+       coralSystem.autoShoot();
+       if(coralSystem.autoShootComplete()){
+         goToNextState();
+       }
+
     } else if (autoPaths.currentAutoAction == AutoAction.ADDITIONAL_DRIVE_ACTIONS) {
+
+     //TODO fix/finish this VVV
+     //autoPaths.();
+      // if(driveTrain.additionalDriveActions()){
+      //   goToNextState();
+      //}
+
+      autoPaths.currentAutoAction = AutoAction.STOP;
       // bring the elevator back down
       // get turn angle to where you want to go next
       // get distance to travel

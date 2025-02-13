@@ -95,8 +95,18 @@ public class AutoPaths { // obviously need to add more
     public AutoAction goToNextState() {
         if (this.currentAutoAction == null) {
             return AutoAction.TURN_TOWARD_REEF;
-        } 
+        } else if(this.currentAutoAction == AutoAction.TURN_TOWARD_REEF) {
+            return AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR;
+        } else if(this.currentAutoAction == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
+            return AutoAction.SHOOT_CORAL;
+        } else if(this.currentAutoAction == AutoAction.SHOOT_CORAL) {
+            return AutoAction.ADDITIONAL_DRIVE_ACTIONS;
+        } else if(this.currentAutoAction == AutoAction.ADDITIONAL_DRIVE_ACTIONS) {
+            return AutoAction.STOP;
+        }
         // TODO: Implement the rest of this
         return AutoAction.STOP;
     }
+
+
 }

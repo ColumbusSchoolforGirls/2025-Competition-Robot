@@ -5,6 +5,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.Timer;
+
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants.CoralConstants;
@@ -23,6 +26,9 @@ public class CoralSystem {
 
     private double targetHeight;
     private double difference;
+    double startShootTime;
+    boolean autoShootComplete;
+
 
     /** Returns the current height of elevator in inches.*/
     private double getHeight() {
@@ -75,7 +81,23 @@ public class CoralSystem {
         } else {
             shootMotor.set(0);
         }
+        
     }
+
+  public void autoShoot() {
+    shootMotor.set(CoralConstants.SHOOT_MOTOR_SPEED);
+    startShootTime = Timer.getFPGATimestamp();
+
+  }
+
+  public boolean autoShootComplete() {
+
+    if (Timer.getFPGATimestamp() - startShootTime > CoralConstants.SHOOT_TIME) {
+      autoShootComplete = true;
+      shootMotor.set(0);
+        }
+            return autoShootComplete;
+  }
 
     //TODO: implement into auto
 
