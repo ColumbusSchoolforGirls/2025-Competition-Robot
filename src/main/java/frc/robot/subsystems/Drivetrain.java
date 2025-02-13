@@ -26,6 +26,8 @@ import frc.robot.Constants.DriveConstants;
 import static frc.robot.Constants.ControllerConstants.DRIVE_CONTROLLER;
 
 public class Drivetrain {
+  private Limelight limelight;
+
   private double gyroDifference;
   private double targetAngle;
   private double driveDifference;
@@ -63,6 +65,10 @@ public class Drivetrain {
           backLeft.getPosition(),
           backRight.getPosition()
       });
+
+  public Drivetrain(Limelight limelight) {
+    this.limelight = limelight;
+  }
 
   public void getDriveEncoders() {
     frontLeft.getDrivePositionInches();
@@ -283,5 +289,20 @@ public class Drivetrain {
         } else if (gyroDifference > 0) {
           drive(0,0, -0.0035 * Math.abs(gyroDifference) - 0.05,true, periodSeconds);
         }
+    }
+
+    public void autoAlignLimelight(double periodSeconds) {
+      final var rot_limelight = limelight.limelight_aim_proportional();
+      final var forward_limelight = limelight.limelight_range_proportional();
+      //while using Limelight, turn off field-relative driving.
+      boolean fieldRelative = false;
+      this.drive(forward_limelight, 0.0, rot_limelight, fieldRelative, periodSeconds);
+    }
+
+    public boolean isLimelightAligned() {
+      double tx = limelight.getTX();
+      double ty = limelight.getTY();
+      // TODO: tune these on robot
+      return (tx < 0.1 && ty < 0.1);
     }
 }
