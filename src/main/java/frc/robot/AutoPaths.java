@@ -49,6 +49,7 @@ public class AutoPaths { // obviously need to add more
         }
 
         this.currentAutoAction = null;
+
     }
 
     /**
@@ -81,6 +82,19 @@ public class AutoPaths { // obviously need to add more
     }
     // coral alignment is the same for L2 and L4, different for L1 --> put this into a function
 
+    public double getAutoTargetAngle(){
+        EndPosition endPosition = EndPosition.valueOf(endPositionChooser.getSelected());
+        if (endPosition == EndPosition.leftCoralStation) {
+            return 0;
+        } else if (endPosition == EndPosition.rightCoralStation) {
+            return 0;
+        } else if (endPosition == EndPosition.stayAtCoral) {
+            return 0;
+        } else if (endPosition == EndPosition.awayFromCoral) {
+            return 0;
+        }
+        return 0;
+    }
 
     public void knockOffAlgae(){
 
@@ -91,6 +105,11 @@ public class AutoPaths { // obviously need to add more
         }
     
     }
+
+    public double getDriveDistance(){
+        return 0; //TODO: change value
+    }
+
     // Updates the currentAutoAction. This handles all state transitions. All actions are in Robot.java
     public AutoAction goToNextState() {
         if (this.currentAutoAction == null) {

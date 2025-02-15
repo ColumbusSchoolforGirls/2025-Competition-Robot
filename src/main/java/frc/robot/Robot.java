@@ -19,10 +19,9 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.CoralSystem;
 import frc.robot.subsystems.Climber;
 
-
 public class Robot extends TimedRobot {
   private final Limelight limelight = new Limelight();
-  private final CoralSystem coralSystem = new CoralSystem(); 
+  private final CoralSystem coralSystem = new CoralSystem();
   private final Climber climber = new Climber();
   private final Drivetrain swerve = new Drivetrain(limelight);
 
@@ -36,10 +35,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    
     // // Starts recording to data log
     // DataLogManager.start(); // TODO: maybe remove one, because logs double
-    
+
     // // Record both DS control and joystick data
     // DriverStation.startDataLog(DataLogManager.getLog());
 
@@ -53,8 +51,6 @@ public class Robot extends TimedRobot {
     // limelight.updateLimelight();
     swerve.updateOdometry();
     swerve.periodic();
-
-
 
   }
 
@@ -70,44 +66,48 @@ public class Robot extends TimedRobot {
       // do the turn
       // if the turn is complete, transition to the next state
       swerve.startTurn(initialTurnAngle);
-      if(swerve.turnComplete()){
+      if (swerve.turnComplete()) {
         goToNextState();
       }
 
     } else if (autoPaths.currentAutoAction == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
-  
+
       coralSystem.setAutoTargetHeight(autoPaths.getAutoTargetHeight());
-      if(coralSystem.elevatorComplete()){
+      if (coralSystem.elevatorComplete()) {
         goToNextState();
       }
       // raise the coral to the desired height
       // run AprilTag auto alignment
       // check elevator and drivetrain, and transition to the next state
     } else if (autoPaths.currentAutoAction == AutoAction.SHOOT_CORAL) {
-       // shoot the coral
-       // give a delay
-       // go to the next state
-       coralSystem.autoShoot();
-       if(coralSystem.autoShootComplete()){
-         goToNextState();
-       }
+      // shoot the coral
+      // give a delay
+      // go to the next state
+      coralSystem.autoShoot();
+      if (coralSystem.autoShootComplete()) {
+        goToNextState();
+      }
 
     } else if (autoPaths.currentAutoAction == AutoAction.ADDITIONAL_DRIVE_ACTIONS) {
-
-     //TODO fix/finish this VVV
-     //autoPaths.();
-      // if(driveTrain.additionalDriveActions()){
-      //   goToNextState();
-      //}
-
       autoPaths.currentAutoAction = AutoAction.STOP;
       // bring the elevator back down
       // get turn angle to where you want to go next
       // get distance to travel
       // execute drive
       // go to next state
+
+      coralSystem.setAutoTargetHeight(0);
+      swerve.startTurn(autoPaths.getAutoTargetAngle());
+      autoPaths.getDriveDistance();
+      swerve.startDrive(autoPaths.getDriveDistance());
+      if (swerve.turnComplete() && swerve.driveComplete()) {
+        goToNextState();
+
+      } else {
+        goToNextState();
+      }
     }
-    
+
   }
 
   @Override
@@ -120,66 +120,60 @@ public class Robot extends TimedRobot {
     driveWithJoystick(true);
   }
 
-  private void goToNextState(){
-    
+  private void goToNextState() {
+
   }
-
-
 
   private void driveWithJoystick(boolean fieldRelative) {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
-    final double xSpeed =
-        -xspeedLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getLeftY(), 0.1))
-            * Constants.DriveConstants.MAX_SPEED;
+    final double xSpeed = -xspeedLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getLeftY(), 0.1))
+        * Constants.DriveConstants.MAX_SPEED;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
-    final double ySpeed =
-        -yspeedLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getLeftX(), 0.1))
-            * Constants.DriveConstants.MAX_SPEED;
+    final double ySpeed = -yspeedLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getLeftX(), 0.1))
+        * Constants.DriveConstants.MAX_SPEED;
 
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left (remember, CCW is positive in
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default.
-    final double rot =
-        -rotLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getRightX(), 0.1))
-            * Constants.DriveConstants.MAX_ANGULAR_SPEED;
+    final double rot = -rotLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getRightX(), 0.1))
+        * Constants.DriveConstants.MAX_ANGULAR_SPEED;
 
     swerve.drive(xSpeed, ySpeed, rot, fieldRelative, getPeriod());
   }
 
-   /** This function is called once when the robot is disabled. */
-   @Override
-   public void disabledInit() {
+  /** This function is called once when the robot is disabled. */
+  @Override
+  public void disabledInit() {
     swerve.setCoastMode();
-   }
- 
-   /** This function is called periodically when disabled. */
-   @Override
-   public void disabledPeriodic() {
-   }
- 
-   /** This function is called once when test mode is enabled. */
-   @Override
-   public void testInit() {
-   }
- 
-   /** This function is called periodically during test mode. */
-   @Override
-   public void testPeriodic() {
-   }
- 
-   /** This function is called once when the robot is first started up. */
-   @Override
-   public void simulationInit() {
-   }
- 
-   /** This function is called periodically whilst in simulation. */
-   @Override
-   public void simulationPeriodic() {
-   }
-} 
+  }
 
+  /** This function is called periodically when disabled. */
+  @Override
+  public void disabledPeriodic() {
+  }
+
+  /** This function is called once when test mode is enabled. */
+  @Override
+  public void testInit() {
+  }
+
+  /** This function is called periodically during test mode. */
+  @Override
+  public void testPeriodic() {
+  }
+
+  /** This function is called once when the robot is first started up. */
+  @Override
+  public void simulationInit() {
+  }
+
+  /** This function is called periodically whilst in simulation. */
+  @Override
+  public void simulationPeriodic() {
+  }
+}

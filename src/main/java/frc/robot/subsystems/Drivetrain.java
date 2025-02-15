@@ -252,7 +252,7 @@ public class Drivetrain {
         return Math.abs(gyroDifference) < Constants.DriveConstants.TURN_TOLERANCE;
     }
 
-    public boolean driveComplete() {
+  public boolean driveComplete() {
         driveDifference = targetDistance - frontLeft.getDrivePositionInches(); //change to make better
         if (Math.abs(driveDifference) < Constants.DriveConstants.DISTANCE_TOLERANCE) {
             return true;    
