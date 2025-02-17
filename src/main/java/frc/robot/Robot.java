@@ -100,11 +100,10 @@ public class Robot extends TimedRobot {
       swerve.startTurn(autoPaths.getAutoTargetAngle());
       autoPaths.getDriveDistance();
       swerve.startDrive(autoPaths.getDriveDistance());
-      if (swerve.turnComplete() && swerve.driveComplete()) {
+      if (swerve.turnComplete() && swerve.driveComplete()) { 
         goToNextState();
-
       } else {
-        goToNextState();
+        autoPaths.currentAutoAction = AutoAction.STOP; 
       }
     }
 

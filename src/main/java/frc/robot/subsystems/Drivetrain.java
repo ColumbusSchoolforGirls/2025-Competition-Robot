@@ -236,7 +236,7 @@ public class Drivetrain {
     zeroHeading();
     resetEncoders();
     resetTurnEncoders();
-    // TODO: MAYBE add setBrakeMode() here
+    setBrakeMode();
   }
 //This is for auto turning
   public void setAutoTargetAngle(double targetAngle) {

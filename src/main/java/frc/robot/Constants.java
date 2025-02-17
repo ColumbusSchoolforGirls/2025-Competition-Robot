@@ -70,8 +70,8 @@ public class Constants {
         public static final int BR_DIO = 0;
         public static final double BR_CHASSIS_ANGULAR_OFFSET = 0.950*Math.PI*2;
 
-        public static final int TURN_TOLERANCE = 1; //TODO: need to change when testing turning
-        public static final int DISTANCE_TOLERANCE = 1; //TODO: need to change when testing distance
+        public static final int TURN_TOLERANCE = 2; //TODO: need to change when testing turning
+        public static final double DISTANCE_TOLERANCE = 0.1; //TODO: need to change when testing distance
 
         //Gyro Reversed
         public static final boolean GyroReversed = false; //TODO: is this always false?????
