@@ -61,7 +61,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    if (autoPaths.currentAutoAction == AutoAction.TURN_TOWARD_REEF) {
+    if (autoPaths.currentAutoAction == AutoAction.INITIAL_DRIVE) {
+      // get distance to travel
+      // execute drive
+      // if the drive is complete, transition to the next state
+      swerve.startDrive(autoPaths.getInitialDriveDistance());
+      if (swerve.driveComplete()) {
+        goToNextState();
+      }
+
+    } else if (autoPaths.currentAutoAction == AutoAction.TURN_TOWARD_REEF) {
+
       float initialTurnAngle = autoPaths.getInitialTurnAngle();
       // do the turn
       // if the turn is complete, transition to the next state
@@ -71,9 +81,9 @@ public class Robot extends TimedRobot {
       }
 
     } else if (autoPaths.currentAutoAction == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
-
+      swerve.startDrive(autoPaths.getDriveToReefDistance());
       coralSystem.setAutoTargetHeight(autoPaths.getAutoTargetHeight());
-      if (coralSystem.elevatorComplete()) {
+      if (coralSystem.elevatorComplete() && swerve.driveComplete()) {
         goToNextState();
       }
       // raise the coral to the desired height
@@ -89,7 +99,7 @@ public class Robot extends TimedRobot {
       }
 
     } else if (autoPaths.currentAutoAction == AutoAction.ADDITIONAL_DRIVE_ACTIONS) {
-      autoPaths.currentAutoAction = AutoAction.STOP;
+      // autoPaths.currentAutoAction = AutoAction.STOP;
       // bring the elevator back down
       // get turn angle to where you want to go next
       // get distance to travel
@@ -97,9 +107,9 @@ public class Robot extends TimedRobot {
       // go to next state
 
       coralSystem.setAutoTargetHeight(0);
-      swerve.startTurn(autoPaths.getAutoTargetAngle());
+      swerve.startTurn(autoPaths.getInitialEndAutoTargetAngle());
       autoPaths.getDriveDistance();
-      swerve.startDrive(autoPaths.getDriveDistance());
+      swerve.startDrive(autoPaths.getInitialEndAutoTargetDistance());
       if (swerve.turnComplete() && swerve.driveComplete()) { 
         goToNextState();
       } else {

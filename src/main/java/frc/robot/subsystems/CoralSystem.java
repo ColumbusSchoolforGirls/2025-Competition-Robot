@@ -32,7 +32,7 @@ public class CoralSystem {
 
     /** Returns the current height of elevator in inches.*/
     private double getHeight() {
-        return elevatorEncoder.getPosition() * CoralConstants.TICKS_TO_INCHES;
+        return elevatorEncoder.getPosition() * CoralConstants.TICKS_TO_INCHES; //is this value real?
     }
 
     public void setShootMotorCoast() {

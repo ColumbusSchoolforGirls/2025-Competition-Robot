@@ -209,7 +209,7 @@ public class Drivetrain {
     backRight.setBrakeMode();
   }
 
-  public void setCoastMode() {
+  public void setCoastMode() { 
     frontLeft.setCoastMode();
     frontRight.setCoastMode();
     backLeft.setCoastMode();

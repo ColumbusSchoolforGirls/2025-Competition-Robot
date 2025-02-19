@@ -58,14 +58,37 @@ public class AutoPaths { // obviously need to add more
      * @return
      */
     // TODO: implement
+    
+    public double getInitialDriveDistance() {
+        StartingPosition startingPosition = startingPositionChooser.getSelected();
+        if (startingPosition == StartingPosition.LEFT || startingPosition == StartingPosition.RIGHT) {
+            return 0; //TODO: change to some positive value
+        } else if (startingPosition == StartingPosition.CENTER) {
+            return 0;
+        } else {
+            return 0;
+        }
+    }
+
+    public double getDriveToReefDistance() {
+        StartingPosition startingPosition = startingPositionChooser.getSelected();
+        if (startingPosition == StartingPosition.LEFT || startingPosition == StartingPosition.RIGHT) {
+            return 0; //TODO: change to some positive value
+        } else if (startingPositionChooser.getSelected() == StartingPosition.CENTER) {
+            return 0; //TODO: change to some positive value
+        } else {
+            return 0;
+        }
+    }
+    
     public float getInitialTurnAngle() {
         StartingPosition startingPosition = startingPositionChooser.getSelected(); 
         if (startingPosition == StartingPosition.LEFT) {
-
+            return 0; //TODO: change to some positive (counter) value
        } else if (startingPosition == StartingPosition.RIGHT) {
-
+            return 0; //TODO: change to some negative (clockwise) value
        } else if (startingPosition == StartingPosition.CENTER) {
-
+            return 0;
        }
        return 0;
     }
@@ -83,7 +106,123 @@ public class AutoPaths { // obviously need to add more
     }
     // coral alignment is the same for L2 and L4, different for L1 --> put this into a function
 
-    public double getAutoTargetAngle(){
+    public double getInitialEndAutoTargetAngle(){ //TODO: change values
+        EndPosition endPosition = EndPosition.valueOf(endPositionChooser.getSelected());
+        StartingPosition startingPosition = startingPositionChooser.getSelected(); 
+        if (startingPosition == StartingPosition.LEFT) {
+            if (endPosition == EndPosition.leftCoralStation) {
+                return 0;
+            } else if (endPosition == EndPosition.rightCoralStation) {
+                return 0;
+            } else if (endPosition == EndPosition.stayAtCoral) {
+                return 0;
+            } else if (endPosition == EndPosition.awayFromCoral) {
+                return 0;
+            }
+        } else if (startingPosition == StartingPosition.RIGHT) {
+            if (endPosition == EndPosition.leftCoralStation) {
+                return 0;
+            } else if (endPosition == EndPosition.rightCoralStation) {
+                return 0;
+            } else if (endPosition == EndPosition.stayAtCoral) {
+                return 0;
+            } else if (endPosition == EndPosition.awayFromCoral) {
+                return 0;
+            }
+        } else if (startingPosition == StartingPosition.CENTER) {
+            if (endPosition == EndPosition.leftCoralStation) {
+                return 0;
+            } else if (endPosition == EndPosition.rightCoralStation) {
+                return 0;
+            } else if (endPosition == EndPosition.stayAtCoral) {
+                return 0;
+            } else if (endPosition == EndPosition.awayFromCoral) {
+                return 0;
+            }
+        }
+        return 0;
+    }
+
+    public double getMiddleEndAutoTargetAngle(){ //TODO: change values
+        EndPosition endPosition = EndPosition.valueOf(endPositionChooser.getSelected());
+        StartingPosition startingPosition = startingPositionChooser.getSelected(); 
+        if (startingPosition == StartingPosition.LEFT) {
+            if (endPosition == EndPosition.leftCoralStation) {
+                return 0;
+            } else if (endPosition == EndPosition.rightCoralStation) {
+                return 0;
+            } else if (endPosition == EndPosition.stayAtCoral) {
+                return 0;
+            } else if (endPosition == EndPosition.awayFromCoral) {
+                return 0;
+            }
+        } else if (startingPosition == StartingPosition.RIGHT) {
+            if (endPosition == EndPosition.leftCoralStation) {
+                return 0;
+            } else if (endPosition == EndPosition.rightCoralStation) {
+                return 0;
+            } else if (endPosition == EndPosition.stayAtCoral) {
+                return 0;
+            } else if (endPosition == EndPosition.awayFromCoral) {
+                return 0;
+            }
+        } else if (startingPosition == StartingPosition.CENTER) {
+            if (endPosition == EndPosition.leftCoralStation) {
+                return 0;
+            } else if (endPosition == EndPosition.rightCoralStation) {
+                return 0;
+            } else if (endPosition == EndPosition.stayAtCoral) {
+                return 0;
+            } else if (endPosition == EndPosition.awayFromCoral) {
+                return 0;
+            }
+        }
+        return 0;
+    }
+
+    public double getInitialEndAutoTargetDistance(){ //TODO: change values
+        EndPosition endPosition = EndPosition.valueOf(endPositionChooser.getSelected());
+        if (endPosition == EndPosition.leftCoralStation) {
+            return 0;
+        } else if (endPosition == EndPosition.rightCoralStation) {
+            return 0;
+        } else if (endPosition == EndPosition.stayAtCoral) {
+            return 0;
+        } else if (endPosition == EndPosition.awayFromCoral) {
+            return 0;
+        }
+        return 0;
+    }
+
+    public double getMiddleEndAutoTargetDistance() { //TODO: change values
+        EndPosition endPosition = EndPosition.valueOf(endPositionChooser.getSelected());
+        if (endPosition == EndPosition.leftCoralStation) {
+            return 0;
+        } else if (endPosition == EndPosition.rightCoralStation) {
+            return 0;
+        } else if (endPosition == EndPosition.stayAtCoral) {
+            return 0;
+        } else if (endPosition == EndPosition.awayFromCoral) {
+            return 0;
+        }
+        return 0;
+    }
+
+    public double getFinalEndAutoTargetDistance() { //TODO: change values
+        EndPosition endPosition = EndPosition.valueOf(endPositionChooser.getSelected());
+        if (endPosition == EndPosition.leftCoralStation) {
+            return 0;
+        } else if (endPosition == EndPosition.rightCoralStation) {
+            return 0;
+        } else if (endPosition == EndPosition.stayAtCoral) {
+            return 0;
+        } else if (endPosition == EndPosition.awayFromCoral) {
+            return 0;
+        }
+        return 0;
+    }
+
+    public double getFinalEndAutoTargetAngle() {
         EndPosition endPosition = EndPosition.valueOf(endPositionChooser.getSelected());
         if (endPosition == EndPosition.leftCoralStation) {
             return 0;
