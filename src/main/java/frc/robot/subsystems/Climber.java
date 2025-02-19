@@ -17,7 +17,7 @@ public class Climber {
     public static final XboxController reverseClimbController = new XboxController(ControllerConstants.REVERSE_CLIMBER_AUX_PORT);
 
     public void setClimb() {
-        climbMotor.set(0); //huh? Elaborate?
+        climbMotor.set(0); //huh? Elaborate?- Yinan & Lillie
     }
 
     public void setCoast() {
