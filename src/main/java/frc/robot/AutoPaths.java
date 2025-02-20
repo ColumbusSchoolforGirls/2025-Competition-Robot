@@ -9,7 +9,10 @@ public class AutoPaths { // obviously need to add more
     public enum StartingPosition {
         LEFT, 
         RIGHT, 
-        CENTER
+        MIDDLE,
+        RIGHT_POSITION,
+        LEFT_POSITION,
+        MIDDLE_POSITION,
     }
 
     public enum CoralPosition {
@@ -54,7 +57,7 @@ public class AutoPaths { // obviously need to add more
     }
 
     /**
-     * Gets the initial turn angle based on the starting position chooser.
+     * Gets the turn angle based on the starting position chooser.
      * @return
      */
     // TODO: implement
@@ -267,5 +270,33 @@ public class AutoPaths { // obviously need to add more
         return AutoAction.STOP;
     }
 
+    private final SendableChooser<String> positionChooser = new SendableChooser<>();
 
-}
+    HashMap<String, StartingPosition[]> startingPositions = new HashMap<>();
+
+  public void updateDashboard() {
+
+    for (StartingPosition p : StartingPosition.values()) {
+        startingPositions.put(p.name(), p);
+    }
+    
+    AutoPaths.put("Left_Position", AutoPaths.StartingPosition.LEFT);
+    AutoPaths.put("Middle_Main", AutoPaths.StartingPosition.MIDDLE_POSITION);
+    AutoPaths.put("Right Main", AutoPaths.StartingPosition.RIGHT_POSITION);
+
+    AutoPaths.put("Left Drive", AutoPaths.autoLeftDrive);
+    AutoPaths.put("Middle Drive", AutoPaths.autoMiddleDrive);
+    AutoPaths.put("Right Drive", AutoPaths.autoRightDrive);
+
+    autoPaths.put("Left Shoot ONLY", AutoPaths.autoLeftShootONLY);
+
+    for (String autoPathName : autoPaths.keySet()) {
+      m_chooser.addOption(autoPathName, autoPathName);
+    }
+
+    SmartDashboard.putData("Auto choices", m_chooser);
+
+    }
+
+    }
+

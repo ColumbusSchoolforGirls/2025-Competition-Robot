@@ -10,5 +10,9 @@ public enum AutoAction {
    // DRIVE_REMOVE_ALGAE
    ADDITIONAL_DRIVE_ACTIONS,
    STOP
-
+   //TURN,
+   //DRIVE,
+   //PLACE
+   //STATION
+   //JUST_LEAVE
 }
