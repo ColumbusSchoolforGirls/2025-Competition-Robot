@@ -42,6 +42,7 @@ public class Robot extends TimedRobot {
     // DriverStation.startDataLog(DataLogManager.getLog());
 
     swerve.driveInit();
+    autoPaths.autoShuffleboardStartup();
   }
 
   @Override
@@ -106,10 +107,11 @@ public class Robot extends TimedRobot {
       // execute drive
       // go to next state
 
+      // TODO: remove all endAuto function uses
       coralSystem.setAutoTargetHeight(0);
-      swerve.startTurn(autoPaths.getInitialEndAutoTargetAngle());
+      // swerve.startTurn(autoPaths.getInitialEndAutoTargetAngle());
       autoPaths.getDriveDistance();
-      swerve.startDrive(autoPaths.getInitialEndAutoTargetDistance());
+      // swerve.startDrive(autoPaths.getInitialEndAutoTargetDistance());
       if (swerve.turnComplete() && swerve.driveComplete()) { 
         goToNextState();
       } else {
