@@ -93,7 +93,7 @@ public class Constants {
 
         public static final double TICKS_TO_INCHES = 0.02;
 
-        public static final double SHOOT_TIME = 2; //TODO: change time
+        public static final double SHOOT_TIME = 1.5; //TODO: change time
     }
 
     public static final class ClimbConstants {

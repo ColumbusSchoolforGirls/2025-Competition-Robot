@@ -1,9 +1,15 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.CoralConstants;
+import frc.robot.subsystems.CoralSystem;
+
 
 public class AutoPaths { 
+    private final CoralSystem coralSystem = new CoralSystem();
+
     public enum StartingPosition {
         LEFT, RIGHT, MIDDLE
     }
@@ -78,6 +84,14 @@ public class AutoPaths {
 
     public double getDriveDistance() {
         return 0; // TODO: change value
+    }
+
+    public void placeCoral() {
+        coralSystem.autoShoot();
+
+        if (coralSystem.autoShootComplete()) {
+            goToNextState();
+        }
     }
 
     // Updates the currentAutoAction. This handles all state transitions. All

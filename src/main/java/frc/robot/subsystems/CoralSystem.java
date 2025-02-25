@@ -27,8 +27,6 @@ public class CoralSystem {
     private double targetHeight;
     private double difference;
     double startShootTime;
-    boolean autoShootComplete;
-
 
     /** Returns the current height of elevator in inches.*/
     private double getHeight() {
@@ -93,10 +91,10 @@ public class CoralSystem {
   public boolean autoShootComplete() {
 
     if (Timer.getFPGATimestamp() - startShootTime > CoralConstants.SHOOT_TIME) {
-      autoShootComplete = true;
-      shootMotor.set(0);
-        }
-            return autoShootComplete;
+        shootMotor.set(0);
+        return true;
+    }
+    return false;
   }
 
     //TODO: implement into auto
