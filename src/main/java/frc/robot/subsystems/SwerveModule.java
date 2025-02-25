@@ -103,7 +103,7 @@ public class SwerveModule {
     correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
     correctedDesiredState.angle = desiredState.angle.plus(Rotation2d.fromRadians(chassisAngularOffset));
 
-     SmartDashboard.putNumber("desiredState", correctedDesiredState.speedMetersPerSecond);
+     SmartDashboard.putNumber("desiredState", correctedDesiredState.angle.getDegrees());
      SmartDashboard.putNumber("AbsEncoder", turnAbsoluteEncoder.get());
     
 
@@ -117,7 +117,7 @@ public class SwerveModule {
     // This results in smoother driving.
     desiredState.cosineScale(encoderRotation);
 
-    driveClosedLoopController.setReference(correctedDesiredState.speedMetersPerSecond, ControlType.kVelocity);
+    //driveClosedLoopController.setReference(correctedDesiredState.speedMetersPerSecond, ControlType.kVelocity);
     turnClosedLoopController.setReference(correctedDesiredState.angle.getRadians(), ControlType.kPosition);
 
     // TODO: add later with feedforward control

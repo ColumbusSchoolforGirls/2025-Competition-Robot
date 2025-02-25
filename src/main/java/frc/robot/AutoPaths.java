@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.CoralConstants;
 
 public class AutoPaths { 
     public enum StartingPosition {
@@ -63,13 +64,15 @@ public class AutoPaths {
         return 0;
     }
 
-    // TODO: add L3 as an option
+   
     public double getAutoTargetHeight() {
         CoralLevel coralLevel = coralLevelChooser.getSelected();
         if (coralLevel == CoralLevel.TROUGH) {
             return Constants.CoralConstants.L2_HEIGHT;
         } else if (coralLevel == CoralLevel.L2) {
             return Constants.CoralConstants.L2_HEIGHT;
+        } else if(coralLevel == CoralLevel.L3) {
+            return Constants.CoralConstants.L3_HEIGHT;
         } else if (coralLevel == CoralLevel.L4) {
             return Constants.CoralConstants.L4_HEIGHT;
         }
@@ -124,7 +127,7 @@ public class AutoPaths {
         createChooser(reefFaceChooser, ReefFace.values(), "Reef Face");
         createChooser(leftOrRightChooser, LeftOrRight.values(), "Left or Right");
         createChooser(coralLevelChooser, CoralLevel.values(), "Coral Level");
-
+        //TODO: add more end position options
         SmartDashboard.putBoolean("LEAVE ONLY", false);
         SmartDashboard.putBoolean("To Reef", false);
         SmartDashboard.putBoolean("Place Coral", false);

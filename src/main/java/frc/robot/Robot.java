@@ -62,16 +62,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    if (autoPaths.currentAutoAction == AutoAction.INITIAL_DRIVE) {
-      // get distance to travel
-      // execute drive
-      // if the drive is complete, transition to the next state
-      swerve.startDrive(autoPaths.getInitialDriveDistance());
-      if (swerve.driveComplete()) {
-        goToNextState();
-      }
-
-    } else if (autoPaths.currentAutoAction == AutoAction.TURN_TOWARD_REEF) {
+    // may need to redo first steps if the vision system doesn't pan out 
+    if (autoPaths.currentAutoAction == AutoAction.TURN_TOWARD_REEF) {
 
       float initialTurnAngle = autoPaths.getInitialTurnAngle();
       // do the turn
@@ -128,7 +120,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    driveWithJoystick(true);
+    driveWithJoystick(false);
+    coralSystem.shoot();
   }
 
   private void goToNextState() {
