@@ -88,8 +88,16 @@ public class SwerveModule {
         driveEncoder.getPosition(), new Rotation2d(turnRelativeEncoder.getPosition()));
   }
 
-  public double getDrivePositionInches() {
-    return driveEncoder.getPosition() / SwerveConstants.GEAR_RATIO * SwerveConstants.WHEEL_CIRCUMFERENCE;
+  public double getDrivePositionMeters() {
+    return driveEncoder.getPosition() / SwerveConstants.GEAR_RATIO * SwerveConstants.WheelCircumferenceMeters;
+  }
+
+  public double getVelocityMetersPerSecond() {
+    return driveEncoder.getVelocity() * SwerveConstants.drivingFactor / 60;
+  }
+
+  public double getVelocityRPM() {
+    return driveEncoder.getVelocity();
   }
 
   /**
@@ -139,6 +147,13 @@ public class SwerveModule {
 //     turningMotor.setVoltage(turnOutput + finalTurnFeedforward);
 
     this.desiredState = desiredState;
+  }
+
+  public void setCurrentLimit() { // TODO: is this written correctly?
+    config.smartCurrentLimit(40, 40, 1); // TODO: decrease the stall limits
+    driveMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    config.smartCurrentLimit(20, 20, 1);
+    turnMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   /** Zeroes all the SwerveModule drive encoders. */

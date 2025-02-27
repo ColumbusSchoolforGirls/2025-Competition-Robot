@@ -71,10 +71,10 @@ public class Drivetrain {
   }
 
   public void getDriveEncoders() {
-    frontLeft.getDrivePositionInches();
-    frontRight.getDrivePositionInches();
-    backLeft.getDrivePositionInches();
-    backRight.getDrivePositionInches();
+    frontLeft.getDrivePositionMeters();
+    frontRight.getDrivePositionMeters();
+    backLeft.getDrivePositionMeters();
+    backRight.getDrivePositionMeters();
   }
 
   public void resetTurnEncoders() {
@@ -241,30 +241,35 @@ public class Drivetrain {
 //This is for auto turning
   public void setAutoTargetAngle(double targetAngle) {
     this.targetAngle = targetAngle;
+  }
+  
+  public boolean turnComplete() {
+    gyroDifference = (getHeading() - targetAngle);
 
-
+    return Math.abs(gyroDifference) < Constants.DriveConstants.TURN_TOLERANCE;
   }
 
-  
-    public boolean turnComplete() {
-        gyroDifference = (getHeading() - targetAngle);
-
-        return Math.abs(gyroDifference) < Constants.DriveConstants.TURN_TOLERANCE;
-    }
-
+  double stallStart = 0.0;
   public boolean driveComplete() {
-        driveDifference = targetDistance - frontLeft.getDrivePositionInches(); //change to make better
-        if (Math.abs(driveDifference) < Constants.DriveConstants.DISTANCE_TOLERANCE) {
-            return true;    
-          //if (frontLeftEncoder.getVelocity() < 0.03) { // to prevent skidding bc of turning before drive is complete
-                //return true;
-            //}
-        //} else if (Math.abs(gyro.getVelocityY()) < Constants.AUTO_DRIVE_VELOCITY_THRESHHOLD && Timer.getFPGATimestamp() - startAutoDriveTime > 0.5) { // change: test //change                                                                                
-            //System.out.println("Drive stalled - TESTING");
-            //return true;
-        }
-        return false;
+    driveDifference = targetDistance - odometry.getPoseMeters().getX();
+    if (Math.abs(driveDifference) < Constants.DriveConstants.DISTANCE_TOLERANCE) {
+      stallStart = 0.0;  
+      return true;    
     }
+    // Prevents the robot from burning out driving continuously into a wall // TODO: check if this works
+    if (frontLeft.getVelocityRPM() < 100) {
+      if (stallStart != 0.0) {
+        if (Timer.getFPGATimestamp() - stallStart > 0.5) {
+          return true;
+        }
+      } else {
+      stallStart = Timer.getFPGATimestamp();
+      }
+    } else {
+      stallStart = 0.0;
+    }
+    return false;
+  }
 
     public void startTurn(double angle) {
         this.targetAngle = (angle + getHeading());
@@ -274,9 +279,9 @@ public class Drivetrain {
         gyro.reset();
     }
 
-    public void startDrive(double distanceInches) {
+    public void startDrive(double distanceMeters) {
         resetEncoders();
-        targetDistance = distanceInches;
+        targetDistance = distanceMeters;
     }
 
     public void gyroTurn(double periodSeconds) {

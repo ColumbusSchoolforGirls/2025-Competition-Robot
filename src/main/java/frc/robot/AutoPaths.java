@@ -30,14 +30,14 @@ public class AutoPaths {
     public AutoAction currentAutoAction;
 
     /**
-     * Gets the turn angle based on the starting position chooser.
-     * 
-     * @return
+     * Returns the initial drive distance in meters based on the starting position chooser.
      */
     // TODO: implement
     public double getInitialDriveDistance() {
         StartingPosition startingPosition = positionChooser.getSelected();
+        LeftOrRight leftOrRight = leftOrRightChooser.getSelected();
         if (startingPosition == StartingPosition.LEFT || startingPosition == StartingPosition.RIGHT) {
+            // return initial drive distance
             return 0; // TODO: change to some positive value
         } else if (startingPosition == StartingPosition.MIDDLE) {
             return 0;
@@ -123,10 +123,6 @@ public class AutoPaths {
             chooser.addOption(value.name(), value);
         }
         SmartDashboard.putData(chooserName, chooser);
-    }
-
-    public <K extends Enum<K>> K getSelected(SendableChooser<K> chooser) {
-        return chooser.getSelected();
     }
 
     public boolean getIfSelected(String key) {
