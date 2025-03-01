@@ -10,6 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -64,21 +65,41 @@ public class Robot extends TimedRobot {
       // do the turn
       // if the turn is complete, transition to the next state
     } else if (autoPaths.currentAutoAction == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
+      //swerve.startDrive(autoPaths.getDriveToReefDistance());
+      // coralSystem.setAutoTargetHeight(autoPaths.getAutoTargetHeight());
+      // if (coralSystem.elevatorComplete() && swerve.driveComplete()) {
+      //    goToNextState();
+      // }
       // raise the coral to the desired height
       // run AprilTag auto alignment
       // check elevator and drivetrain, and transition to the next state
     } else if (autoPaths.currentAutoAction == AutoAction.SHOOT_CORAL) {
        // shoot the coral
        // give a delay
-       // go to the next state
-    } else if (autoPaths.currentAutoAction == AutoAction.ADDITIONAL_DRIVE_ACTIONS) {
+      // coralSystem.autoShoot();
+      // if (coralSystem.autoShootComplete()) {
+      //   goToNextState();
+      }
+
+    // } else if (autoPaths.currentAutoAction == AutoAction.ADDITIONAL_DRIVE_ACTIONS) {
+    //   // autoPaths.currentAutoAction = AutoAction.STOP;
       // bring the elevator back down
       // get turn angle to where you want to go next
-      // get distance to travel
       // execute drive
       // go to next state
-    }
-    
+
+      // TODO: remove all endAuto function uses
+      // coralSystem.setAutoTargetHeight(0);
+      // swerve.startTurn(autoPaths.getInitialEndAutoTargetAngle());
+    //   autoPaths.getDriveDistance();
+    //   swerve.startDrive(autoPaths.getInitialEndAutoTargetDistance());
+    //   if (swerve.turnComplete() && swerve.driveComplete()) { 
+    //     goToNextState();
+    //   } else {
+    //     autoPaths.currentAutoAction = AutoAction.STOP; 
+    //   }
+    // }
+
   }
 
   @Override
@@ -88,7 +109,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    driveWithJoystick(true);
+    driveWithJoystick(false);
+    // coralSystem.shoot();
+    swerve.driverResetTurnEncoders();
   }
 
   private void goToNextState(){

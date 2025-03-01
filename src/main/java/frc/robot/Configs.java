@@ -45,9 +45,9 @@ public class Configs {
                     // to 10 degrees will go through 0 rather than the other direction which is a
                     // longer route.
                     .positionWrappingEnabled(true)
-                    .positionWrappingInputRange(0, SwerveConstants.turningFactor);
+                    .positionWrappingInputRange(0, 2*Math.PI);
 
-                    turningConfig.closedLoop.maxMotion.allowedClosedLoopError(0.08);
+                    turningConfig.closedLoop.maxMotion.allowedClosedLoopError(0.04);
 
 
         }

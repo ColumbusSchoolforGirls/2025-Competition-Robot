@@ -25,7 +25,7 @@ import frc.robot.Configs;
 import frc.robot.Constants.SwerveConstants;
 
 
-public class SwerveModule {
+public class SwerveModule implements SwerveModuleInterface {
   public SparkMax driveMotor;
   public SparkMax turnMotor;
 
@@ -53,7 +53,6 @@ public class SwerveModule {
     driveEncoder = driveMotor.getEncoder(); // Drive motor only has a relative encoder
     turnRelativeEncoder = turnMotor.getEncoder();
     turnAbsoluteEncoder = new DutyCycleEncoder(turnDIOPin);
-
     driveClosedLoopController = driveMotor.getClosedLoopController();
     turnClosedLoopController = turnMotor.getClosedLoopController();
 
@@ -73,8 +72,10 @@ public class SwerveModule {
   }
 
   public void resetRelativeTurnEncoder() {
-
-    turnRelativeEncoder.setPosition((turnAbsoluteEncoder.get()*2*Math.PI + chassisAngularOffset) / SwerveConstants.turningFactor);
+    turnRelativeEncoder.setPosition((turnAbsoluteEncoder.get()*2*Math.PI - chassisAngularOffset) / SwerveConstants.turningFactor);
+    desiredState.angle = new Rotation2d(turnRelativeEncoder.getPosition(
+      
+    ));
   }
 
   
@@ -94,8 +95,16 @@ public class SwerveModule {
         driveEncoder.getPosition(), new Rotation2d(turnRelativeEncoder.getPosition()));
   }
 
-  public double getDrivePositionInches() {
-    return driveEncoder.getPosition() / SwerveConstants.GEAR_RATIO * SwerveConstants.WHEEL_CIRCUMFERENCE;
+  public double getDrivePositionMeters() {
+    return driveEncoder.getPosition() / SwerveConstants.GEAR_RATIO * SwerveConstants.WheelCircumferenceMeters;
+  }
+
+  public double getVelocityMetersPerSecond() {
+    return driveEncoder.getVelocity() * SwerveConstants.drivingFactor / 60;
+  }
+
+  public double getVelocityRPM() {
+    return driveEncoder.getVelocity();
   }
 
   /**
@@ -115,13 +124,13 @@ public class SwerveModule {
 
     
     // Optimize the reference state to avoid spinning further than 90 degrees.
-    Rotation2d encoderRotation = new Rotation2d(turnRelativeEncoder.getPosition());
-    desiredState.optimize(encoderRotation);
+    Rotation2d encoderRotation = new Rotation2d(turnRelativeEncoder.getPosition() % (2 * Math.PI));
+    correctedDesiredState.optimize(encoderRotation); 
 
     // Scale speed by cosine of angle error. This scales down movement perpendicular
     // to the desired direction of travel that can occur when modules change directions.
     // This results in smoother driving.
-    desiredState.cosineScale(encoderRotation);
+    correctedDesiredState.cosineScale(encoderRotation);
 
     driveClosedLoopController.setReference(correctedDesiredState.speedMetersPerSecond, ControlType.kVelocity);
     turnClosedLoopController.setReference(correctedDesiredState.angle.getRadians(), ControlType.kPosition);
@@ -145,6 +154,13 @@ public class SwerveModule {
 //     turningMotor.setVoltage(turnOutput + finalTurnFeedforward);
 
     this.desiredState = desiredState;
+  }
+
+  public void setCurrentLimit() { // TODO: is this written correctly?
+    config.smartCurrentLimit(40, 40, 1); // TODO: decrease the stall limits
+    driveMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    config.smartCurrentLimit(20, 20, 1);
+    turnMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   /** Zeroes all the SwerveModule drive encoders. */

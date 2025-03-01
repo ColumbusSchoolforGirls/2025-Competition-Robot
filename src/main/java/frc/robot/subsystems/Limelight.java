@@ -69,15 +69,15 @@ public class Limelight {
         return pos.getDoubleArray(new double[6])[5];
     }
 
-    private double getTX() {
+    public double getTX() {
         return tx.getDouble(0);
     }
 
-    private double getTY() {
+    public double getTY() {
         return ty.getDouble(0);
     }
 
-    private double getTA() {
+    public double getTA() {
         return ta.getDouble(0);
     }
 }

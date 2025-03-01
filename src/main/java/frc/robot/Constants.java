@@ -33,7 +33,6 @@ public class Constants {
 
         //Encoder calculations
         public static final double GEAR_RATIO = 8.14;
-        public static final int WHEEL_CIRCUMFERENCE = 4; // inches
         public static final double WHEEL_DIAMETER = 4 / Math.PI; //inches
 
         public static final double drivingFactor = Constants.SwerveConstants.WheelDiameterMeters * Math.PI
@@ -53,7 +52,7 @@ public class Constants {
         public static final int FL_DRIVE_ID = 2;
         public static final int FL_TURN_ID = 3;
         public static final int FL_DIO = 2;
-        public static final double FL_CHASSIS_ANGULAR_OFFSET = 0.802*Math.PI*2; //TODO: need to check after Chole fix (in radians)
+        public static final double FL_CHASSIS_ANGULAR_OFFSET = 2.44346; // 0.802*Math.PI*2; //TODO: need to check after Chole fix (in radians)
 
         public static final int FR_DRIVE_ID = 4;
         public static final int FR_TURN_ID = 5;
@@ -71,7 +70,10 @@ public class Constants {
         public static final double BR_CHASSIS_ANGULAR_OFFSET = 0.950*Math.PI*2;
 
         //Gyro Reversed
-        public static final boolean GyroReversed = false; //TODO: is this always false?????
+        public static final boolean GyroReversed = false; //TODO: is this always false?????'
+        
+        public static final int TURN_TOLERANCE = 2; //TODO: need to change when testing turning
+        public static final double DISTANCE_TOLERANCE = 0.1; //TODO: need to change when testing distance
     }   
 
     public static final class CoralConstants { //TODO: need to change all of the values!
@@ -89,6 +91,8 @@ public class Constants {
         public static final double ELEVATOR_SPEED = 0.5;
 
         public static final double TICKS_TO_INCHES = 0.02;
+
+        public static final double SHOOT_TIME = 1.5; //TODO: change time
     }
 
     public static final class ClimbConstants {
