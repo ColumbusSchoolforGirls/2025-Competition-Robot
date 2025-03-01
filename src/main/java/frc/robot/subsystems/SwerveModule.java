@@ -110,14 +110,14 @@ public class SwerveModule {
     
     // Optimize the reference state to avoid spinning further than 90 degrees.
     Rotation2d encoderRotation = new Rotation2d(turnRelativeEncoder.getPosition());
-    desiredState.optimize(encoderRotation);
+    desiredState.optimize(encoderRotation); 
 
     // Scale speed by cosine of angle error. This scales down movement perpendicular
     // to the desired direction of travel that can occur when modules change directions.
     // This results in smoother driving.
     desiredState.cosineScale(encoderRotation);
 
-    //driveClosedLoopController.setReference(correctedDesiredState.speedMetersPerSecond, ControlType.kVelocity);
+    driveClosedLoopController.setReference(correctedDesiredState.speedMetersPerSecond, ControlType.kVelocity);
     turnClosedLoopController.setReference(correctedDesiredState.angle.getRadians(), ControlType.kPosition);
 
     // TODO: add later with feedforward control
