@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   // private final CoralSystem coralSystem = new CoralSystem(); ?? TODO: ADD BACK
   // private final Climber climber = new Climber();
 
-  private final AutoPaths autoPaths = new AutoPaths();
+  private final AutoPaths autoPaths = new AutoPaths(coralSystem);
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);

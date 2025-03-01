@@ -72,10 +72,10 @@ public class SwerveModule implements SwerveModuleInterface {
   }
 
   public void resetRelativeTurnEncoder() {
-    turnRelativeEncoder.setPosition((turnAbsoluteEncoder.get()*2*Math.PI - chassisAngularOffset) / SwerveConstants.turningFactor);
-    desiredState.angle = new Rotation2d(turnRelativeEncoder.getPosition(
-      
-    ));
+    double targetRelativeEncoder = (turnAbsoluteEncoder.get()*2*Math.PI - chassisAngularOffset) / SwerveConstants.turningFactor; 
+    turnRelativeEncoder.setPosition(targetRelativeEncoder);
+    desiredState.angle = new Rotation2d(targetRelativeEncoder);
+    SmartDashboard.putNumber("TargetRelativeEncoder", targetRelativeEncoder);
   }
 
   

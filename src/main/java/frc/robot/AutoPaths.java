@@ -4,8 +4,14 @@ import java.util.HashMap;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.CoralConstants;
+import frc.robot.subsystems.CoralSystem;
 
-public class AutoPaths { // obviously need to add more
+
+public class AutoPaths { 
+
+    private final CoralSystem coralSystem;
+
     public enum StartingPosition {
         LEFT, 
         RIGHT, 
@@ -27,7 +33,8 @@ public class AutoPaths { // obviously need to add more
     public AutoAction currentAutoAction;
 
 
-    public AutoPaths() {
+    public AutoPaths(CoralSystem coralSystem) {
+        this.coralSystem = coralSystem;
         SmartDashboard.putData("Starting Position", startingPositionChooser); // actually puts them on the dashboard
                                                                               // after they are added to m_chooser
         for (StartingPosition p : StartingPosition.values()) {
