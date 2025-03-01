@@ -37,7 +37,8 @@ public class Constants {
 
         public static final double drivingFactor = Constants.SwerveConstants.WheelDiameterMeters * Math.PI
         / Constants.SwerveConstants.DrivingMotorReduction;
-        public static final double turningFactor = 2 * Math.PI/12.8*0.6;
+        public static final double steeringFactor = 150/7;
+        public static final double turningFactor = (2 * Math.PI)/steeringFactor;
         public static final double drivingVelocityFeedForward = 1 / Constants.SwerveConstants.DriveWheelFreeSpeedRps;
 
     }

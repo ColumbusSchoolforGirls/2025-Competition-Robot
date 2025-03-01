@@ -111,14 +111,14 @@ public class SwerveModule {
     correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
     correctedDesiredState.angle = desiredState.angle.plus(Rotation2d.fromRadians(chassisAngularOffset));
 
-     SmartDashboard.putNumber("desiredState", correctedDesiredState.speedMetersPerSecond);
+     SmartDashboard.putNumber("desiredState", correctedDesiredState.angle.getDegrees());
      SmartDashboard.putNumber("AbsEncoder", turnAbsoluteEncoder.get());
     
 
     
     // Optimize the reference state to avoid spinning further than 90 degrees.
     Rotation2d encoderRotation = new Rotation2d(turnRelativeEncoder.getPosition());
-    desiredState.optimize(encoderRotation);
+    desiredState.optimize(encoderRotation); 
 
     // Scale speed by cosine of angle error. This scales down movement perpendicular
     // to the desired direction of travel that can occur when modules change directions.

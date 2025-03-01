@@ -78,7 +78,7 @@ public class AutoPaths {
         }
     }
 
-    // TODO: add L3 as an option
+   
     public double getAutoTargetHeight() {
         CoralLevel coralLevel = coralLevelChooser.getSelected();
         if (coralLevel == CoralLevel.TROUGH) {
@@ -158,7 +158,7 @@ public class AutoPaths {
         createChooser(reefFaceChooser, ReefFace.values(), "Reef Face");
         createChooser(leftOrRightChooser, LeftOrRight.values(), "Left or Right");
         createChooser(coralLevelChooser, CoralLevel.values(), "Coral Level");
-
+        //TODO: add more end position options
         SmartDashboard.putBoolean("LEAVE ONLY", false);
         SmartDashboard.putBoolean("To Reef", false);
         SmartDashboard.putBoolean("Place Coral", false);
