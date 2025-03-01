@@ -33,7 +33,6 @@ public class Constants {
 
         //Encoder calculations
         public static final double GEAR_RATIO = 8.14;
-        public static final int WHEEL_CIRCUMFERENCE = 4; // inches
         public static final double WHEEL_DIAMETER = 4 / Math.PI; //inches
 
         public static final double drivingFactor = Constants.SwerveConstants.WheelDiameterMeters * Math.PI
@@ -94,7 +93,7 @@ public class Constants {
 
         public static final double TICKS_TO_INCHES = 0.02;
 
-        public static final double SHOOT_TIME = 2; //TODO: change time
+        public static final double SHOOT_TIME = 1.5; //TODO: change time
     }
 
     public static final class ClimbConstants {
