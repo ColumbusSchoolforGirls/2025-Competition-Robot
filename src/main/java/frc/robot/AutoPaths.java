@@ -1,10 +1,14 @@
 package frc.robot;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.CoralConstants;
 import frc.robot.subsystems.CoralSystem;
+import frc.robot.Constants.AutoConstants;
 
 
 public class AutoPaths { 
@@ -35,14 +39,17 @@ public class AutoPaths {
     // TODO: implement
     public double getInitialDriveDistance() {
         StartingPosition startingPosition = positionChooser.getSelected();
-        LeftOrRight leftOrRight = leftOrRightChooser.getSelected();
-        if (startingPosition == StartingPosition.LEFT || startingPosition == StartingPosition.RIGHT) {
-            // return initial drive distance
-            return 0; // TODO: change to some positive value
-        } else if (startingPosition == StartingPosition.MIDDLE) {
-            return 0;
+        Boolean leaveOnly = getIfSelected("LEAVE ONLY");
+        if (leaveOnly) {
+            return AutoConstants.LEAVE_ONLY_DISTANCE;
         } else {
-            return 0;
+            if (startingPosition == StartingPosition.LEFT || startingPosition == StartingPosition.RIGHT) {
+                return AutoConstants.SIDE_DISTANCE;
+            } else if (startingPosition == StartingPosition.MIDDLE) {
+                return AutoConstants.MIDDLE_DISTANCE;
+            } else {
+                return 0;
+            }
         }
     }
 
@@ -57,60 +64,77 @@ public class AutoPaths {
         }
     }
 
+    // Add a limelight align after using this
     public float getInitialTurnAngle() {
         StartingPosition startingPosition = positionChooser.getSelected();
         if (startingPosition == StartingPosition.LEFT) {
-            return 0; // TODO: change to some positive (counter) value
+            return 60; // TODO: change to some positive (counter) value
         } else if (startingPosition == StartingPosition.RIGHT) {
-            return 0; // TODO: change to some negative (clockwise) value
+            return -60; // TODO: change to some negative (clockwise) value
         } else if (startingPosition == StartingPosition.MIDDLE) {
             return 0;
+        } else {
+            return 0;
         }
-        return 0;
     }
 
     // TODO: add L3 as an option
     public double getAutoTargetHeight() {
         CoralLevel coralLevel = coralLevelChooser.getSelected();
         if (coralLevel == CoralLevel.TROUGH) {
-            return Constants.CoralConstants.L2_HEIGHT;
+            return CoralConstants.L2_HEIGHT;
         } else if (coralLevel == CoralLevel.L2) {
-            return Constants.CoralConstants.L2_HEIGHT;
+            return CoralConstants.L2_HEIGHT;
+        } else if (coralLevel == CoralLevel.L3) {
+            return CoralConstants.L3_HEIGHT;
         } else if (coralLevel == CoralLevel.L4) {
-            return Constants.CoralConstants.L4_HEIGHT;
+            return CoralConstants.L4_HEIGHT;
         }
-        return Constants.CoralConstants.L2_HEIGHT;
+        return CoralConstants.L2_HEIGHT;
     }
 
     public double getDriveDistance() {
         return 0; // TODO: change value
     }
 
-    public void placeCoral() {
-        coralSystem.autoShoot();
-
-        if (coralSystem.autoShootComplete()) {
-            goToNextState();
-        }
-    }
-
     // Updates the currentAutoAction. This handles all state transitions. All
     // actions are in Robot.java
-    public AutoAction goToNextState() {
-        if (this.currentAutoAction == null) {
-            return AutoAction.TURN_TOWARD_REEF;
-        } else if (this.currentAutoAction == AutoAction.TURN_TOWARD_REEF) {
-            return AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR;
-        } else if (this.currentAutoAction == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
-            return AutoAction.SHOOT_CORAL;
-        } else if (this.currentAutoAction == AutoAction.SHOOT_CORAL) {
-            return AutoAction.ADDITIONAL_DRIVE_ACTIONS;
-        } else if (this.currentAutoAction == AutoAction.ADDITIONAL_DRIVE_ACTIONS) {
-            return AutoAction.STOP;
-        }
-        // TODO: Implement the rest of this
-        return AutoAction.STOP;
-    }
+    // public AutoAction goToNextState() {
+    //     if (this.currentAutoAction == null) {
+    //         return AutoAction.STOP;
+    //     } else if (this.currentAutoAction == AutoAction.TURN_TOWARD_REEF) {
+    //         return AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR;
+    //     } else if (this.currentAutoAction == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
+    //         return AutoAction.SHOOT_CORAL;
+    //     } else if (this.currentAutoAction == AutoAction.SHOOT_CORAL) {
+    //         return AutoAction.ADDITIONAL_DRIVE_ACTIONS;
+    //     } else if (this.currentAutoAction == AutoAction.ADDITIONAL_DRIVE_ACTIONS) {
+    //         return AutoAction.STOP;
+    //     }
+    //     // TODO: Implement the rest of this
+    //     return AutoAction.STOP;
+    // }
+
+    // public void goToNextState2() {
+    //     switch (this.currentAutoAction) {
+    //         case LEAVE_ONLY:
+    //             // implement
+    //             this.currentAutoAction = AutoAction.INITIAL_DRIVE;
+    //         case INITIAL_DRIVE:
+    //             // implement
+    //             this.currentAutoAction = AutoAction.TURN_TOWARD_REEF;
+    //         case TURN_TOWARD_REEF:
+    //             // implement
+    //             this.currentAutoAction = AutoAction.GO_TO_REEF;
+    //         case GO_TO_REEF:
+    //             // implement
+    //             this.currentAutoAction = AutoAction.SHOOT_CORAL;
+    //         case SHOOT_CORAL:
+    //             // implement
+    //             this.currentAutoAction = AutoAction.STATION;
+
+    //     }
+    // }
 
     // Choosers for the shuffleboard
     private final SendableChooser<StartingPosition> positionChooser = new SendableChooser<>();
@@ -142,4 +166,32 @@ public class AutoPaths {
 
         this.currentAutoAction = null;
     }
+
+    public ArrayList<AutoStep> buildPath() {
+        ArrayList<AutoStep> path = new ArrayList<>();
+        int value = 0; // TODO: PLACEHOLDER, add constants or get() for each
+        
+        if  (getIfSelected("LEAVE ONLY")) {
+            path.add(new AutoStep(AutoAction.LEAVE_ONLY, value)); // TODO: change to a turn and drive?
+            return path;
+        }
+
+        if(getIfSelected("TO REEF")) {
+            path.addAll(Arrays.asList(new AutoStep(AutoAction.INITIAL_DRIVE, value), new AutoStep(AutoAction.TURN_TOWARD_REEF, value), new AutoStep(AutoAction.GO_TO_REEF, value)));
+        }
+        
+        if (getIfSelected("PLACE CORAL")) {
+            path.add(new AutoStep(AutoAction.SHOOT_CORAL, value));
+        }
+
+        if (getIfSelected("TO STATION")) {
+            // TODO: STATION is a placeholder, change to actual action (probably drives and turns)
+            path.addAll(Arrays.asList(new AutoStep(AutoAction.STATION, value), new AutoStep(AutoAction.STATION, value), new AutoStep(AutoAction.STATION, value)));
+        }
+
+        return path;
+    }
 }
+
+
+// get values for autoPath value from startingPosition math

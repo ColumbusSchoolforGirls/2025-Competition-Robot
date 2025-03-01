@@ -76,6 +76,12 @@ public class Constants {
         public static final boolean GyroReversed = false; //TODO: is this always false?????
     }   
 
+    public static final class AutoConstants {
+        public static final double SIDE_DISTANCE = 0; //TODO: change distance
+        public static final double MIDDLE_DISTANCE = 0; //TODO: change distance
+        public static final double LEAVE_ONLY_DISTANCE = 0; //TODO: change distance
+    }
+
     public static final class CoralConstants { //TODO: need to change all of the values!
 
         public static final int ELEVATOR_TOLERANCE = 1; //TODO: Need to change when testing elevator

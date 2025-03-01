@@ -1,18 +1,15 @@
 package frc.robot;
 
 public enum AutoAction {
+   LEAVE_ONLY,
    INITIAL_DRIVE, //added for driving forward before turning towards the coral // TODO: change to drive 
    TURN_TOWARD_REEF,
-   GO_TO_REEF_AND_RAISE_ELEVATOR,
+   GO_TO_REEF,
    SHOOT_CORAL,
-   // later on...
-   // SET_ALGAE_HEIGHT,
-   // DRIVE_REMOVE_ALGAE
+   STATION,
+   STOP,
+   GO_TO_REEF_AND_RAISE_ELEVATOR,
+   TURN,
+   DRIVE,
    ADDITIONAL_DRIVE_ACTIONS,
-   STOP
-   //TURN,
-   //DRIVE,
-   //PLACE
-   //STATION
-   //JUST_LEAVE
 }

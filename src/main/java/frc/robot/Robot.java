@@ -12,6 +12,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.subsystems.Drivetrain;
@@ -26,6 +27,8 @@ public class Robot extends TimedRobot {
   private final Drivetrain swerve = new Drivetrain(limelight);
 
   private final AutoPaths autoPaths = new AutoPaths();
+  AutoStep[] autoActions = {}; // TODO: add autoActions = buildPath() in autoInit
+  int state;
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
@@ -60,65 +63,73 @@ public class Robot extends TimedRobot {
     swerve.setBrakeMode();
   }
 
+  public void goToNextState() {
+    state++;
+
+    if (state >= autoActions.length) {
+      return;
+    }
+
+    AutoStep currentAction = autoActions[state];
+
+    if (currentAction.getAction() == AutoAction.TURN) {
+      // float initialTurnAngle = autoPaths.getInitialTurnAngle();
+      swerve.startTurn(currentAction.getValue());
+
+    } else if (currentAction.getAction() == AutoAction.DRIVE) {
+      swerve.startDrive(currentAction.getValue()); // value = autopaths.getInitialDriveDistance()
+
+    } else if (currentAction.getAction() == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
+      coralSystem.setAutoTargetHeight(autoPaths.getAutoTargetHeight());
+      swerve.startDrive(currentAction.getValue()); // autoPaths.getDriveToReefDistance()
+
+    } else if (currentAction.getAction() == AutoAction.SHOOT_CORAL) {
+      coralSystem.autoShoot();
+
+    } else if (currentAction.getAction() == AutoAction.ADDITIONAL_DRIVE_ACTIONS) {
+      coralSystem.setAutoTargetHeight(0);
+      // swerve.startTurn(autoPaths.getInitialEndAutoTargetAngle());
+      autoPaths.getDriveDistance();
+      // swerve.startDrive(autoPaths.getInitialEndAutoTargetDistance());
+      
+    } else if (currentAction.getAction() == AutoAction.STOP) {
+      // TODO: add stop all
+    }
+    // TODO: add all the other actions
+  }
+
   @Override
   public void autonomousPeriodic() {
+
     if (autoPaths.currentAutoAction == AutoAction.INITIAL_DRIVE) {
-      // get distance to travel
-      // execute drive
-      // if the drive is complete, transition to the next state
-      swerve.startDrive(autoPaths.getInitialDriveDistance());
       if (swerve.driveComplete()) {
         goToNextState();
       }
 
     } else if (autoPaths.currentAutoAction == AutoAction.TURN_TOWARD_REEF) {
-
-      float initialTurnAngle = autoPaths.getInitialTurnAngle();
-      // do the turn
-      // if the turn is complete, transition to the next state
-      swerve.startTurn(initialTurnAngle);
       if (swerve.turnComplete()) {
         goToNextState();
       }
-
+    
     } else if (autoPaths.currentAutoAction == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
-      swerve.startDrive(autoPaths.getDriveToReefDistance());
-      coralSystem.setAutoTargetHeight(autoPaths.getAutoTargetHeight());
       if (coralSystem.elevatorComplete() && swerve.driveComplete()) {
         goToNextState();
       }
-      // raise the coral to the desired height
-      // run AprilTag auto alignment
-      // check elevator and drivetrain, and transition to the next state
+      // TODO: run AprilTag auto alignment
+
     } else if (autoPaths.currentAutoAction == AutoAction.SHOOT_CORAL) {
-      // shoot the coral
-      // give a delay
-      // go to the next state
-      coralSystem.autoShoot();
       if (coralSystem.autoShootComplete()) {
         goToNextState();
       }
 
     } else if (autoPaths.currentAutoAction == AutoAction.ADDITIONAL_DRIVE_ACTIONS) {
-      // autoPaths.currentAutoAction = AutoAction.STOP;
-      // bring the elevator back down
-      // get turn angle to where you want to go next
-      // get distance to travel
-      // execute drive
-      // go to next state
-
-      // TODO: remove all endAuto function uses
-      coralSystem.setAutoTargetHeight(0);
-      // swerve.startTurn(autoPaths.getInitialEndAutoTargetAngle());
-      autoPaths.getDriveDistance();
-      // swerve.startDrive(autoPaths.getInitialEndAutoTargetDistance());
       if (swerve.turnComplete() && swerve.driveComplete()) { 
         goToNextState();
-      } else {
-        autoPaths.currentAutoAction = AutoAction.STOP; 
-      }
-    }
+      } 
 
+    } else {
+      autoPaths.currentAutoAction = AutoAction.STOP; 
+    }
   }
 
   @Override
@@ -129,10 +140,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     driveWithJoystick(true);
-  }
-
-  private void goToNextState() {
-
   }
 
   private void driveWithJoystick(boolean fieldRelative) {
