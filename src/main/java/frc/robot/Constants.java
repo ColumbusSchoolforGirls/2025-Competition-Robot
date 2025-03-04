@@ -73,8 +73,9 @@ public class Constants {
         public static final int TURN_TOLERANCE = 2; //TODO: need to change when testing turning
         public static final double DISTANCE_TOLERANCE = 0.1; //TODO: need to change when testing distance
 
-        //Gyro Reversed
+        //Gyro 
         public static final boolean GyroReversed = false; //TODO: is this always false?????
+        public static final double STALL_SPEED = 0.1; // TODO change speed if needed, greater?
     }   
 
     public static final class AutoConstants {
