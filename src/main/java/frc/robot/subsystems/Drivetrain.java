@@ -157,6 +157,11 @@ public class Drivetrain {
         });
   }
 
+  public void updateSmartDashboard() {
+    frontLeft.updateSmartDashboard();
+    //for 1 swerve module testing
+  }
+
   /** Returns the currently-estimated pose of the robot. */
   public Pose2d getPose() {
     return odometry.getPoseMeters();
@@ -191,7 +196,7 @@ public class Drivetrain {
         });
 
         // SmartDashboard.putNumber("BL Encoder", backLeft.turnRelativeEncoder.getPosition());
-        SmartDashboard.putNumber("FL Encoder", frontLeft.turnRelativeEncoder.getPosition());
+        SmartDashboard.putNumber("FL Encoder", (frontLeft.turnRelativeEncoder.getPosition()*180)/3.14159);
         // SmartDashboard.putNumber("BR Encoder", backRight.turnRelativeEncoder.getPosition());
         // SmartDashboard.putNumber("FR Encoder", frontRight.turnRelativeEncoder.getPosition());
 

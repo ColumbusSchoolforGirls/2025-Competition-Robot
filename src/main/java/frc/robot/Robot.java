@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   // private final CoralSystem coralSystem = new CoralSystem(); ?? TODO: ADD BACK
   // private final Climber climber = new Climber();
 
-  private final AutoPaths autoPaths = new AutoPaths(coralSystem);
+  //private final AutoPaths autoPaths = new AutoPaths(coralSystem);
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
@@ -51,6 +51,8 @@ public class Robot extends TimedRobot {
     // limelight.updateLimelight();
     swerve.updateOdometry();
     swerve.periodic();
+    swerve.updateSmartDashboard();
+
   }
 
   @Override
@@ -60,11 +62,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    if (autoPaths.currentAutoAction == AutoAction.TURN_TOWARD_REEF) {
-      float initialTurnAngle = autoPaths.getInitialTurnAngle();
-      // do the turn
-      // if the turn is complete, transition to the next state
-    } else if (autoPaths.currentAutoAction == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
+    // if (autoPaths.currentAutoAction == AutoAction.TURN_TOWARD_REEF) {
+    //   float initialTurnAngle = autoPaths.getInitialTurnAngle();
+    //   // do the turn
+    //   // if the turn is complete, transition to the next state
+    // } else if (autoPaths.currentAutoAction == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
       //swerve.startDrive(autoPaths.getDriveToReefDistance());
       // coralSystem.setAutoTargetHeight(autoPaths.getAutoTargetHeight());
       // if (coralSystem.elevatorComplete() && swerve.driveComplete()) {
@@ -73,7 +75,7 @@ public class Robot extends TimedRobot {
       // raise the coral to the desired height
       // run AprilTag auto alignment
       // check elevator and drivetrain, and transition to the next state
-    } else if (autoPaths.currentAutoAction == AutoAction.SHOOT_CORAL) {
+    // } else if (autoPaths.currentAutoAction == AutoAction.SHOOT_CORAL) {
        // shoot the coral
        // give a delay
       // coralSystem.autoShoot();
@@ -100,7 +102,7 @@ public class Robot extends TimedRobot {
     //   }
     // }
 
-  }
+  // }
 
   @Override
   public void teleopInit() {

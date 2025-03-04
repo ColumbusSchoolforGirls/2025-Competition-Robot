@@ -52,7 +52,7 @@ public class Constants {
         public static final int FL_DRIVE_ID = 2;
         public static final int FL_TURN_ID = 3;
         public static final int FL_DIO = 2;
-        public static final double FL_CHASSIS_ANGULAR_OFFSET = 2.44346; // 0.802*Math.PI*2; //TODO: need to check after Chole fix (in radians)
+        public static final double FL_CHASSIS_ANGULAR_OFFSET = 3.979347333333333; //2.44346; //3.979347333333333; //so specific //2.44346; // 0.802*Math.PI*2; //TODO: need to check after Chole fix (in radians)
 
         public static final int FR_DRIVE_ID = 4;
         public static final int FR_TURN_ID = 5;

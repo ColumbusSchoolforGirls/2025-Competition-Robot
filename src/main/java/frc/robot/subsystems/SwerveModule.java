@@ -39,7 +39,6 @@ public class SwerveModule implements SwerveModuleInterface {
   SparkMaxConfig config = new SparkMaxConfig();
 
   private double chassisAngularOffset; // This comes from constants
-  private SwerveModuleState desiredState = new SwerveModuleState(0.0, new Rotation2d());
 
   // TODO: add later for precision
   // private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(1, 3);
@@ -63,18 +62,21 @@ public class SwerveModule implements SwerveModuleInterface {
         PersistMode.kPersistParameters);
     turnMotor.configure(Configs.MAXSwerveModule.turningConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
+        turnAbsoluteEncoder.setInverted(true);
     // setBrakeMode();
 
     this.chassisAngularOffset = chassisAngularOffset;
-    desiredState.angle = new Rotation2d(turnRelativeEncoder.getPosition());
     driveEncoder.setPosition(0);
-    
+    turnRelativeEncoder.setPosition(0);
   }
 
   public void resetRelativeTurnEncoder() {
-    double targetRelativeEncoder = (turnAbsoluteEncoder.get()*2*Math.PI - chassisAngularOffset) / SwerveConstants.turningFactor; 
-    turnRelativeEncoder.setPosition(targetRelativeEncoder);
-    desiredState.angle = new Rotation2d(targetRelativeEncoder);
+    double targetRelativeEncoder = (turnAbsoluteEncoder.get()*2*Math.PI); //chassisAngularOffset 
+    turnRelativeEncoder.setPosition(targetRelativeEncoder); //
+    SwerveModuleState desiredState = new SwerveModuleState(0.0, new Rotation2d());
+    desiredState.angle = new Rotation2d(turnRelativeEncoder.getPosition());
+    setDesiredState(desiredState);
+
     SmartDashboard.putNumber("TargetRelativeEncoder", targetRelativeEncoder);
   }
 
@@ -107,6 +109,15 @@ public class SwerveModule implements SwerveModuleInterface {
     return driveEncoder.getVelocity();
   }
 
+  public void updateSmartDashboard() {
+    SwerveModuleState correctedDesiredState = new SwerveModuleState();
+
+    SmartDashboard.putNumber("desiredState", correctedDesiredState.speedMetersPerSecond);
+    SmartDashboard.putNumber("AbsEncoder", turnAbsoluteEncoder.get());
+    SmartDashboard.putNumber("target relative encoder", ((turnAbsoluteEncoder.get()*2*Math.PI - chassisAngularOffset)*180)/3.14159);
+    
+  }
+
   /**
    * Sets the desired state for the module.
    *
@@ -116,10 +127,12 @@ public class SwerveModule implements SwerveModuleInterface {
     // Apply chassis angular offset to the desired state.
     SwerveModuleState correctedDesiredState = new SwerveModuleState();
     correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
-    correctedDesiredState.angle = desiredState.angle.plus(Rotation2d.fromRadians(chassisAngularOffset));
+    correctedDesiredState.angle = desiredState.angle;//.plus(Rotation2d.fromRadians(chassisAngularOffset));
 
      SmartDashboard.putNumber("desiredState", correctedDesiredState.speedMetersPerSecond);
      SmartDashboard.putNumber("AbsEncoder", turnAbsoluteEncoder.get());
+
+     SmartDashboard.putNumber("target relative encoder", (turnAbsoluteEncoder.get()*2*Math.PI - chassisAngularOffset) / SwerveConstants.turningFactor);
     
 
     
@@ -153,7 +166,6 @@ public class SwerveModule implements SwerveModuleInterface {
 //     driveMotor.setVoltage(driveOutput + finalDriveFeedforward);
 //     turningMotor.setVoltage(turnOutput + finalTurnFeedforward);
 
-    this.desiredState = desiredState;
   }
 
   public void setCurrentLimit() { // TODO: is this written correctly?
