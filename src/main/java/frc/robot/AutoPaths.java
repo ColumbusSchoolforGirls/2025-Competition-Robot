@@ -81,16 +81,18 @@ public class AutoPaths {
    
     public double getAutoTargetHeight() {
         CoralLevel coralLevel = coralLevelChooser.getSelected();
-        if (coralLevel == CoralLevel.TROUGH) {
-            return CoralConstants.L2_HEIGHT;
-        } else if (coralLevel == CoralLevel.L2) {
-            return CoralConstants.L2_HEIGHT;
-        } else if (coralLevel == CoralLevel.L3) {
-            return CoralConstants.L3_HEIGHT;
-        } else if (coralLevel == CoralLevel.L4) {
-            return CoralConstants.L4_HEIGHT;
+        switch (coralLevel) {
+            case TROUGH:
+                return CoralConstants.L2_HEIGHT;
+            case L2:
+                return CoralConstants.L2_HEIGHT;
+            case L3:
+                return CoralConstants.L3_HEIGHT;
+            case L4:
+                return CoralConstants.L4_HEIGHT;
+            default:
+                return CoralConstants.L2_HEIGHT;
         }
-        return CoralConstants.L2_HEIGHT;
     }
 
     public double getDriveDistance() {
@@ -149,7 +151,7 @@ public class AutoPaths {
         SmartDashboard.putData(chooserName, chooser);
     }
 
-    public boolean getIfSelected(String key) {
+    private boolean getIfSelected(String key) {
         return SmartDashboard.getBoolean(key, false);
     }
 
@@ -167,26 +169,27 @@ public class AutoPaths {
         this.currentAutoAction = null;
     }
 
+    // TODO: make able to select to go to reef a second time
     public ArrayList<AutoStep> buildPath() {
         ArrayList<AutoStep> path = new ArrayList<>();
         int value = 0; // TODO: PLACEHOLDER, add constants or get() for each
         
-        if  (getIfSelected("LEAVE ONLY")) {
-            path.add(new AutoStep(AutoAction.LEAVE_ONLY, value)); // TODO: change to a turn and drive?
+        if (getIfSelected("LEAVE ONLY")) {
+            path.add(new AutoStep(AutoAction.DRIVE, value)); // TODO: change to a turn and drive? LEAVE ONLY turn value
             return path;
         }
 
-        if(getIfSelected("TO REEF")) {
-            path.addAll(Arrays.asList(new AutoStep(AutoAction.INITIAL_DRIVE, value), new AutoStep(AutoAction.TURN_TOWARD_REEF, value), new AutoStep(AutoAction.GO_TO_REEF, value)));
+        if (getIfSelected("TO REEF")) {
+            path.addAll(Arrays.asList(new AutoStep(AutoAction.DRIVE, value), new AutoStep(AutoAction.TURN, value), new AutoStep(AutoAction.DRIVE, value)));
         }
         
         if (getIfSelected("PLACE CORAL")) {
-            path.add(new AutoStep(AutoAction.SHOOT_CORAL, value));
+            path.add(new AutoStep(AutoAction.SHOOT, value));
         }
 
         if (getIfSelected("TO STATION")) {
             // TODO: STATION is a placeholder, change to actual action (probably drives and turns)
-            path.addAll(Arrays.asList(new AutoStep(AutoAction.STATION, value), new AutoStep(AutoAction.STATION, value), new AutoStep(AutoAction.STATION, value)));
+            path.addAll(Arrays.asList(new AutoStep(AutoAction.DRIVE, value), new AutoStep(AutoAction.TURN, value), new AutoStep(AutoAction.DRIVE, value)));
         }
 
         return path;

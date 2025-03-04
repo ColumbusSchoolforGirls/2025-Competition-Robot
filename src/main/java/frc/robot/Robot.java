@@ -6,6 +6,8 @@ package frc.robot;
 
 import static frc.robot.Constants.ControllerConstants.DRIVE_CONTROLLER; // Noah HATES this, but says it's not a bad use . . .
 
+import java.util.ArrayList;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.units.measure.Current;
@@ -27,7 +29,7 @@ public class Robot extends TimedRobot {
   private final Drivetrain swerve = new Drivetrain(limelight);
 
   private final AutoPaths autoPaths = new AutoPaths();
-  AutoStep[] autoActions = {}; // TODO: add autoActions = buildPath() in autoInit
+  ArrayList<AutoStep> autoActions = new ArrayList<>(); // TODO: add autoActions = buildPath() in autoInit
   int state;
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
@@ -60,72 +62,65 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    swerve.setBrakeMode();
+    autoActions = autoPaths.buildPath();    
   }
 
   public void goToNextState() {
     state++;
-
-    if (state >= autoActions.length) {
+    if (state >= autoActions.size()) {
       return;
     }
 
-    AutoStep currentAction = autoActions[state];
+    AutoStep currentAction = autoActions.get(state);
 
-    if (currentAction.getAction() == AutoAction.TURN) {
-      // float initialTurnAngle = autoPaths.getInitialTurnAngle();
-      swerve.startTurn(currentAction.getValue());
-
-    } else if (currentAction.getAction() == AutoAction.DRIVE) {
-      swerve.startDrive(currentAction.getValue()); // value = autopaths.getInitialDriveDistance()
-
-    } else if (currentAction.getAction() == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
-      coralSystem.setAutoTargetHeight(autoPaths.getAutoTargetHeight());
-      swerve.startDrive(currentAction.getValue()); // autoPaths.getDriveToReefDistance()
-
-    } else if (currentAction.getAction() == AutoAction.SHOOT_CORAL) {
-      coralSystem.autoShoot();
-
-    } else if (currentAction.getAction() == AutoAction.ADDITIONAL_DRIVE_ACTIONS) {
-      coralSystem.setAutoTargetHeight(0);
+    switch (currentAction.getAction()) {
+      case DRIVE:
+        swerve.startDrive(currentAction.getValue()); // value = autopaths.getInitialDriveDistance()
+        break;
+      case TURN:
+        // float initialTurnAngle = autoPaths.getInitialTurnAngle();
+        swerve.startTurn(currentAction.getValue());
+        break;
+      case ALIGN:
+       // TODO: implement limelight alignment
+       break;
+      case DRIVE_AND_ELEVATOR:
+      coralSystem.setAutoTargetHeight(currentAction.getValue()); // or autoPaths.getAutoTargetHeight() BUT this is better for abstraction
       // swerve.startTurn(autoPaths.getInitialEndAutoTargetAngle());
       autoPaths.getDriveDistance();
       // swerve.startDrive(autoPaths.getInitialEndAutoTargetDistance());
-      
-    } else if (currentAction.getAction() == AutoAction.STOP) {
-      // TODO: add stop all
+        break;
+      case SHOOT:
+        coralSystem.autoShoot();
+        break;
+      case STOP:
+        break;
     }
-    // TODO: add all the other actions
   }
 
   @Override
   public void autonomousPeriodic() {
 
-    if (autoPaths.currentAutoAction == AutoAction.INITIAL_DRIVE) {
+    if (autoPaths.currentAutoAction == AutoAction.DRIVE) {
       if (swerve.driveComplete()) {
         goToNextState();
       }
 
-    } else if (autoPaths.currentAutoAction == AutoAction.TURN_TOWARD_REEF) {
+    } else if (autoPaths.currentAutoAction == AutoAction.TURN) {
       if (swerve.turnComplete()) {
         goToNextState();
       }
     
-    } else if (autoPaths.currentAutoAction == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
+    } else if (autoPaths.currentAutoAction == AutoAction.DRIVE_AND_ELEVATOR) {
       if (coralSystem.elevatorComplete() && swerve.driveComplete()) {
         goToNextState();
       }
       // TODO: run AprilTag auto alignment
 
-    } else if (autoPaths.currentAutoAction == AutoAction.SHOOT_CORAL) {
+    } else if (autoPaths.currentAutoAction == AutoAction.SHOOT) {
       if (coralSystem.autoShootComplete()) {
         goToNextState();
       }
-
-    } else if (autoPaths.currentAutoAction == AutoAction.ADDITIONAL_DRIVE_ACTIONS) {
-      if (swerve.turnComplete() && swerve.driveComplete()) { 
-        goToNextState();
-      } 
 
     } else {
       autoPaths.currentAutoAction = AutoAction.STOP; 

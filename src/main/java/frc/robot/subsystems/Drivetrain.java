@@ -257,7 +257,7 @@ public class Drivetrain {
       return true;    
     }
     // Prevents the robot from burning out driving continuously into a wall // TODO: check if this works
-    if (frontLeft.getVelocityRPM() < 100) {
+    if (gyro.getVelocityZ() < 0.01) {
       if (stallStart != 0.0) {
         if (Timer.getFPGATimestamp() - stallStart > 0.5) {
           return true;
