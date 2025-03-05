@@ -114,7 +114,7 @@ public class SwerveModule implements SwerveModuleInterface {
 
     SmartDashboard.putNumber("desiredState", correctedDesiredState.speedMetersPerSecond);
     SmartDashboard.putNumber("AbsEncoder", turnAbsoluteEncoder.get());
-    SmartDashboard.putNumber("target relative encoder", ((turnAbsoluteEncoder.get()*2*Math.PI - chassisAngularOffset)*180)/3.14159);
+    SmartDashboard.putNumber("target relative encoder", ((turnAbsoluteEncoder.get()*2*Math.PI)*180)/3.14159);
     
   }
 

@@ -247,7 +247,6 @@ public class Drivetrain {
     // TODO: make the robot align with the AprilTag first to make sure we're at 0
     zeroHeading();
     resetEncoders();
-    resetTurnEncoders();
     // TODO: MAYBE add setBrakeMode() here
   }
 //This is for auto turning

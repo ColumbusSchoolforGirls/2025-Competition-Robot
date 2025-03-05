@@ -58,6 +58,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     swerve.setBrakeMode();
+    swerve.resetTurnEncoders();
   }
 
   @Override
@@ -107,6 +108,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     swerve.setBrakeMode();
+    swerve.resetTurnEncoders();
   }
 
   @Override
