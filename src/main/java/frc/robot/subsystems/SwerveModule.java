@@ -169,7 +169,7 @@ public class SwerveModule implements SwerveModuleInterface {
   }
 
   public void setCurrentLimit() { // TODO: is this written correctly?
-    config.smartCurrentLimit(40, 40, 1); // TODO: decrease the stall limits
+    config.smartCurrentLimit(30, 40, 1); // TODO: decrease the stall limits
     driveMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     config.smartCurrentLimit(20, 20, 1);
     turnMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

@@ -99,7 +99,7 @@ public class Drivetrain {
       backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
 
   }
-
+  
   }
   
   /**
@@ -228,7 +228,6 @@ public class Drivetrain {
     backRight.setCoastMode();
   }
 
-  // TODO: use after aligning with AprilTag (to make sure we're at 0)?
   public void zeroHeading() {
     gyro.reset();
   }
@@ -244,7 +243,7 @@ public class Drivetrain {
   }
 
   public void driveInit() {
-    // TODO: make the robot align with the AprilTag first to make sure we're at 0
+   
     zeroHeading();
     resetEncoders();
     // TODO: MAYBE add setBrakeMode() here
@@ -320,5 +319,7 @@ public class Drivetrain {
       double ty = limelight.getTY();
       // TODO: tune these on robot
       return (tx < 0.1 && ty < 0.1);
+
+      
     }
 }

@@ -24,9 +24,17 @@ public class CoralSystem {
 
     private final RelativeEncoder elevatorEncoder = elevatorMotor.getEncoder();
 
+
     private double targetHeight;
     private double difference;
     double startShootTime;
+    public Limelight limelight;
+    
+ 
+    public CoralSystem(Limelight limelight) {
+        this.limelight = limelight;
+
+    }
 
     /** Returns the current height of elevator in inches.*/
     private double getHeight() {
@@ -96,8 +104,6 @@ public class CoralSystem {
     }
     return false;
   }
+    
 
-    //TODO: implement into auto
-
-    // TODO: add limelight stuff
 }
