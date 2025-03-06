@@ -30,8 +30,13 @@ public class CoralSystem {
 
     /** Returns the current height of elevator in inches.*/
     private double getHeight() {
-        return elevatorEncoder.getPosition() * CoralConstants.TICKS_TO_INCHES; //is this value real?
+        return elevatorEncoder.getPosition() * CoralConstants.ELEVATOR_INCHES_PER_TICK;
     }
+
+    /** Sets the elevator encoder tick count to 0. Only for use on robot-init when the elevator has been reset to bottom. */
+    public void resetElevatorEncoder() {
+        elevatorEncoder.setPosition(0);
+    } 
 
     public void setShootMotorCoast() {
         shootMotor.setNeutralMode(NeutralMode.Coast);
@@ -53,9 +58,8 @@ public class CoralSystem {
         
     }
 
-
     public boolean elevatorComplete() {
-        difference = (targetHeight - getHeight());
+        difference = (targetHeight - getHeight()); //in inches
 
         return Math.abs(difference) < CoralConstants.ELEVATOR_TOLERANCE;
     }

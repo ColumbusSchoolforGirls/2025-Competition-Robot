@@ -48,6 +48,7 @@ public class Robot extends TimedRobot {
 
     swerve.driveInit();
     autoPaths.autoShuffleboardStartup();
+    coralSystem.resetElevatorEncoder();
   }
 
   @Override
@@ -95,35 +96,43 @@ public class Robot extends TimedRobot {
         break;
       case STOP:
         break;
+      default:
+        autoPaths.currentAutoAction = AutoAction.STOP;
+        break;
     }
   }
 
   @Override
   public void autonomousPeriodic() {
-
-    if (autoPaths.currentAutoAction == AutoAction.DRIVE) {
-      if (swerve.driveComplete()) {
-        goToNextState();
-      }
-
-    } else if (autoPaths.currentAutoAction == AutoAction.TURN) {
-      if (swerve.turnComplete()) {
-        goToNextState();
-      }
-    
-    } else if (autoPaths.currentAutoAction == AutoAction.DRIVE_AND_ELEVATOR) {
-      if (coralSystem.elevatorComplete() && swerve.driveComplete()) {
-        goToNextState();
-      }
-      // TODO: run AprilTag auto alignment
-
-    } else if (autoPaths.currentAutoAction == AutoAction.SHOOT) {
-      if (coralSystem.autoShootComplete()) {
-        goToNextState();
-      }
-
-    } else {
-      autoPaths.currentAutoAction = AutoAction.STOP; 
+    switch (autoPaths.currentAutoAction) {
+      case DRIVE:
+        if (swerve.driveComplete()) {
+          goToNextState();
+        }
+        break;
+      case TURN:
+        if (swerve.turnComplete()) {
+          goToNextState();
+        }
+        break;
+      case ALIGN:
+        // TODO: implement AprilTag alignment
+        break;
+      case DRIVE_AND_ELEVATOR:
+        if (coralSystem.elevatorComplete() && swerve.driveComplete()) {
+          goToNextState();
+        }
+        break;
+      case SHOOT:
+        if (coralSystem.autoShootComplete()) {
+          goToNextState();
+        }
+        break;
+      case STOP:
+        break;
+      default:
+        autoPaths.currentAutoAction = AutoAction.STOP;
+        break;
     }
   }
 

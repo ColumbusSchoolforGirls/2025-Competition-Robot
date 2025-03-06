@@ -53,7 +53,7 @@ public class AutoPaths {
         }
     }
 
-    public double getDriveToReefDistance() {
+    public double getEndDriveDistance() { // TODO: immplementation, maybe (for after alignment) change to a constant distance?
         StartingPosition startingPosition = positionChooser.getSelected();
         if (startingPosition == StartingPosition.LEFT || startingPosition == StartingPosition.RIGHT) {
             return 0; // TODO: change to some positive value
@@ -62,6 +62,11 @@ public class AutoPaths {
         } else {
             return 0;
         }
+    }
+
+     // TODO: implement this method
+     public double getDistanceToReefFromStation() {
+        return 0; // Placeholder value, replace with actual logic
     }
 
     // Add a limelight align after using this
@@ -99,44 +104,6 @@ public class AutoPaths {
         return 0; // TODO: change value
     }
 
-    // Updates the currentAutoAction. This handles all state transitions. All
-    // actions are in Robot.java
-    // public AutoAction goToNextState() {
-    //     if (this.currentAutoAction == null) {
-    //         return AutoAction.STOP;
-    //     } else if (this.currentAutoAction == AutoAction.TURN_TOWARD_REEF) {
-    //         return AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR;
-    //     } else if (this.currentAutoAction == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
-    //         return AutoAction.SHOOT_CORAL;
-    //     } else if (this.currentAutoAction == AutoAction.SHOOT_CORAL) {
-    //         return AutoAction.ADDITIONAL_DRIVE_ACTIONS;
-    //     } else if (this.currentAutoAction == AutoAction.ADDITIONAL_DRIVE_ACTIONS) {
-    //         return AutoAction.STOP;
-    //     }
-    //     // TODO: Implement the rest of this
-    //     return AutoAction.STOP;
-    // }
-
-    // public void goToNextState2() {
-    //     switch (this.currentAutoAction) {
-    //         case LEAVE_ONLY:
-    //             // implement
-    //             this.currentAutoAction = AutoAction.INITIAL_DRIVE;
-    //         case INITIAL_DRIVE:
-    //             // implement
-    //             this.currentAutoAction = AutoAction.TURN_TOWARD_REEF;
-    //         case TURN_TOWARD_REEF:
-    //             // implement
-    //             this.currentAutoAction = AutoAction.GO_TO_REEF;
-    //         case GO_TO_REEF:
-    //             // implement
-    //             this.currentAutoAction = AutoAction.SHOOT_CORAL;
-    //         case SHOOT_CORAL:
-    //             // implement
-    //             this.currentAutoAction = AutoAction.STATION;
-
-    //     }
-    // }
 
     // Choosers for the shuffleboard
     private final SendableChooser<StartingPosition> positionChooser = new SendableChooser<>();
@@ -155,12 +122,12 @@ public class AutoPaths {
         return SmartDashboard.getBoolean(key, false);
     }
 
-    public void autoShuffleboardStartup() {
+    public void autoShuffleboardStartup() { // TODO: if time allows (HAH) write this using Shuffleboard documentation instead!!, definite to-do next year
         createChooser(positionChooser, StartingPosition.values(), "Start Position");
         createChooser(reefFaceChooser, ReefFace.values(), "Reef Face");
         createChooser(leftOrRightChooser, LeftOrRight.values(), "Left or Right");
         createChooser(coralLevelChooser, CoralLevel.values(), "Coral Level");
-        //TODO: add more end position options
+        //TODO: add go to reef again buttons?
         SmartDashboard.putBoolean("LEAVE ONLY", false);
         SmartDashboard.putBoolean("To Reef", false);
         SmartDashboard.putBoolean("Place Coral", false);
@@ -175,21 +142,29 @@ public class AutoPaths {
         int value = 0; // TODO: PLACEHOLDER, add constants or get() for each
         
         if (getIfSelected("LEAVE ONLY")) {
-            path.add(new AutoStep(AutoAction.DRIVE, value)); // TODO: change to a turn and drive? LEAVE ONLY turn value
+            path.add(new AutoStep(AutoAction.DRIVE, AutoConstants.LEAVE_ONLY_DISTANCE)); // TODO: change to a turn and drive? LEAVE ONLY turn value
             return path;
         }
 
         if (getIfSelected("TO REEF")) {
-            path.addAll(Arrays.asList(new AutoStep(AutoAction.DRIVE, value), new AutoStep(AutoAction.TURN, value), new AutoStep(AutoAction.DRIVE, value)));
+            path.addAll(Arrays.asList(
+                new AutoStep(AutoAction.TURN, getInitialTurnAngle()),
+                new AutoStep(AutoAction.DRIVE, getInitialDriveDistance()),
+                new AutoStep(AutoAction.ALIGN),
+                new AutoStep(AutoAction.DRIVE, getEndDriveDistance())));
         }
         
         if (getIfSelected("PLACE CORAL")) {
-            path.add(new AutoStep(AutoAction.SHOOT, value));
+            path.add(new AutoStep(AutoAction.SHOOT));
+            path.set(1, new AutoStep(AutoAction.DRIVE_AND_ELEVATOR, getInitialDriveDistance(), getAutoTargetHeight()));
         }
 
         if (getIfSelected("TO STATION")) {
-            // TODO: STATION is a placeholder, change to actual action (probably drives and turns)
-            path.addAll(Arrays.asList(new AutoStep(AutoAction.DRIVE, value), new AutoStep(AutoAction.TURN, value), new AutoStep(AutoAction.DRIVE, value)));
+            path.addAll(Arrays.asList(
+                new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()),
+                new AutoStep(AutoAction.TURN, value), // TODO: CHANGE
+                new AutoStep(AutoAction.ALIGN),
+                new AutoStep(AutoAction.DRIVE, getEndDriveDistance())));
         }
 
         return path;

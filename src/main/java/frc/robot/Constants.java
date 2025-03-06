@@ -88,7 +88,7 @@ public class Constants {
 
         public static final int ELEVATOR_TOLERANCE = 1; //TODO: Need to change when testing elevator
         
-        public static final double L2_HEIGHT = 24.5;
+        public static final double L2_HEIGHT = 24.5; // TODO: change, fake values
         public static final double L3_HEIGHT = 34.5;
         public static final double L4_HEIGHT = 44.5;
 
@@ -98,9 +98,14 @@ public class Constants {
         public static final double SHOOT_MOTOR_SPEED = 0.5;
         public static final double ELEVATOR_SPEED = 0.5;
 
-        public static final double TICKS_TO_INCHES = 0.02;
+        //public static final double TICKS_TO_INCHES = 0.02;
 
         public static final double SHOOT_TIME = 1.5; //TODO: change time
+
+        public static final double ELEVATOR_TICKS_PER_REV = 840; // ticks per revolution, 840 tick per rev 
+        public static final double ELEVATOR_DRUM_CIRCUMFERENCE = 0.942 * Math.PI; //inches per rev
+        public static final double ELEVATOR_INCHES_PER_TICK = ELEVATOR_DRUM_CIRCUMFERENCE / ELEVATOR_TICKS_PER_REV; //ticks per inch
+
     }
 
     public static final class ClimbConstants {
