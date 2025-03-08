@@ -133,17 +133,17 @@ public class Robot extends TimedRobot {
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
-    // return positive values when you pull to the right by default.
+    // return positive values when you pull to the right by default. // nah positive now
     final double ySpeed =
-        -yspeedLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getLeftX(), 0.1))
+        yspeedLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getLeftX(), 0.1))
             * Constants.DriveConstants.MAX_SPEED;
 
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left (remember, CCW is positive in
     // mathematics). Xbox controllers return positive values when you pull to
-    // the right by default.
+    // the right by default. // uh no, positive now
     final double rot =
-        -rotLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getRightX(), 0.1))
+        rotLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getRightX(), 0.1))
             * Constants.DriveConstants.MAX_ANGULAR_SPEED;
 
     swerve.drive(xSpeed, ySpeed, rot, fieldRelative, getPeriod());

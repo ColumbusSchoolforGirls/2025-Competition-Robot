@@ -66,18 +66,23 @@ public class SwerveModule implements SwerveModuleInterface {
     // setBrakeMode();
 
     this.chassisAngularOffset = chassisAngularOffset;
+    System.out.println("chassis angular offset " + chassisAngularOffset);
     driveEncoder.setPosition(0);
     turnRelativeEncoder.setPosition(0);
   }
 
+  public double getAbsoluteEncoderAngle() {
+    return (turnAbsoluteEncoder.get()*2*Math.PI) + chassisAngularOffset;
+
+  }
+
   public void resetRelativeTurnEncoder() {
-    double targetRelativeEncoder = (turnAbsoluteEncoder.get()*2*Math.PI); //chassisAngularOffset 
+    double targetRelativeEncoder = getAbsoluteEncoderAngle(); //chassisAngularOffset 
     turnRelativeEncoder.setPosition(targetRelativeEncoder); //
     SwerveModuleState desiredState = new SwerveModuleState(0.0, new Rotation2d());
     desiredState.angle = new Rotation2d(turnRelativeEncoder.getPosition());
     setDesiredState(desiredState);
 
-    SmartDashboard.putNumber("TargetRelativeEncoder", targetRelativeEncoder);
   }
 
   
@@ -114,7 +119,7 @@ public class SwerveModule implements SwerveModuleInterface {
 
     SmartDashboard.putNumber("desiredState", correctedDesiredState.speedMetersPerSecond);
     SmartDashboard.putNumber("AbsEncoder", turnAbsoluteEncoder.get());
-    SmartDashboard.putNumber("target relative encoder", ((turnAbsoluteEncoder.get()*2*Math.PI)*180)/3.14159);
+    SmartDashboard.putNumber("target relative encoder", (getAbsoluteEncoderAngle()));
     
   }
 
@@ -130,12 +135,7 @@ public class SwerveModule implements SwerveModuleInterface {
     correctedDesiredState.angle = desiredState.angle;//.plus(Rotation2d.fromRadians(chassisAngularOffset));
 
      SmartDashboard.putNumber("desiredState", correctedDesiredState.speedMetersPerSecond);
-     SmartDashboard.putNumber("AbsEncoder", turnAbsoluteEncoder.get());
 
-     SmartDashboard.putNumber("target relative encoder", (turnAbsoluteEncoder.get()*2*Math.PI - chassisAngularOffset) / SwerveConstants.turningFactor);
-    
-
-    
     // Optimize the reference state to avoid spinning further than 90 degrees.
     Rotation2d encoderRotation = new Rotation2d(turnRelativeEncoder.getPosition() % (2 * Math.PI));
     correctedDesiredState.optimize(encoderRotation); 
@@ -147,7 +147,8 @@ public class SwerveModule implements SwerveModuleInterface {
 
     driveClosedLoopController.setReference(correctedDesiredState.speedMetersPerSecond, ControlType.kVelocity);
     turnClosedLoopController.setReference(correctedDesiredState.angle.getRadians(), ControlType.kPosition);
-
+    // turnClosedLoopController.setReference(1.5, ControlType.kPosition);
+// 
     // TODO: add later with feedforward control
 //     // Calculate the drive output from the drive PID controller.
 //     final double driveOutput =

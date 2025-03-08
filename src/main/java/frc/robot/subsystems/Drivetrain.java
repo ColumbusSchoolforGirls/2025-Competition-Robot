@@ -33,28 +33,34 @@ public class Drivetrain {
   private double targetDistance;
 
   private final Translation2d frontLeftLocation = new Translation2d(DriveConstants.TRANSLATION_2D_OFFSET,
-      DriveConstants.TRANSLATION_2D_OFFSET);
+      -DriveConstants.TRANSLATION_2D_OFFSET);
   private final Translation2d frontRightLocation = new Translation2d(DriveConstants.TRANSLATION_2D_OFFSET,
-      -DriveConstants.TRANSLATION_2D_OFFSET);
-  private final Translation2d backLeftLocation = new Translation2d(-DriveConstants.TRANSLATION_2D_OFFSET,
       DriveConstants.TRANSLATION_2D_OFFSET);
-  private final Translation2d backRightLocation = new Translation2d(-DriveConstants.TRANSLATION_2D_OFFSET,
+  private final Translation2d backLeftLocation = new Translation2d(-DriveConstants.TRANSLATION_2D_OFFSET,
       -DriveConstants.TRANSLATION_2D_OFFSET);
+  private final Translation2d backRightLocation = new Translation2d(-DriveConstants.TRANSLATION_2D_OFFSET,
+      DriveConstants.TRANSLATION_2D_OFFSET);
 
-  private boolean isOnlyFrontLeft = true;
+  private boolean isOnlyFrontLeft = false;
 
   private final SwerveModule frontLeft = new SwerveModule(DriveConstants.FL_DRIVE_ID, DriveConstants.FL_TURN_ID,
       DriveConstants.FL_DIO, DriveConstants.FL_CHASSIS_ANGULAR_OFFSET);
-
-  private final SwerveModuleInterface frontRight = 
-    isOnlyFrontLeft ? new MockSwerveModule() : new SwerveModule(DriveConstants.FR_DRIVE_ID, DriveConstants.FR_TURN_ID,
+  private final SwerveModule backLeft = new SwerveModule(DriveConstants.BL_DRIVE_ID, DriveConstants.BL_TURN_ID,
+      DriveConstants.BL_DIO, DriveConstants.BL_CHASSIS_ANGULAR_OFFSET);    
+  private final SwerveModule frontRight = new SwerveModule(DriveConstants.FR_DRIVE_ID, DriveConstants.FR_TURN_ID,
       DriveConstants.FR_DIO, DriveConstants.FR_CHASSIS_ANGULAR_OFFSET);
-  private final SwerveModuleInterface backLeft = 
-    isOnlyFrontLeft ? new MockSwerveModule() : new SwerveModule(DriveConstants.BL_DRIVE_ID, DriveConstants.BL_TURN_ID,
-      DriveConstants.BL_DIO, DriveConstants.BL_CHASSIS_ANGULAR_OFFSET);
-  private final SwerveModuleInterface backRight = 
-    isOnlyFrontLeft ? new MockSwerveModule() : new SwerveModule(DriveConstants.BR_DRIVE_ID, DriveConstants.BR_TURN_ID,
+  private final SwerveModule backRight = new SwerveModule(DriveConstants.BR_DRIVE_ID, DriveConstants.BR_TURN_ID,
       DriveConstants.BR_DIO, DriveConstants.BR_CHASSIS_ANGULAR_OFFSET);
+
+  // private final SwerveModuleInterface frontRight = 
+  //   isOnlyFrontLeft ? new MockSwerveModule() : new SwerveModule(DriveConstants.FR_DRIVE_ID, DriveConstants.FR_TURN_ID,
+  //     DriveConstants.FR_DIO, DriveConstants.FR_CHASSIS_ANGULAR_OFFSET);
+  // private final SwerveModuleInterface backLeft = 
+  //   isOnlyFrontLeft ? new MockSwerveModule() : new SwerveModule(DriveConstants.BL_DRIVE_ID, DriveConstants.BL_TURN_ID,
+  //     DriveConstants.BL_DIO, DriveConstants.BL_CHASSIS_ANGULAR_OFFSET);
+  // private final SwerveModuleInterface backRight = 
+  //   isOnlyFrontLeft ? new MockSwerveModule() : new SwerveModule(DriveConstants.BR_DRIVE_ID, DriveConstants.BR_TURN_ID,
+  //     DriveConstants.BR_DIO, DriveConstants.BR_CHASSIS_ANGULAR_OFFSET);
 
   private final AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
 
@@ -195,16 +201,20 @@ public class Drivetrain {
             backRight.getPosition()
         });
 
-        // SmartDashboard.putNumber("BL Encoder", backLeft.turnRelativeEncoder.getPosition());
+        SmartDashboard.putNumber("BL Encoder", (backLeft.turnRelativeEncoder.getPosition()*180)/3.14159);
         SmartDashboard.putNumber("FL Encoder", (frontLeft.turnRelativeEncoder.getPosition()*180)/3.14159);
-        // SmartDashboard.putNumber("BR Encoder", backRight.turnRelativeEncoder.getPosition());
-        // SmartDashboard.putNumber("FR Encoder", frontRight.turnRelativeEncoder.getPosition());
+        SmartDashboard.putNumber("BR Encoder", (backRight.turnRelativeEncoder.getPosition()*180)/3.14159);
+        SmartDashboard.putNumber("FR Encoder", (frontRight.turnRelativeEncoder.getPosition()*180)/3.14159);
 
-        // SmartDashboard.putNumber("BLAngOfset", backLeft.turnAbsoluteEncoder.get()*360);
-        SmartDashboard.putNumber("FLAngOfset", frontLeft.turnAbsoluteEncoder.get()*360);
-        // SmartDashboard.putNumber("BRAngOfset", backRight.turnAbsoluteEncoder.get()*360 );
-        // SmartDashboard.putNumber("FRAngOfset", frontRight.turnAbsoluteEncoder.get()*360); 
+        SmartDashboard.putNumber("BL AbsEncoder", backLeft.turnAbsoluteEncoder.get()*360);
+        SmartDashboard.putNumber("FL AbsEncoder", frontLeft.turnAbsoluteEncoder.get()*360);
+        SmartDashboard.putNumber("BR AbsEncoder", backRight.turnAbsoluteEncoder.get()*360);
+        SmartDashboard.putNumber("FR AbsEncoder", frontRight.turnAbsoluteEncoder.get()*360); 
 
+        SmartDashboard.putNumber("BL TargetRel", backLeft.getAbsoluteEncoderAngle()*180/Math.PI);
+        SmartDashboard.putNumber("FL TargetRel", frontLeft.getAbsoluteEncoderAngle()*180/Math.PI);
+        SmartDashboard.putNumber("BR TargetRel", backRight.getAbsoluteEncoderAngle()*180/Math.PI);
+        SmartDashboard.putNumber("FR TargetRel", frontRight.getAbsoluteEncoderAngle()*180/Math.PI); 
       }
 
   public void resetEncoders() {
