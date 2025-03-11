@@ -15,8 +15,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Timer;
-
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
@@ -256,7 +254,7 @@ public class Drivetrain {
       stallStart = 0.0;  
       return true;    
     }
-    // Prevents the robot from burning out driving continuously into a wall // TODO: check if this works
+    // Prevents the robot from burning out driving continuously into a wall // TODO: check if this works // TODO: velocityZ is probably wrong
     if (gyro.getVelocityZ() < 0.01) {
       if (stallStart != 0.0) {
         if (Timer.getFPGATimestamp() - stallStart > 0.5) {

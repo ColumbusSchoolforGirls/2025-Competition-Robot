@@ -25,7 +25,7 @@ import frc.robot.subsystems.Climber;
 public class Robot extends TimedRobot {
   private final Limelight limelight = new Limelight();
   private final CoralSystem coralSystem = new CoralSystem();
-  private final Climber climber = new Climber();
+  // private final Climber climber = new Climber();
   private final Drivetrain swerve = new Drivetrain(limelight);
 
   private final AutoPaths autoPaths = new AutoPaths();

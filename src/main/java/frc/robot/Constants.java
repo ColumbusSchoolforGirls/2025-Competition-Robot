@@ -79,9 +79,8 @@ public class Constants {
     }   
 
     public static final class AutoConstants {
-        public static final double SIDE_DISTANCE = 0; //TODO: change distance
-        public static final double MIDDLE_DISTANCE = 0; //TODO: change distance
-        public static final double LEAVE_ONLY_DISTANCE = 0; //TODO: change distance
+        public static final double INITIAL_DISTANCE = 58.5; //inches
+        public static final double LEAVE_ONLY_DISTANCE = 10; //inches
     }
 
     public static final class CoralConstants { //TODO: need to change all of the values!
@@ -100,7 +99,7 @@ public class Constants {
 
         //public static final double TICKS_TO_INCHES = 0.02;
 
-        public static final double SHOOT_TIME = 1.5; //TODO: change time
+        public static final double SHOOT_TIME = 1.5; //TODO: change time -- PROBABLY LESS
 
         public static final double ELEVATOR_TICKS_PER_REV = 840; // ticks per revolution, 840 tick per rev 
         public static final double ELEVATOR_DRUM_CIRCUMFERENCE = 0.942 * Math.PI; //inches per rev
