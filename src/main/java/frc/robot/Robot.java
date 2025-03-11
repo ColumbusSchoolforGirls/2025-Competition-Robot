@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.ControllerConstants.AUX;
 import static frc.robot.Constants.ControllerConstants.DRIVE_CONTROLLER; // Noah HATES this, but says it's not a bad use . . .
 
 import edu.wpi.first.math.MathUtil;
@@ -32,7 +33,7 @@ public class Robot extends TimedRobot {
   private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
-
+  private boolean fieldRelative = false;
   @Override
   public void robotInit() {
     // // Starts recording to data log
@@ -40,7 +41,9 @@ public class Robot extends TimedRobot {
     
     // // Record both DS control and joystick data
     // DriverStation.startDataLog(DataLogManager.getLog());
-
+    if (AUX.getXButtonPressed()){
+      fieldRelative = false;
+    }//TODO:Change Button if needed
     swerve.driveInit();
   }
 

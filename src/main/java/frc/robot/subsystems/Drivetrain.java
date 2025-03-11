@@ -105,6 +105,12 @@ public class Drivetrain {
       backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
 
   }
+
+  frontLeft.updateModule();
+  frontRight.updateModule();
+  backLeft.updateModule();
+  backRight.updateModule();
+
   
   }
   

@@ -53,7 +53,7 @@ public class AutoPaths {
      * Gets the initial turn angle based on the starting position chooser.
      * @return
      */
-    // TODO: implement
+    
     public float getInitialTurnAngle() {
         StartingPosition startingPosition = startingPositionChooser.getSelected(); 
         if (startingPosition == StartingPosition.LEFT) {

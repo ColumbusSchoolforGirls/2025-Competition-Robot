@@ -40,6 +40,8 @@ public class Constants {
         public static final double turningFactor = (2 * Math.PI)/steeringFactor;
         public static final double drivingVelocityFeedForward = 1 / Constants.SwerveConstants.DriveWheelFreeSpeedRps;
 
+
+        public static final double TURN_RESET_VELOCITY = 1; //TODO: Definetly need to measure
     }
 
     public static final class DriveConstants {  
@@ -79,13 +81,13 @@ public class Constants {
         public static final double DISTANCE_TOLERANCE = 0.1; //TODO: need to change when testing distance
     }   
 
-    public static final class CoralConstants { //TODO: need to change all of the values!
+    public static final class CoralConstants {
 
         public static final int ELEVATOR_TOLERANCE = 1; //TODO: Need to change when testing elevator
         
-        public static final double L2_HEIGHT = 24.5;
-        public static final double L3_HEIGHT = 34.5;
-        public static final double L4_HEIGHT = 44.5;
+        public static final double L2_HEIGHT = 0;
+        public static final double L3_HEIGHT = 15.75; //inches!! (difference between L2 and L3)
+        public static final double L4_HEIGHT = 40.124; //same deal
 
         public static final int SHOOT_ID = 10; // TODO: change id
         public static final int ELEVATOR_ID = 14;
@@ -93,7 +95,7 @@ public class Constants {
         public static final double SHOOT_MOTOR_SPEED = 0.5;
         public static final double ELEVATOR_SPEED = 0.5;
 
-        public static final double TICKS_TO_INCHES = 0.02;
+        public static final double TICKS_TO_INCHES = 0.02; //TODO: change
 
         public static final double SHOOT_TIME = 1.5; //TODO: change time
     }

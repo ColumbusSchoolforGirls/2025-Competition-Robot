@@ -76,6 +76,15 @@ public class SwerveModule implements SwerveModuleInterface {
 
   }
 
+  public void updateModule(){
+    turnRelativeEncoder.getVelocity();
+ 
+    if(turnRelativeEncoder.getVelocity() < SwerveConstants.TURN_RESET_VELOCITY) {
+      resetRelativeTurnEncoder();
+    }
+  }
+
+
   public void resetRelativeTurnEncoder() {
     double targetRelativeEncoder = getAbsoluteEncoderAngle(); //chassisAngularOffset 
     turnRelativeEncoder.setPosition(targetRelativeEncoder); //
