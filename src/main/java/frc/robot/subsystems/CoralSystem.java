@@ -4,12 +4,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Timer;
 
 import com.revrobotics.RelativeEncoder;
 
+import frc.robot.Constants;
 import frc.robot.Constants.CoralConstants;
 import static frc.robot.Constants.ControllerConstants.AUX;
 
@@ -41,20 +43,29 @@ public class CoralSystem {
         return elevatorEncoder.getPosition() * CoralConstants.TICKS_TO_INCHES;
     }
 
+    public void driveElevator(double normalElevatorSpeed)  {
+        double elevatorSpeed = -AUX.getLeftY(); //messily inverted //TODO: real invert
+
+    if (Math.abs(elevatorSpeed) < Constants.CoralConstants.AUX_DEADZONE) { 
+        elevatorMotor.set(0);
+    } else 
+        elevatorMotor.set(elevatorSpeed * normalElevatorSpeed); 
+    }
+
     public void setShootMotorCoast() {
         shootMotor.setNeutralMode(NeutralMode.Coast);
     }
 
-    public void controllerInputTargetHeight() {
+    // public void controllerInputTargetHeight() {
 
-        if (AUX.getAButtonPressed()) {
-            targetHeight = CoralConstants.L2_HEIGHT;
-        } else if (AUX.getBButtonPressed()) {
-            targetHeight = CoralConstants.L3_HEIGHT;
-        } else if (AUX.getYButtonPressed()) {
-            targetHeight = CoralConstants.L4_HEIGHT;
-        }
-    }
+    //     if (AUX.getAButtonPressed()) {
+    //         targetHeight = CoralConstants.L2_HEIGHT;
+    //     } else if (AUX.getBButtonPressed()) {
+    //         targetHeight = CoralConstants.L3_HEIGHT;
+    //     } else if (AUX.getYButtonPressed()) {
+    //         targetHeight = CoralConstants.L4_HEIGHT;
+    //     }
+    // }
 
     public void setAutoTargetHeight(double targetHeight){
         this.targetHeight = targetHeight;

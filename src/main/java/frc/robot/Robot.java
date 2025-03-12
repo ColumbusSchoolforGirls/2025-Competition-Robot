@@ -24,7 +24,7 @@ import frc.robot.subsystems.Climber;
 public class Robot extends TimedRobot {
   private final Drivetrain swerve = new Drivetrain();
   private final Limelight limelight = new Limelight();
-  // private final CoralSystem coralSystem = new CoralSystem(); ?? TODO: ADD BACK
+  private final CoralSystem coralSystem = new CoralSystem(limelight);
   // private final Climber climber = new Climber();
 
   //private final AutoPaths autoPaths = new AutoPaths(coralSystem);
@@ -43,13 +43,13 @@ public class Robot extends TimedRobot {
     // DriverStation.startDataLog(DataLogManager.getLog());
     if (AUX.getXButtonPressed()){
       fieldRelative = false;
-    }//TODO:Change Button if needed
+    }//TODO:Change Button if needed AND move to periodic
     swerve.driveInit();
   }
 
   @Override
   public void robotPeriodic() {
-    // coralSystem.elevator();
+    //coralSystem.elevator();
     // climber.climb();
     // limelight.updateLimelight();
     swerve.updateOdometry();
@@ -119,6 +119,7 @@ public class Robot extends TimedRobot {
     driveWithJoystick(false);
     // coralSystem.shoot();
     swerve.driverResetTurnEncoders();
+    coralSystem.driveElevator(0.5);
   }
 
   private void goToNextState(){
