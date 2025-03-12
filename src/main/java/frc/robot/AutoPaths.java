@@ -8,15 +8,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.AutoConstants;
 
-
-public class AutoPaths { 
+public class AutoPaths {
 
     public enum StartingPosition {
-        LEFT, RIGHT, MIDDLE //from drive station persepctive
+        LEFT, RIGHT, MIDDLE // from drive station persepctive
     }
 
     public enum ReefFace {
-        N, NE, SE, S, SW, NW //cardinal directions from the drive station perspective
+        N, NE, SE, S, SW, NW // cardinal directions from the drive station perspective
     }
 
     public enum LeftOrRight {
@@ -31,10 +30,10 @@ public class AutoPaths {
     public AutoAction currentAutoAction;
 
     /**
-     * Returns the initial drive distance in meters based on the starting position chooser.
+     * Returns the initial drive distance in meters based on the starting position
+     * chooser.
      */
     // TODO: implement
-
     public double getTurnRadiusDistance() { // TODO: immplementation, maybe (for after alignment) change to a constant distance?
         StartingPosition startingPosition = positionChooser.getSelected();
         if (startingPosition == StartingPosition.LEFT || startingPosition == StartingPosition.RIGHT) {
@@ -46,8 +45,8 @@ public class AutoPaths {
         }
     }
 
-     // TODO: implement this method
-     public double getDistanceToReefFromStation() {
+    // TODO: implement this method
+    public double getDistanceToReefFromStation() {
         return 0; // Placeholder value, replace with actual logic
     }
 
@@ -73,7 +72,6 @@ public class AutoPaths {
         return 0;
     }
 
-   
     public double getAutoTargetHeight() {
         CoralLevel coralLevel = coralLevelChooser.getSelected();
         switch (coralLevel) {
@@ -94,7 +92,6 @@ public class AutoPaths {
         return 0; // TODO: change value
     }
 
-
     // Choosers for the shuffleboard
     private final SendableChooser<StartingPosition> positionChooser = new SendableChooser<>();
     private final SendableChooser<ReefFace> reefFaceChooser = new SendableChooser<>();
@@ -103,7 +100,6 @@ public class AutoPaths {
     private final SendableChooser<ReefFace> reefFaceChooser2 = new SendableChooser<>();
     private final SendableChooser<CoralLevel> coralLevelChooser2 = new SendableChooser<>();
     private final SendableChooser<LeftOrRight> leftOrRIghtChooser2 = new SendableChooser<>();
-
 
     private <K extends Enum<K>> void createChooser(SendableChooser<K> chooser, K[] values, String chooserName) {
         for (K value : values) {
@@ -140,7 +136,7 @@ public class AutoPaths {
 
     public ArrayList<AutoStep> buildPath() {
         ArrayList<AutoStep> path = new ArrayList<>();
-        
+
         if (getIfSelected("LEAVE ONLY")) {
             path.add(new AutoStep(AutoAction.DRIVE, AutoConstants.LEAVE_ONLY_DISTANCE));
             return path;
@@ -148,14 +144,14 @@ public class AutoPaths {
 
         if (getIfSelected("TO REEF")) {
             path.addAll(Arrays.asList(
-                new AutoStep(AutoAction.DRIVE_AND_ELEVATOR, Constants.AutoConstants.INITIAL_DISTANCE, getAutoTargetHeight()),
-                new AutoStep(AutoAction.TURN, getInitialTurnAngle()),
-                new AutoStep(AutoAction.ALIGN),
-                new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
+                    new AutoStep(AutoAction.DRIVE_AND_ELEVATOR, Constants.AutoConstants.INITIAL_DISTANCE, getAutoTargetHeight()),
+                    new AutoStep(AutoAction.TURN, getInitialTurnAngle()),
+                    new AutoStep(AutoAction.ALIGN),
+                    new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
         } else {
             return path;
         }
-        
+
         if (getIfSelected("PLACE CORAL")) {
             path.add(new AutoStep(AutoAction.SHOOT));
         } else {
@@ -164,21 +160,21 @@ public class AutoPaths {
 
         if (getIfSelected("TO STATION")) {
             path.addAll(Arrays.asList(
-                new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance()),
-                new AutoStep(AutoAction.TURN, getTurnAngleToStation()), // TODO: turn should be backward (back up to station)
-                new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()),
-                new AutoStep(AutoAction.TURN, getAtStationTurnAngle()),
-                new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
+                    new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance()),
+                    new AutoStep(AutoAction.TURN, getTurnAngleToStation()), // TODO: turn should be backward (back up to station)
+                    new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()),
+                    new AutoStep(AutoAction.TURN, getAtStationTurnAngle()),
+                    new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
         } else {
             return path;
         }
 
         if (getIfSelected("TO REEF AGAIN")) {
             path.addAll(Arrays.asList(
-                new AutoStep(AutoAction.TURN, getAtStationTurnAngle()), // TODO: change this? might need to be a different value
-                new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()),
-                new AutoStep(AutoAction.ALIGN),
-                new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
+                    new AutoStep(AutoAction.TURN, getAtStationTurnAngle()), // TODO: change this? might need to be a different value
+                    new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()),
+                    new AutoStep(AutoAction.ALIGN),
+                    new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
         } else {
             return path;
         }
@@ -191,16 +187,13 @@ public class AutoPaths {
 
         if (getIfSelected("TO STATION AGAIN")) {
             path.addAll(Arrays.asList(
-                new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance()),
-                new AutoStep(AutoAction.TURN, getTurnAngleToStation()), // drive backward to station
-                new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()),
-                new AutoStep(AutoAction.TURN, getAtStationTurnAngle()),
-                new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
+                    new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance()),
+                    new AutoStep(AutoAction.TURN, getTurnAngleToStation()), // drive backward to station
+                    new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()),
+                    new AutoStep(AutoAction.TURN, getAtStationTurnAngle()),
+                    new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
         }
 
         return path;
     }
 }
-
-
-// get values for autoPath value from startingPosition math

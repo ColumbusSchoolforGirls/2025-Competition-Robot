@@ -28,7 +28,7 @@ public class Robot extends TimedRobot {
 
   private final AutoPaths autoPaths = new AutoPaths();
   ArrayList<AutoStep> autoActions = new ArrayList<>();
-  
+
   int state;
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
@@ -36,10 +36,9 @@ public class Robot extends TimedRobot {
   private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
   private boolean fieldRelative = false;
-  
+
   @Override
   public void robotInit() {
-
     // // Starts recording to data log
     // DataLogManager.start(); // TODO: maybe remove one, because logs double
 
@@ -52,23 +51,23 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    //coralSystem.elevator();
+    // coralSystem.elevator();
     // climber.climb();
     // limelight.updateLimelight();
     swerve.updateOdometry();
     swerve.periodic();
     swerve.updateSmartDashboard();
 
-    if (AUX.getXButtonPressed()){
+    if (AUX.getXButtonPressed()) {
       fieldRelative = false;
-    } //TODO:Change Button if needed AND move to periodic
+    } // TODO:Change Button if needed AND move to periodic
   }
 
   @Override
   public void autonomousInit() {
     swerve.setBrakeMode();
     swerve.resetTurnEncoders();
-    autoActions = autoPaths.buildPath();    
+    autoActions = autoPaths.buildPath();
   }
 
   public void goToNextState() {
@@ -88,13 +87,13 @@ public class Robot extends TimedRobot {
         swerve.startTurn(currentAction.getValue());
         break;
       case ALIGN:
-       // TODO: implement limelight alignment
-       break;
+        // TODO: implement limelight alignment
+        break;
       case DRIVE_AND_ELEVATOR:
-      coralSystem.setAutoTargetHeight(currentAction.getValue()); // or autoPaths.getAutoTargetHeight() BUT this is better for abstraction
-      // swerve.startTurn(autoPaths.getInitialEndAutoTargetAngle());
-      autoPaths.getDriveDistance();
-      // swerve.startDrive(autoPaths.getInitialEndAutoTargetDistance());
+        coralSystem.setAutoTargetHeight(currentAction.getValue()); // or autoPaths.getAutoTargetHeight() BUT this is better for abstraction
+        // swerve.startTurn(autoPaths.getInitialEndAutoTargetAngle());
+        autoPaths.getDriveDistance();
+        // swerve.startDrive(autoPaths.getInitialEndAutoTargetDistance());
         break;
       case SHOOT:
         coralSystem.autoShoot();
@@ -163,18 +162,17 @@ public class Robot extends TimedRobot {
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
-    // return positive values when you pull to the right by default. // nah positive now
-    final double ySpeed =
-        yspeedLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getLeftX(), 0.1))
-            * Constants.DriveConstants.MAX_SPEED;
+    // return positive values when you pull to the right by default. // nah positive
+    // now
+    final double ySpeed = yspeedLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getLeftX(), 0.1))
+        * Constants.DriveConstants.MAX_SPEED;
 
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left (remember, CCW is positive in
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default. // uh no, positive now
-    final double rot =
-        rotLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getRightX(), 0.1))
-            * Constants.DriveConstants.MAX_ANGULAR_SPEED;
+    final double rot = rotLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getRightX(), 0.1))
+        * Constants.DriveConstants.MAX_ANGULAR_SPEED;
 
     swerve.drive(xSpeed, ySpeed, rot, fieldRelative, getPeriod());
   }

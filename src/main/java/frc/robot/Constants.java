@@ -1,14 +1,11 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.XboxController;
-
 
 public class Constants {
 
     public static final class SwerveConstants {
-        //feed forward constants //TODO: change values if we use feedforward
+        // feed forward constants //TODO: change values if we use feedforward
         public static final int STATIC_GAIN_DRIVE = 1;
         public static final int VELOCITY_GAIN_DRIVE = 3;
         public static final int STATIC_GAIN_TURN = 1;
@@ -29,68 +26,67 @@ public class Constants {
         // teeth on the bevel pinion
         public static final double DrivingMotorReduction = (45.0 * 22) / (DrivingMotorPinionTeeth * 15);
         public static final double DriveWheelFreeSpeedRps = (DrivingMotorFreeSpeedRps * WheelCircumferenceMeters)
-            / DrivingMotorReduction;
+                / DrivingMotorReduction;
 
-        //Encoder calculations
+        // Encoder calculations
         public static final double GEAR_RATIO = 8.14;
-        public static final double WHEEL_DIAMETER = 4 / Math.PI; //inches
+        public static final double WHEEL_DIAMETER = 4 / Math.PI; // inches
 
-        public static final double drivingFactor = Constants.SwerveConstants.WheelDiameterMeters * Math.PI / Constants.SwerveConstants.DrivingMotorReduction;
-        public static final double steeringFactor = 150/7;
-        public static final double turningFactor = (2 * Math.PI)/steeringFactor;
+        public static final double drivingFactor = Constants.SwerveConstants.WheelDiameterMeters * Math.PI
+                / Constants.SwerveConstants.DrivingMotorReduction;
+        public static final double steeringFactor = 150 / 7;
+        public static final double turningFactor = (2 * Math.PI) / steeringFactor;
         public static final double drivingVelocityFeedForward = 1 / Constants.SwerveConstants.DriveWheelFreeSpeedRps;
 
-
-        public static final double TURN_RESET_VELOCITY = 1; //TODO: Definetly need to measure
+        public static final double TURN_RESET_VELOCITY = 1; // TODO: Definetly need to measure
     }
 
-    public static final class DriveConstants {  
+    public static final class DriveConstants {
 
         public static final double MAX_SPEED = 3.0; // 3 meters per second
         public static final double MAX_ANGULAR_SPEED = Math.PI; // 1/2 rotation per second
-        
+
         public static final double TRANSLATION_2D_OFFSET = 0.3048; // 12 inches to meters
 
-
         // NOTE: All angles must be thought of as clockwise negative (-) because of the gear-pulley system.
+        // All angular offsets are in angles.
         public static final int FL_DRIVE_ID = 2;
         public static final int FL_TURN_ID = 3;
         public static final int FL_DIO = 8;
-        public static final double FL_CHASSIS_ANGULAR_OFFSET = (-25*Math.PI)/180; // was 24.838
+        public static final double FL_CHASSIS_ANGULAR_OFFSET = (-25 * Math.PI) / 180; 
 
         public static final int FR_DRIVE_ID = 4;
         public static final int FR_TURN_ID = 5;
         public static final int FR_DIO = 7;
-        public static final double FR_CHASSIS_ANGULAR_OFFSET = (3.4*Math.PI)/180; //3.0825; //0.294*Math.PI*2;
+        public static final double FR_CHASSIS_ANGULAR_OFFSET = (3.4 * Math.PI) / 180; 
 
         public static final int BL_DRIVE_ID = 6;
         public static final int BL_TURN_ID = 7;
         public static final int BL_DIO = 9;
-        public static final double BL_CHASSIS_ANGULAR_OFFSET = (85*Math.PI)/180; //(276.988*Math.PI)/180; //4.828; //0.918*Math.PI*2; //TODO: check later
-
+        public static final double BL_CHASSIS_ANGULAR_OFFSET = (85 * Math.PI) / 180; 
 
         public static final int BR_DRIVE_ID = 8;
         public static final int BR_TURN_ID = 9;
         public static final int BR_DIO = 6;
-        public static final double BR_CHASSIS_ANGULAR_OFFSET = -178*Math.PI/180; // 6.243-Math.PI; //0.950*Math.PI*2;
+        public static final double BR_CHASSIS_ANGULAR_OFFSET = -178 * Math.PI / 180;
 
-        public static final int TURN_TOLERANCE = 2; //TODO: need to change when testing turning
-        public static final double DISTANCE_TOLERANCE = 0.1; //TODO: need to change when testing distance
+        public static final int TURN_TOLERANCE = 2; // TODO: need to change when testing turning
+        public static final double DISTANCE_TOLERANCE = 0.1; // TODO: need to change when testing distance
 
-        //Gyro 
-        public static final boolean GyroReversed = false; //TODO: is this always false?????
+        // Gyro
+        public static final boolean GyroReversed = false; // TODO: is this always false?????
         public static final double STALL_SPEED = 0.1; // TODO change speed if needed, greater?
-    }   
-
-    public static final class AutoConstants {
-        public static final double INITIAL_DISTANCE = 58.5; //inches
-        public static final double LEAVE_ONLY_DISTANCE = 10; //inches
     }
 
-    public static final class CoralConstants { //TODO: need to change all of the values!
+    public static final class AutoConstants {
+        public static final double INITIAL_DISTANCE = 58.5; // inches
+        public static final double LEAVE_ONLY_DISTANCE = 10; // inches
+    }
 
-        public static final int ELEVATOR_TOLERANCE = 1; //TODO: Need to change when testing elevator
-        
+    public static final class CoralConstants { // TODO: need to change all of the values!
+
+        public static final int ELEVATOR_TOLERANCE = 1; // TODO: Need to change when testing elevator
+
         public static final double L2_HEIGHT = 24.5; // TODO: change, fake values
         public static final double L3_HEIGHT = 34.5;
         public static final double L4_HEIGHT = 44.5;
@@ -101,19 +97,18 @@ public class Constants {
         public static final double SHOOT_MOTOR_SPEED = 0.5;
         public static final double ELEVATOR_SPEED = 0.5;
 
-        public static final double SHOOT_TIME = 1.5; //TODO: change time
+        public static final double SHOOT_TIME = 1.5; // TODO: change time
 
         public static final double AUX_DEADZONE = 0.1;
 
-        public static final double ELEVATOR_TICKS_PER_REV = 840; // ticks per revolution, 840 tick per rev 
-        public static final double ELEVATOR_DRUM_CIRCUMFERENCE = 0.942 * Math.PI; //inches per rev
-        public static final double ELEVATOR_INCHES_PER_TICK = ELEVATOR_DRUM_CIRCUMFERENCE / ELEVATOR_TICKS_PER_REV; //ticks per inch
-
+        public static final double ELEVATOR_TICKS_PER_REV = 840; // ticks per revolution, 840 tick per rev
+        public static final double ELEVATOR_DRUM_CIRCUMFERENCE = 0.942 * Math.PI; // inches per rev
+        public static final double ELEVATOR_INCHES_PER_TICK = ELEVATOR_DRUM_CIRCUMFERENCE / ELEVATOR_TICKS_PER_REV; // ticks per inch
     }
 
     public static final class ClimbConstants {
 
-        public static final int CLIMBER_ID = 11; //TODO: change id
+        public static final int CLIMBER_ID = 11; // TODO: change id
 
         public static final double CLIMB_SPEED = 0.5;
     }
@@ -135,7 +130,6 @@ public class Constants {
 
         public static final double ALGAE_SPEED = 0.5;
 
-        public static final double ALGAE_TIME = 2; //TODO: change time
-
+        public static final double ALGAE_TIME = 2; // TODO: change time
     }
 }
