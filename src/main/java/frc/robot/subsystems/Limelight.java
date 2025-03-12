@@ -16,11 +16,7 @@ public class Limelight {
     NetworkTableEntry pos = table.getEntry("camera-pose_targetspace"); // 3D translation and rotations?
     NetworkTableEntry pos1 = table.getEntry("target-pose_cameraspace");
     NetworkTableEntry pos2 = table.getEntry("target-pose_robotspace");
-
-    double ySpeed = 0;
-    double rotationSpeed = 0;
-    long lastTargetTime = 0;
-
+    
     public Limelight() {
 
     }

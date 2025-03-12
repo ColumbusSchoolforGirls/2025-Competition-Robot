@@ -59,5 +59,5 @@ public class AlgaeSystem {
             setAlgaeArm(upperMotor, -1);
             algaeUpperArmUp = false;
         }
-    } // I hate this. PLEASE clean it up I CAN'T
+    }  
 }

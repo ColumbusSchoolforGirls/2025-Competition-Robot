@@ -91,10 +91,7 @@ public class SwerveModule implements SwerveModuleInterface {
     SwerveModuleState desiredState = new SwerveModuleState(0.0, new Rotation2d());
     desiredState.angle = new Rotation2d(turnRelativeEncoder.getPosition());
     setDesiredState(desiredState);
-
   }
-
-  
 
   /** Returns the current state of the module. */
   public SwerveModuleState getState() {
@@ -102,7 +99,6 @@ public class SwerveModule implements SwerveModuleInterface {
     // relative to the chassis.
     return new SwerveModuleState(
         driveEncoder.getVelocity(), new Rotation2d(turnRelativeEncoder.getPosition()));
-      
   }
 
   /** Returns the current position of the module. */

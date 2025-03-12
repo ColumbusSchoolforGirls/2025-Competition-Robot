@@ -74,20 +74,26 @@ public class Constants {
         public static final int BR_DIO = 6;
         public static final double BR_CHASSIS_ANGULAR_OFFSET = -178*Math.PI/180; // 6.243-Math.PI; //0.950*Math.PI*2;
 
-        //Gyro Reversed
-        public static final boolean                                                                                                                                                                                                                                                                                                                                        GyroReversed = false; //TODO: is this always false?????'
-        
         public static final int TURN_TOLERANCE = 2; //TODO: need to change when testing turning
         public static final double DISTANCE_TOLERANCE = 0.1; //TODO: need to change when testing distance
+
+        //Gyro 
+        public static final boolean GyroReversed = false; //TODO: is this always false?????
+        public static final double STALL_SPEED = 0.1; // TODO change speed if needed, greater?
     }   
 
-    public static final class CoralConstants {
+    public static final class AutoConstants {
+        public static final double INITIAL_DISTANCE = 58.5; //inches
+        public static final double LEAVE_ONLY_DISTANCE = 10; //inches
+    }
+
+    public static final class CoralConstants { //TODO: need to change all of the values!
 
         public static final int ELEVATOR_TOLERANCE = 1; //TODO: Need to change when testing elevator
         
-        public static final double L2_HEIGHT = 0;
-        public static final double L3_HEIGHT = 15.75; //inches!! (difference between L2 and L3)
-        public static final double L4_HEIGHT = 40.124; //same deal
+        public static final double L2_HEIGHT = 24.5; // TODO: change, fake values
+        public static final double L3_HEIGHT = 34.5;
+        public static final double L4_HEIGHT = 44.5;
 
         public static final int SHOOT_ID = 10; // TODO: change id
         public static final int ELEVATOR_ID = 14;
@@ -95,11 +101,14 @@ public class Constants {
         public static final double SHOOT_MOTOR_SPEED = 0.5;
         public static final double ELEVATOR_SPEED = 0.5;
 
-        public static final double TICKS_TO_INCHES = 0.02; //TODO: change
-
         public static final double SHOOT_TIME = 1.5; //TODO: change time
 
         public static final double AUX_DEADZONE = 0.1;
+
+        public static final double ELEVATOR_TICKS_PER_REV = 840; // ticks per revolution, 840 tick per rev 
+        public static final double ELEVATOR_DRUM_CIRCUMFERENCE = 0.942 * Math.PI; //inches per rev
+        public static final double ELEVATOR_INCHES_PER_TICK = ELEVATOR_DRUM_CIRCUMFERENCE / ELEVATOR_TICKS_PER_REV; //ticks per inch
+
     }
 
     public static final class ClimbConstants {

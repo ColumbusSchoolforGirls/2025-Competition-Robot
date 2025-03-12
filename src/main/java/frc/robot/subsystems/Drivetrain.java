@@ -24,7 +24,6 @@ import frc.robot.Constants.DriveConstants;
 import static frc.robot.Constants.ControllerConstants.DRIVE_CONTROLLER;
 
 public class Drivetrain {
-
   private Limelight limelight;
 
   private double gyroDifference;
@@ -76,6 +75,10 @@ public class Drivetrain {
           backLeft.getPosition(),
           backRight.getPosition()
       });
+
+  public Drivetrain(Limelight limelight) {
+    this.limelight = limelight;
+  }
 
   public void getDriveEncoders() {
     frontLeft.getDrivePositionMeters();
@@ -237,7 +240,7 @@ public class Drivetrain {
     backRight.setBrakeMode();
   }
 
-  public void setCoastMode() {
+  public void setCoastMode() { 
     frontLeft.setCoastMode();
     frontRight.setCoastMode();
     backLeft.setCoastMode();
@@ -262,7 +265,8 @@ public class Drivetrain {
    
     zeroHeading();
     resetEncoders();
-    // TODO: MAYBE add setBrakeMode() here
+    resetTurnEncoders();
+    setBrakeMode();
   }
 //This is for auto turning
   public void setAutoTargetAngle(double targetAngle) {
@@ -282,8 +286,8 @@ public class Drivetrain {
       stallStart = 0.0;  
       return true;    
     }
-    // Prevents the robot from burning out driving continuously into a wall // TODO: check if this works
-    if (frontLeft.getVelocityRPM() < 100) {
+    // Prevents the robot from burning out driving continuously into a wall // TODO: check if this works // TODO: velocityZ is probably wrong
+    if (gyro.getVelocityZ() < 0.01) {
       if (stallStart != 0.0) {
         if (Timer.getFPGATimestamp() - stallStart > 0.5) {
           return true;
@@ -335,7 +339,5 @@ public class Drivetrain {
       double ty = limelight.getTY();
       // TODO: tune these on robot
       return (tx < 0.1 && ty < 0.1);
-
-      
     }
 }
