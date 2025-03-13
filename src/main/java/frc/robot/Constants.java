@@ -87,9 +87,10 @@ public class Constants {
 
         public static final int ELEVATOR_TOLERANCE = 1; // TODO: Need to change when testing elevator
 
-        public static final double L2_HEIGHT = 24.5; // TODO: change, fake values
-        public static final double L3_HEIGHT = 34.5;
-        public static final double L4_HEIGHT = 44.5;
+        // Height in inches of coral node from default height (0 is L2).
+        public static final double L2_HEIGHT = 0; // 31.875 from floor
+        public static final double L3_HEIGHT = 15.75; // 47.625 from floor
+        public static final double L4_HEIGHT = 24.375; // 72 from floor;
 
         public static final int SHOOT_ID = 10; // TODO: change id
         public static final int ELEVATOR_ID = 14;
