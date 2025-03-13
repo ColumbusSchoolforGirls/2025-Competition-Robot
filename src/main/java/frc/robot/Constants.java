@@ -104,6 +104,8 @@ public class Constants {
         public static final double ELEVATOR_TICKS_PER_REV = 840; // ticks per revolution, 840 tick per rev
         public static final double ELEVATOR_DRUM_CIRCUMFERENCE = 0.942 * Math.PI; // inches per rev
         public static final double ELEVATOR_INCHES_PER_TICK = ELEVATOR_DRUM_CIRCUMFERENCE / ELEVATOR_TICKS_PER_REV; // ticks per inch
+
+        public static final double SCALE_FACTOR = 0.5; // TODO: change scale factor
     }
 
     public static final class ClimbConstants {

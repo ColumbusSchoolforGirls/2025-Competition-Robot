@@ -41,12 +41,16 @@ public class CoralSystem {
     }
 
     public void driveElevator(double normalElevatorSpeed) {
-        double elevatorSpeed = -AUX.getLeftY(); // messily inverted //TODO: real invert
+      //  double elevatorSpeed = -AUX.getLeftY(); // messily inverted //TODO: real invert
+
+        double elevatorSpeed = Constants.CoralConstants.SCALE_FACTOR * difference;
 
         if (Math.abs(elevatorSpeed) < Constants.CoralConstants.AUX_DEADZONE) {
             elevatorMotor.set(0);
         } else
             elevatorMotor.set(elevatorSpeed * normalElevatorSpeed);
+
+
     }
 
     /**
@@ -87,11 +91,13 @@ public class CoralSystem {
 
         if (difference < CoralConstants.ELEVATOR_TOLERANCE) {
             elevatorMotor.set(0);
-        } else if (difference > 0) {
+        } else if (difference > 0) { 
             elevatorMotor.set(CoralConstants.ELEVATOR_SPEED);
         } else if (difference < 0) {
             elevatorMotor.set(-CoralConstants.ELEVATOR_SPEED);
         }
+
+
     }
 
     // TODO: Change this to time-based if needed (driver visibility)
