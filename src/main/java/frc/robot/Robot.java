@@ -19,6 +19,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.CoralSystem;
 import frc.robot.subsystems.Climber;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
   private final Limelight limelight = new Limelight();
@@ -201,10 +202,34 @@ public class Robot extends TimedRobot {
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
+    SmartDashboard.putBoolean("A", false);
+    SmartDashboard.putBoolean("B", false);
+    SmartDashboard.putBoolean("X", false);
+    SmartDashboard.putBoolean("Y", false);
   }
 
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {
+    if (AUX.getAButton()) {
+      SmartDashboard.putBoolean("A", true);
+    } else {
+      SmartDashboard.putBoolean("A", false);
+    }
+    if (AUX.getBButton()) {
+      SmartDashboard.putBoolean("B", true);
+    } else {
+      SmartDashboard.putBoolean("B", false);
+    }
+    if (AUX.getXButton()) {
+      SmartDashboard.putBoolean("X", true);
+    } else {
+      SmartDashboard.putBoolean("X", false);
+    }
+    if (AUX.getYButton()) {
+      SmartDashboard.putBoolean("Y", true);
+    } else {
+      SmartDashboard.putBoolean("Y", false);
+    }
   }
 }
