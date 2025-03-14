@@ -40,19 +40,6 @@ public class CoralSystem {
         return elevatorEncoder.getPosition() * CoralConstants.ELEVATOR_INCHES_PER_TICK;
     }
 
-    public void driveElevator(double normalElevatorSpeed) {
-      //  double elevatorSpeed = -AUX.getLeftY(); // messily inverted //TODO: real invert
-
-        double elevatorSpeed = Constants.CoralConstants.SCALE_FACTOR * difference;
-
-        if (Math.abs(elevatorSpeed) < Constants.CoralConstants.AUX_DEADZONE) {
-            elevatorMotor.set(0);
-        } else
-            elevatorMotor.set(elevatorSpeed * normalElevatorSpeed);
-
-
-    }
-
     /**
      * Sets the elevator encoder tick count to 0. Only for use on robot-init when
      * the elevator has been reset to bottom.
@@ -86,19 +73,24 @@ public class CoralSystem {
         return Math.abs(difference) < CoralConstants.ELEVATOR_TOLERANCE;
     }
 
-    public void elevator() {
+    public void elevator(double normalElevatorSpeed) {
         difference = (targetHeight - getHeight());
 
-        if (difference < CoralConstants.ELEVATOR_TOLERANCE) {
+        double scaledElevatorSpeed = Constants.CoralConstants.ELEVATOR_SCALE_FACTOR * difference;
+        
+        if (Math.abs(difference) < Constants.CoralConstants.ELEVATOR_TOLERANCE) {
             elevatorMotor.set(0);
-        } else if (difference > 0) { 
-            elevatorMotor.set(CoralConstants.ELEVATOR_SPEED);
-        } else if (difference < 0) {
-            elevatorMotor.set(-CoralConstants.ELEVATOR_SPEED);
+        } else if (Math.abs(difference) < Constants.CoralConstants.NORMAL_ELEVATOR_SPEED_DIFFERENCE) {
+            elevatorMotor.set(normalElevatorSpeed);
+        } else {
+            elevatorMotor.set(scaledElevatorSpeed * normalElevatorSpeed);
         }
-
-
+    
     }
+
+    // public void driveElevator(double normalElevatorSpeed) {
+
+    // }
 
     // TODO: Change this to time-based if needed (driver visibility)
     public void shoot() {

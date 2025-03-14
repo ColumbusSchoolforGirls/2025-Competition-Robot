@@ -96,7 +96,6 @@ public class Constants {
         public static final int ELEVATOR_ID = 14;
 
         public static final double SHOOT_MOTOR_SPEED = 0.5;
-        public static final double ELEVATOR_SPEED = 0.5;
 
         public static final double SHOOT_TIME = 1.5; // TODO: change time
 
@@ -106,7 +105,8 @@ public class Constants {
         public static final double ELEVATOR_DRUM_CIRCUMFERENCE = 0.942 * Math.PI; // inches per rev
         public static final double ELEVATOR_INCHES_PER_TICK = ELEVATOR_DRUM_CIRCUMFERENCE / ELEVATOR_TICKS_PER_REV; // ticks per inch
 
-        public static final double SCALE_FACTOR = 0.5; // TODO: change scale factor
+        public static final double ELEVATOR_SCALE_FACTOR = 0.08333; //1/12 so max at 12+ difference - need to ajust if we change the NORMAL ELEVATOR SPEED DIFFERENCE // TODO: test
+        public static final double NORMAL_ELEVATOR_SPEED_DIFFERENCE = 12; //inches //TODO: test and change, start with 12 inches
     }
 
     public static final class ClimbConstants {
