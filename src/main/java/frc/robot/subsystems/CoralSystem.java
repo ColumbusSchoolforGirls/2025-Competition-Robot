@@ -52,16 +52,15 @@ public class CoralSystem {
         shootMotor.setNeutralMode(NeutralMode.Coast);
     }
 
-    // public void controllerInputTargetHeight() {
-
-    // if (AUX.getAButtonPressed()) {
-    // targetHeight = CoralConstants.L2_HEIGHT;
-    // } else if (AUX.getBButtonPressed()) {
-    // targetHeight = CoralConstants.L3_HEIGHT;
-    // } else if (AUX.getYButtonPressed()) {
-    // targetHeight = CoralConstants.L4_HEIGHT;
-    // }
-    // }
+    public void controllerInputTargetHeight() {
+        if (AUX.getAButtonPressed()) {
+            targetHeight = CoralConstants.L2_HEIGHT;
+        } else if (AUX.getBButtonPressed()) {
+            targetHeight = CoralConstants.L3_HEIGHT;
+        } else if (AUX.getYButtonPressed()) {
+            targetHeight = CoralConstants.L4_HEIGHT;
+        }
+    }
 
     public void setAutoTargetHeight(double targetHeight) {
         this.targetHeight = targetHeight;
@@ -77,7 +76,7 @@ public class CoralSystem {
         difference = (targetHeight - getHeight());
 
         double scaledElevatorSpeed = Constants.CoralConstants.ELEVATOR_SCALE_FACTOR * difference;
-        
+
         if (Math.abs(difference) < Constants.CoralConstants.ELEVATOR_TOLERANCE) {
             elevatorMotor.set(0);
         } else if (Math.abs(difference) < Constants.CoralConstants.NORMAL_ELEVATOR_SPEED_DIFFERENCE) {
@@ -85,7 +84,7 @@ public class CoralSystem {
         } else {
             elevatorMotor.set(scaledElevatorSpeed * normalElevatorSpeed);
         }
-    
+
     }
 
     // public void driveElevator(double normalElevatorSpeed) {
