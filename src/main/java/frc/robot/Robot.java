@@ -145,6 +145,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     swerve.setBrakeMode();
     swerve.resetTurnEncoders();
+    coralSystem.resetElevatorEncoder();
   }
 
   @Override
