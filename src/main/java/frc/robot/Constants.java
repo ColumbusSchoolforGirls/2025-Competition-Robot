@@ -105,7 +105,8 @@ public class Constants {
         public static final double ELEVATOR_DRUM_CIRCUMFERENCE = 0.942 * Math.PI; // inches per rev
         public static final double ELEVATOR_INCHES_PER_TICK = ELEVATOR_DRUM_CIRCUMFERENCE / ELEVATOR_TICKS_PER_REV; // ticks per inch
 
-        public static final double ELEVATOR_SCALE_FACTOR = 0.08333; //1/12 so max at 12+ difference - need to ajust if we change the NORMAL ELEVATOR SPEED DIFFERENCE // TODO: test
+        public static final double ELEVATOR_SCALE_FACTOR = 0.079166667; //1/12 + 0.05 so max at 12+ difference - need to ajust if we change the NORMAL ELEVATOR SPEED DIFFERENCE // TODO: test
+        public static final double MINIMUM_ELEVATOR_SPEED_NEEDED = 0.05; //5% power
         public static final double NORMAL_ELEVATOR_SPEED_DIFFERENCE = 12; //inches //TODO: test and change, start with 12 inches
     }
 

@@ -75,14 +75,15 @@ public class CoralSystem {
     public void elevator(double normalElevatorSpeed) {
         difference = (targetHeight - getHeight());
 
-        double scaledElevatorSpeed = Constants.CoralConstants.ELEVATOR_SCALE_FACTOR * difference;
+        double scaledElevatorSpeedSlope = Constants.CoralConstants.ELEVATOR_SCALE_FACTOR * difference;
+        
 
         if (Math.abs(difference) < Constants.CoralConstants.ELEVATOR_TOLERANCE) {
             elevatorMotor.set(0);
         } else if (Math.abs(difference) < Constants.CoralConstants.NORMAL_ELEVATOR_SPEED_DIFFERENCE) {
-            elevatorMotor.set(normalElevatorSpeed);
+            elevatorMotor.set((scaledElevatorSpeedSlope * normalElevatorSpeed) + Constants.CoralConstants.MINIMUM_ELEVATOR_SPEED_NEEDED);
         } else {
-            elevatorMotor.set(scaledElevatorSpeed * normalElevatorSpeed);
+            elevatorMotor.set(normalElevatorSpeed);
         }
 
     }
