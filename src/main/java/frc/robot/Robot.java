@@ -153,7 +153,8 @@ public class Robot extends TimedRobot {
     driveWithJoystick(false);
     // coralSystem.shoot();
     swerve.driverResetTurnEncoders();
-    coralSystem.elevator(0.5);
+    //coralSystem.elevator(0.5);
+    coralSystem.driveElevator(0.5);
   }
 
   private void driveWithJoystick(boolean fieldRelative) {

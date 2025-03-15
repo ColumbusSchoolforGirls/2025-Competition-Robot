@@ -88,6 +88,16 @@ public class CoralSystem {
 
     }
 
+    public void driveElevator(double normalElevatorSpeed) {
+        double elevatorSpeed = AUX.getLeftY(); // messily inverted //TODO: real invert
+;
+        if (Math.abs(elevatorSpeed) < Constants.CoralConstants.AUX_DEADZONE) {
+            elevatorMotor.set(0);
+        } else
+            elevatorMotor.set(elevatorSpeed * normalElevatorSpeed);
+  
+  
+      }
     // public void driveElevator(double normalElevatorSpeed) {
 
     // }
