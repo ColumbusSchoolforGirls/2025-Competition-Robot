@@ -89,21 +89,21 @@ public class Constants {
 
         // Height in inches of coral node from default height (0 is L2).
         public static final double L2_HEIGHT = 0; // 31.875 from floor
-        public static final double L3_HEIGHT = 15.75; // 47.625 from floor
-        public static final double L4_HEIGHT = 24.375; // 72 from floor;
+        public static final double L3_HEIGHT = 15.75/2; // 47.625 from floor //divided in half because of the elevator
+        public static final double L4_HEIGHT = 24.375/2; // 72 from floor; //divided in half because of the elevator
 
         public static final int SHOOT_ID = 10; // TODO: change id
         public static final int ELEVATOR_ID = 14;
 
-        public static final double SHOOT_MOTOR_SPEED = 0.5;
+        public static final double SHOOT_MOTOR_SPEED = 1.0;
 
         public static final double SHOOT_TIME = 1.5; // TODO: change time
 
         public static final double AUX_DEADZONE = 0.1;
 
-        public static final double ELEVATOR_TICKS_PER_REV = 840; // ticks per revolution, 840 tick per rev
+        public static final double ELEVATOR_GEAR_RATIO = 20; // 20:1 gear ratio
         public static final double ELEVATOR_DRUM_CIRCUMFERENCE = 0.942 * Math.PI; // inches per rev
-        public static final double ELEVATOR_INCHES_PER_TICK = ELEVATOR_DRUM_CIRCUMFERENCE / ELEVATOR_TICKS_PER_REV; // ticks per inch
+        public static final double ELEVATOR_INCHES_PER_ROTATION = ELEVATOR_DRUM_CIRCUMFERENCE / ELEVATOR_GEAR_RATIO; // inches per rev
 
         public static final double ELEVATOR_SCALE_FACTOR = 0.079166667; //1/12 + 0.05 so max at 12+ difference - need to ajust if we change the NORMAL ELEVATOR SPEED DIFFERENCE // TODO: test
         public static final double MINIMUM_ELEVATOR_SPEED_NEEDED = 0.05; //5% power
@@ -112,9 +112,9 @@ public class Constants {
 
     public static final class ClimbConstants {
 
-        public static final int CLIMBER_ID = 11; // TODO: change id
+        public static final int CLIMBER_ID = 15; // TODO: change id to 11
 
-        public static final double CLIMB_SPEED = 0.5;
+        public static final double CLIMB_SPEED = 1.0;
     }
 
     public static final class ControllerConstants {

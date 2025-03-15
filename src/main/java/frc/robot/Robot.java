@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
   private final Limelight limelight = new Limelight();
   private final CoralSystem coralSystem = new CoralSystem(limelight);
-  // private final Climber climber = new Climber();
+  private final Climber climber = new Climber();
   private final Drivetrain swerve = new Drivetrain(limelight);
 
   private final AutoPaths autoPaths = new AutoPaths();
@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
     // DriverStation.startDataLog(DataLogManager.getLog());
     swerve.driveInit();
     autoPaths.autoShuffleboardStartup();
-    coralSystem.resetElevatorEncoder();
+    coralSystem.resetElevatorEncoders();
   }
 
   @Override
@@ -91,7 +91,7 @@ public class Robot extends TimedRobot {
         // TODO: implement limelight alignment
         break;
       case DRIVE_AND_ELEVATOR:
-        coralSystem.setAutoTargetHeight(currentAction.getValue()); // or autoPaths.getAutoTargetHeight() BUT this is better for abstraction
+        //coralSystem.setAutoTargetHeight(currentAction.getValue()); // or autoPaths.getAutoTargetHeight() BUT this is better for abstraction
         // swerve.startTurn(autoPaths.getInitialEndAutoTargetAngle());
         autoPaths.getDriveDistance();
         // swerve.startDrive(autoPaths.getInitialEndAutoTargetDistance());
@@ -145,16 +145,20 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     swerve.setBrakeMode();
     swerve.resetTurnEncoders();
-    coralSystem.resetElevatorEncoder();
+    coralSystem.resetElevatorEncoders();
+    coralSystem.setShootMotor();
+    climber.setClimb();
+    climber.setCoast();
   }
 
   @Override
   public void teleopPeriodic() {
     driveWithJoystick(false);
-    // coralSystem.shoot();
+    coralSystem.shoot();
     swerve.driverResetTurnEncoders();
-    //coralSystem.elevator(0.5);
-    coralSystem.driveElevator(0.5);
+    climber.climb();
+    coralSystem.elevator(0.3, -0.1);
+    coralSystem.driveElevator(0.3);
   }
 
   private void driveWithJoystick(boolean fieldRelative) {

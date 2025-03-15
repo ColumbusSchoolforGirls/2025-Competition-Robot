@@ -14,6 +14,8 @@ public class Configs {
 
         static {
             elevatorConfig
+                    .encoder.positionConversionFactor(1);
+            elevatorConfig
                     .idleMode(IdleMode.kBrake);
                     //.smartCurrentLimit(40);
             
