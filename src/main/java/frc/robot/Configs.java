@@ -10,9 +10,14 @@ public class Configs {
     public static final class MAXSwerveModule {
         public static final SparkMaxConfig drivingConfig = new SparkMaxConfig();
         public static final SparkMaxConfig turningConfig = new SparkMaxConfig();
+        public static final SparkMaxConfig elevatorConfig = new SparkMaxConfig();
 
         static {
-            // Use module constants to calculate conversion factors and feed forward gain.
+            elevatorConfig
+                    .idleMode(IdleMode.kBrake);
+                    //.smartCurrentLimit(40);
+            
+                // Use module constants to calculate conversion factors and feed forward gain.
             drivingConfig
                     .idleMode(IdleMode.kBrake)
                     .smartCurrentLimit(50);
