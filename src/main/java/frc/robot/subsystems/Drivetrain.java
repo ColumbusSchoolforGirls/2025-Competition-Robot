@@ -322,6 +322,13 @@ public class Drivetrain {
     this.drive(forward_limelight, 0.0, rot_limelight, fieldRelative, periodSeconds);
   }
 
+  public void teleopAutoAlign(double periodSeconds) {
+    if (DRIVE_CONTROLLER.getXButtonPressed()) {
+      autoAlignLimelight(periodSeconds);
+
+    }
+  }
+
   public boolean isLimelightAligned() {
     double tx = limelight.getTX();
     double ty = limelight.getTY();

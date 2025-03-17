@@ -88,7 +88,7 @@ public class Robot extends TimedRobot {
         swerve.startTurn(currentAction.getValue());
         break;
       case ALIGN:
-        // TODO: implement limelight alignment
+        swerve.autoAlignLimelight(getPeriod());
         break;
       case DRIVE_AND_ELEVATOR:
         //coralSystem.setAutoTargetHeight(currentAction.getValue()); // or autoPaths.getAutoTargetHeight() BUT this is better for abstraction
@@ -161,6 +161,7 @@ public class Robot extends TimedRobot {
     swerve.driverResetTurnEncoders();
     climber.climb();
     coralSystem.elevator(0.7, -0.1);
+    swerve.teleopAutoAlign(getPeriod());
   }
 
   private void driveWithJoystick(boolean fieldRelative) {
