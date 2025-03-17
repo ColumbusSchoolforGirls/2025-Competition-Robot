@@ -1,271 +1,199 @@
 package frc.robot;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.CoralConstants;
+import frc.robot.Constants.AutoConstants;
 
-public class AutoPaths { // obviously need to add more
+public class AutoPaths {
+
     public enum StartingPosition {
-        LEFT, 
-        RIGHT, 
-        CENTER
+        LEFT, RIGHT, MIDDLE // from drive station persepctive
     }
 
-    public enum CoralPosition {
-        L1, L2, L4 // L1 and L2 are at the same height but different alighment, L3 is always the blocked, L2 is sometimes blocked
+    public enum ReefFace {
+        N, NE, SE, S, SW, NW // cardinal directions from the drive station perspective
     }
 
-    public enum EndPosition{
-        leftCoralStation, rightCoralStation, stayAtCoral, awayFromCoral // awayFromCoral is in between the 2 coral stations
+    public enum LeftOrRight {
+        LEFT, RIGHT
     }
 
-    boolean knockOffAlgae;
+    // L3 is always blocked at start
+    public enum CoralLevel {
+        TROUGH, L2, L3, L4
+    }
 
-    // the drop down menu to choose a path on the dashboard
-    private final SendableChooser<StartingPosition> startingPositionChooser = new SendableChooser<StartingPosition>();
-    private final SendableChooser<String> coralPositionChooser = new SendableChooser<String>();
-    private final SendableChooser<String> endPositionChooser = new SendableChooser<String>(); 
-    private final SendableChooser<Boolean> knockOffAlgaeFlag = new SendableChooser<Boolean>();
-    // for endPositionChooser add which coral station to go to or remain stationary. 
     public AutoAction currentAutoAction;
 
-
-    public AutoPaths() {
-        SmartDashboard.putData("Starting Position", startingPositionChooser); // actually puts them on the dashboard
-                                                                              // after they are added to m_chooser
-        for (StartingPosition p : StartingPosition.values()) {
-            startingPositionChooser.addOption(p.name(), p);
-        }
-
-        SmartDashboard.putData("Coral Position", coralPositionChooser);
-        for (CoralPosition coralPosition: CoralPosition.values()) {
-            coralPositionChooser.addOption(coralPosition.name(), coralPosition.name());
-        }
-
-        SmartDashboard.putData("End Position", endPositionChooser);
-        for (EndPosition endPosition: EndPosition.values()) {
-            coralPositionChooser.addOption(endPosition.name(), endPosition.name());
-        }
-
-        this.currentAutoAction = null;
-
-
-    }
-
     /**
-     * Gets the initial turn angle based on the starting position chooser.
-     * @return
+     * Returns the initial drive distance in meters based on the starting position
+     * chooser.
      */
     // TODO: implement
-    
-    public double getInitialDriveDistance() {
-        StartingPosition startingPosition = startingPositionChooser.getSelected();
+    public double getTurnRadiusDistance() { // TODO: immplementation, maybe (for after alignment) change to a constant distance?
+        StartingPosition startingPosition = positionChooser.getSelected();
         if (startingPosition == StartingPosition.LEFT || startingPosition == StartingPosition.RIGHT) {
-            return 0; //TODO: change to some positive value
-        } else if (startingPosition == StartingPosition.CENTER) {
-            return 0;
+            return 0; // Constants.AutoConstants._RADIUS_DISTANCE; // TODO: change to some positive value
+        } else if (positionChooser.getSelected() == StartingPosition.MIDDLE) {
+            return 0; // TODO: change to some positive value
         } else {
             return 0;
         }
     }
 
-    public double getDriveToReefDistance() {
-        StartingPosition startingPosition = startingPositionChooser.getSelected();
-        if (startingPosition == StartingPosition.LEFT || startingPosition == StartingPosition.RIGHT) {
-            return 0; //TODO: change to some positive value
-        } else if (startingPositionChooser.getSelected() == StartingPosition.CENTER) {
-            return 0; //TODO: change to some positive value
-        } else {
-            return 0;
-        }
+    // TODO: implement this method
+    public double getDistanceToReefFromStation() {
+        return 0; // Placeholder value, replace with actual logic
     }
-    
+
+    // Add a limelight align after using this
     public float getInitialTurnAngle() {
-        StartingPosition startingPosition = startingPositionChooser.getSelected(); 
+        StartingPosition startingPosition = positionChooser.getSelected();
         if (startingPosition == StartingPosition.LEFT) {
-            return 0; //TODO: change to some positive (counter) value
-       } else if (startingPosition == StartingPosition.RIGHT) {
-            return 0; //TODO: change to some negative (clockwise) value
-       } else if (startingPosition == StartingPosition.CENTER) {
-            return 0;
-       }
-       return 0;
-    }
-
-    public double getAutoTargetHeight(){
-        CoralPosition coralPosition = CoralPosition.valueOf(coralPositionChooser.getSelected());
-        if (coralPosition == CoralPosition.L1) {
-            return Constants.CoralConstants.L2_HEIGHT;
-        } else if (coralPosition == CoralPosition.L2) {
-            return Constants.CoralConstants.L2_HEIGHT;
-        } else if (coralPosition == CoralPosition.L4) {
-            return Constants.CoralConstants.L4_HEIGHT;
-        }
-        return Constants.CoralConstants.L2_HEIGHT;
-    }
-    // coral alignment is the same for L2 and L4, different for L1 --> put this into a function
-
-    public double getInitialEndAutoTargetAngle(){ //TODO: change values
-        EndPosition endPosition = EndPosition.valueOf(endPositionChooser.getSelected());
-        StartingPosition startingPosition = startingPositionChooser.getSelected(); 
-        if (startingPosition == StartingPosition.LEFT) {
-            if (endPosition == EndPosition.leftCoralStation) {
-                return 0;
-            } else if (endPosition == EndPosition.rightCoralStation) {
-                return 0;
-            } else if (endPosition == EndPosition.stayAtCoral) {
-                return 0;
-            } else if (endPosition == EndPosition.awayFromCoral) {
-                return 0;
-            }
+            return 60; // TODO: change to some positive (counter) value
         } else if (startingPosition == StartingPosition.RIGHT) {
-            if (endPosition == EndPosition.leftCoralStation) {
-                return 0;
-            } else if (endPosition == EndPosition.rightCoralStation) {
-                return 0;
-            } else if (endPosition == EndPosition.stayAtCoral) {
-                return 0;
-            } else if (endPosition == EndPosition.awayFromCoral) {
-                return 0;
-            }
-        } else if (startingPosition == StartingPosition.CENTER) {
-            if (endPosition == EndPosition.leftCoralStation) {
-                return 0;
-            } else if (endPosition == EndPosition.rightCoralStation) {
-                return 0;
-            } else if (endPosition == EndPosition.stayAtCoral) {
-                return 0;
-            } else if (endPosition == EndPosition.awayFromCoral) {
-                return 0;
-            }
-        }
-        return 0;
-    }
-
-    public double getMiddleEndAutoTargetAngle(){ //TODO: change values
-        EndPosition endPosition = EndPosition.valueOf(endPositionChooser.getSelected());
-        StartingPosition startingPosition = startingPositionChooser.getSelected(); 
-        if (startingPosition == StartingPosition.LEFT) {
-            if (endPosition == EndPosition.leftCoralStation) {
-                return 0;
-            } else if (endPosition == EndPosition.rightCoralStation) {
-                return 0;
-            } else if (endPosition == EndPosition.stayAtCoral) {
-                return 0;
-            } else if (endPosition == EndPosition.awayFromCoral) {
-                return 0;
-            }
-        } else if (startingPosition == StartingPosition.RIGHT) {
-            if (endPosition == EndPosition.leftCoralStation) {
-                return 0;
-            } else if (endPosition == EndPosition.rightCoralStation) {
-                return 0;
-            } else if (endPosition == EndPosition.stayAtCoral) {
-                return 0;
-            } else if (endPosition == EndPosition.awayFromCoral) {
-                return 0;
-            }
-        } else if (startingPosition == StartingPosition.CENTER) {
-            if (endPosition == EndPosition.leftCoralStation) {
-                return 0;
-            } else if (endPosition == EndPosition.rightCoralStation) {
-                return 0;
-            } else if (endPosition == EndPosition.stayAtCoral) {
-                return 0;
-            } else if (endPosition == EndPosition.awayFromCoral) {
-                return 0;
-            }
-        }
-        return 0;
-    }
-
-    public double getInitialEndAutoTargetDistance(){ //TODO: change values
-        EndPosition endPosition = EndPosition.valueOf(endPositionChooser.getSelected());
-        if (endPosition == EndPosition.leftCoralStation) {
+            return -60; // TODO: change to some negative (clockwise) value
+        } else if (startingPosition == StartingPosition.MIDDLE) {
             return 0;
-        } else if (endPosition == EndPosition.rightCoralStation) {
-            return 0;
-        } else if (endPosition == EndPosition.stayAtCoral) {
-            return 0;
-        } else if (endPosition == EndPosition.awayFromCoral) {
-            return 0;
-        }
-        return 0;
-    }
-
-    public double getMiddleEndAutoTargetDistance() { //TODO: change values
-        EndPosition endPosition = EndPosition.valueOf(endPositionChooser.getSelected());
-        if (endPosition == EndPosition.leftCoralStation) {
-            return 0;
-        } else if (endPosition == EndPosition.rightCoralStation) {
-            return 0;
-        } else if (endPosition == EndPosition.stayAtCoral) {
-            return 0;
-        } else if (endPosition == EndPosition.awayFromCoral) {
-            return 0;
-        }
-        return 0;
-    }
-
-    public double getFinalEndAutoTargetDistance() { //TODO: change values
-        EndPosition endPosition = EndPosition.valueOf(endPositionChooser.getSelected());
-        if (endPosition == EndPosition.leftCoralStation) {
-            return 0;
-        } else if (endPosition == EndPosition.rightCoralStation) {
-            return 0;
-        } else if (endPosition == EndPosition.stayAtCoral) {
-            return 0;
-        } else if (endPosition == EndPosition.awayFromCoral) {
-            return 0;
-        }
-        return 0;
-    }
-
-    public double getFinalEndAutoTargetAngle() {
-        EndPosition endPosition = EndPosition.valueOf(endPositionChooser.getSelected());
-        if (endPosition == EndPosition.leftCoralStation) {
-            return 0;
-        } else if (endPosition == EndPosition.rightCoralStation) {
-            return 0;
-        } else if (endPosition == EndPosition.stayAtCoral) {
-            return 0;
-        } else if (endPosition == EndPosition.awayFromCoral) {
-            return 0;
-        }
-        return 0;
-    }
-
-    public void knockOffAlgae(){
-
-        if (knockOffAlgaeFlag.getSelected() == true) {
-            // do the knock off algae action
         } else {
-            // do nothing
+            return 0;
         }
-    
     }
 
-    public double getDriveDistance(){
-        return 0; //TODO: change value
+    public double getTurnAngleToStation() {
+        return 0;
     }
 
-    // Updates the currentAutoAction. This handles all state transitions. All actions are in Robot.java
-    public AutoAction goToNextState() {
-        if (this.currentAutoAction == null) {
-            return AutoAction.TURN_TOWARD_REEF;
-        } else if(this.currentAutoAction == AutoAction.TURN_TOWARD_REEF) {
-            return AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR;
-        } else if(this.currentAutoAction == AutoAction.GO_TO_REEF_AND_RAISE_ELEVATOR) {
-            return AutoAction.SHOOT_CORAL;
-        } else if(this.currentAutoAction == AutoAction.SHOOT_CORAL) {
-            return AutoAction.ADDITIONAL_DRIVE_ACTIONS;
-        } else if(this.currentAutoAction == AutoAction.ADDITIONAL_DRIVE_ACTIONS) {
-            return AutoAction.STOP;
+    public double getAtStationTurnAngle() {
+        return 0;
+    }
+
+    public double getAutoTargetHeight() {
+        CoralLevel coralLevel = coralLevelChooser.getSelected();
+        switch (coralLevel) {
+            case TROUGH:
+                return CoralConstants.L2_HEIGHT;
+            case L2:
+                return CoralConstants.L2_HEIGHT;
+            case L3:
+                return CoralConstants.L3_HEIGHT;
+            case L4:
+                return CoralConstants.L4_HEIGHT;
+            default:
+                return CoralConstants.L2_HEIGHT;
         }
-        // TODO: Implement the rest of this
-        return AutoAction.STOP;
     }
 
+    public double getDriveDistance() {
+        return 0; // TODO: change value
+    }
 
+    // Choosers for the shuffleboard
+    private final SendableChooser<StartingPosition> positionChooser = new SendableChooser<>();
+    private final SendableChooser<ReefFace> reefFaceChooser = new SendableChooser<>();
+    private final SendableChooser<LeftOrRight> leftOrRightChooser = new SendableChooser<>();
+    private final SendableChooser<CoralLevel> coralLevelChooser = new SendableChooser<>();
+    private final SendableChooser<ReefFace> reefFaceChooser2 = new SendableChooser<>();
+    private final SendableChooser<CoralLevel> coralLevelChooser2 = new SendableChooser<>();
+    private final SendableChooser<LeftOrRight> leftOrRIghtChooser2 = new SendableChooser<>();
+
+    private <K extends Enum<K>> void createChooser(SendableChooser<K> chooser, K[] values, String chooserName) {
+        for (K value : values) {
+            chooser.addOption(value.name(), value);
+        }
+        SmartDashboard.putData(chooserName, chooser);
+    }
+
+    private boolean getIfSelected(String key) {
+        return SmartDashboard.getBoolean(key, false);
+    }
+
+    public void autoShuffleboardStartup() { // TODO: if time allows (HAH) write this using Shuffleboard documentation instead!!, definite to-do next year
+        createChooser(positionChooser, StartingPosition.values(), "Start Position");
+        createChooser(reefFaceChooser, ReefFace.values(), "Reef Face");
+        createChooser(leftOrRightChooser, LeftOrRight.values(), "L or R");
+        createChooser(coralLevelChooser, CoralLevel.values(), "Coral Level");
+        // To return to the reef after getting a second coral
+        createChooser(reefFaceChooser2, ReefFace.values(), "2nd Reef Face");
+        createChooser(coralLevelChooser2, CoralLevel.values(), "2nd Coral Level");
+        createChooser(leftOrRIghtChooser2, LeftOrRight.values(), "2nd L or R");
+
+        SmartDashboard.putBoolean("LEAVE ONLY", false);
+        SmartDashboard.putBoolean("To Reef", false);
+        SmartDashboard.putBoolean("Place Coral", false);
+        SmartDashboard.putBoolean("To Station", false);
+
+        SmartDashboard.putBoolean("To Reef AGAIN", false);
+        SmartDashboard.putBoolean("Place Coral AGAIN", false);
+        SmartDashboard.putBoolean("To Station AGAIN", false);
+
+        this.currentAutoAction = null;
+    }
+
+    public ArrayList<AutoStep> buildPath() {
+        ArrayList<AutoStep> path = new ArrayList<>();
+
+        if (getIfSelected("LEAVE ONLY")) {
+            path.add(new AutoStep(AutoAction.DRIVE, AutoConstants.LEAVE_ONLY_DISTANCE));
+            return path;
+        }
+
+        if (getIfSelected("TO REEF")) {
+            path.addAll(Arrays.asList(
+                    new AutoStep(AutoAction.DRIVE_AND_ELEVATOR, Constants.AutoConstants.INITIAL_DISTANCE, getAutoTargetHeight()),
+                    new AutoStep(AutoAction.TURN, getInitialTurnAngle()),
+                    new AutoStep(AutoAction.ALIGN),
+                    new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
+        } else {
+            return path;
+        }
+
+        if (getIfSelected("PLACE CORAL")) {
+            path.add(new AutoStep(AutoAction.SHOOT));
+        } else {
+            return path;
+        }
+
+        if (getIfSelected("TO STATION")) {
+            path.addAll(Arrays.asList(
+                    new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance()),
+                    new AutoStep(AutoAction.TURN, getTurnAngleToStation()), // TODO: turn should be backward (back up to station)
+                    new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()),
+                    new AutoStep(AutoAction.TURN, getAtStationTurnAngle()),
+                    new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
+        } else {
+            return path;
+        }
+
+        if (getIfSelected("TO REEF AGAIN")) {
+            path.addAll(Arrays.asList(
+                    new AutoStep(AutoAction.TURN, getAtStationTurnAngle()), // TODO: change this? might need to be a different value
+                    new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()),
+                    new AutoStep(AutoAction.ALIGN),
+                    new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
+        } else {
+            return path;
+        }
+
+        if (getIfSelected("PLACE CORAL AGAIN")) {
+            path.add(new AutoStep(AutoAction.SHOOT));
+        } else {
+            return path;
+        }
+
+        if (getIfSelected("TO STATION AGAIN")) {
+            path.addAll(Arrays.asList(
+                    new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance()),
+                    new AutoStep(AutoAction.TURN, getTurnAngleToStation()), // drive backward to station
+                    new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()),
+                    new AutoStep(AutoAction.TURN, getAtStationTurnAngle()),
+                    new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
+        }
+
+        return path;
+    }
 }
