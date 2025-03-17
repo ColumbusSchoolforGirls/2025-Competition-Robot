@@ -22,10 +22,12 @@ import frc.robot.subsystems.Climber;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
-  private final Limelight limelight = new Limelight();
-  private final CoralSystem coralSystem = new CoralSystem(limelight);
+  //private final Limelight limelightCage = new Limelight("limelight-cage"); //TODO: make this camera onyl show up with a button 
+  private final Limelight limelightCoral = new Limelight("limelight-coral");
+
+  private final CoralSystem coralSystem = new CoralSystem(limelightCoral);
   private final Climber climber = new Climber();
-  private final Drivetrain swerve = new Drivetrain(limelight);
+  private final Drivetrain swerve = new Drivetrain(limelightCoral);
 
   private final AutoPaths autoPaths = new AutoPaths();
   ArrayList<AutoStep> autoActions = new ArrayList<>();
@@ -154,6 +156,15 @@ public class Robot extends TimedRobot {
     climber.setCoast();
   }
 
+  public void isFieldRelative() {
+    
+    if (DRIVE_CONTROLLER.getYButtonPressed()) {
+      fieldRelative = !fieldRelative;
+      SmartDashboard.putBoolean("Field Relative?", false);
+    } 
+
+  }
+
   @Override
   public void teleopPeriodic() {
     driveWithJoystick(false);
@@ -162,6 +173,9 @@ public class Robot extends TimedRobot {
     climber.climb();
     coralSystem.elevator(0.7, -0.1);
     swerve.teleopAutoAlign(getPeriod());
+    isFieldRelative(); //TODO: fix
+
+
   }
 
   private void driveWithJoystick(boolean fieldRelative) {

@@ -319,11 +319,14 @@ public class Drivetrain {
     final var forward_limelight = limelight.limelight_range_proportional();
     // while using Limelight, turn off field-relative driving.
     boolean fieldRelative = false;
-    this.drive(forward_limelight, 0.0, rot_limelight, fieldRelative, periodSeconds);
+
+    if (!isLimelightAligned()) {
+      this.drive(forward_limelight, 0.0, rot_limelight, fieldRelative, periodSeconds);
+    }
   }
 
   public void teleopAutoAlign(double periodSeconds) {
-    if (DRIVE_CONTROLLER.getXButtonPressed()) {
+    if (DRIVE_CONTROLLER.getXButton()) {
       autoAlignLimelight(periodSeconds);
 
     }
@@ -333,6 +336,6 @@ public class Drivetrain {
     double tx = limelight.getTX();
     double ty = limelight.getTY();
     // TODO: tune these on robot
-    return (tx < 0.1 && ty < 0.1);
+    return (Math.abs(tx) < Constants.DriveConstants.TX_TOLERANCE && Math.abs(ty) < Constants.DriveConstants.TY_TOLERANCE);
   }
 }

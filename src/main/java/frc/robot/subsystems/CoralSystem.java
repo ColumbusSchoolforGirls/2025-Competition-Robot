@@ -107,14 +107,6 @@ public class CoralSystem {
 
     public void elevator(double normalElevatorSpeed, double downwardElevatorSpeed) {
 
-        System.out.println(getHeight());
-        System.out.println(getDifference());
-
-        SmartDashboard.putNumber("ele height", getHeight());
-        SmartDashboard.putNumber("target height", controllerInputTargetHeight());
-        SmartDashboard.putNumber("ele dif", getDifference());
-        SmartDashboard.putNumber("ele encoder value", elevatorEncoder.getPosition());
-
         double scaledElevatorSpeedSlope = Constants.CoralConstants.ELEVATOR_SCALE_FACTOR * getDifference();
 
         stopElevatorWithLimitSwitch();

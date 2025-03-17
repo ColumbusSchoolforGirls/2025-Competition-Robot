@@ -76,6 +76,9 @@ public class Constants {
         // Gyro
         public static final boolean GyroReversed = false; // TODO: is this always false?????
         public static final double STALL_SPEED = 0.1; // TODO change speed if needed, greater?
+
+        public static final double TX_TOLERANCE = 2.0;
+        public static final double TY_TOLERANCE = 2.0;
     }
 
     public static final class AutoConstants {

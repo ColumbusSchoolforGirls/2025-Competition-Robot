@@ -7,17 +7,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 
 public class Limelight {
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry tx = table.getEntry("tx"); // x axis position
-    NetworkTableEntry ty = table.getEntry("ty"); // y axis position
-    NetworkTableEntry tv = table.getEntry("tv"); // is there valid target
-    NetworkTableEntry ta = table.getEntry("ta"); // area in view
-    NetworkTableEntry ts = table.getEntry("ts0"); // area in view
-    NetworkTableEntry pos = table.getEntry("camera-pose_targetspace"); // 3D translation and rotations?
-    NetworkTableEntry pos1 = table.getEntry("target-pose_cameraspace");
-    NetworkTableEntry pos2 = table.getEntry("target-pose_robotspace");
+    NetworkTableEntry tx; 
+    NetworkTableEntry ty; 
+    NetworkTableEntry tv; 
+    NetworkTableEntry ta; 
+    NetworkTableEntry ts; 
+    NetworkTableEntry pos; 
+    NetworkTableEntry pos1; 
+    NetworkTableEntry pos2; 
     
-    public Limelight() {
+    public Limelight(String limelightName) {
+        NetworkTable table = NetworkTableInstance.getDefault().getTable(limelightName);
+        tx = table.getEntry("tx"); // x axis position
+        ty = table.getEntry("ty"); // y axis position
+        tv = table.getEntry("tv"); // is there valid target
+        ta = table.getEntry("ta"); // area in view
+        ts = table.getEntry("ts0"); // area in view
+        pos = table.getEntry("camera-pose_targetspace"); // 3D translation and rotations?
+        pos1 = table.getEntry("target-pose_cameraspace");
+        pos2 = table.getEntry("target-pose_robotspace");
 
     }
 
@@ -26,6 +34,7 @@ public class Limelight {
         SmartDashboard.putNumber("LimelightTY", getTY());
         SmartDashboard.putNumber("LimelightTA", getTA());
     }
+
     public double limelight_aim_proportional() {
         // kP (constant of proportionality)
         // this is a hand-tuned number that determines the aggressiveness of our proportional control loop
@@ -41,10 +50,9 @@ public class Limelight {
         double targetingAngularVelocity = getTX() * kP; // TODO: Add the limelight string back when we have the exact Apriltag ID
 
         // convert to radians per second for our drive method
-        targetingAngularVelocity *= DriveConstants.MAX_ANGULAR_SPEED;
+        targetingAngularVelocity *= DriveConstants.MAX_ANGULAR_SPEED*0.2; //TODO: make into constant
 
         // invert since tx is positive when the target is to the right of the crosshair
-        targetingAngularVelocity *= -1.0;
 
             return targetingAngularVelocity;
    
@@ -57,7 +65,7 @@ public class Limelight {
     public double limelight_range_proportional() {
         double kP = .1;
         double targetingForwardSpeed = getTY() * kP;// TODO: Add the limelight string back when we have the exact Apriltag ID
-        targetingForwardSpeed *= DriveConstants.MAX_SPEED;
+        targetingForwardSpeed *= DriveConstants.MAX_SPEED*0.2;
         targetingForwardSpeed *= -1.0;
         return targetingForwardSpeed;
     }
