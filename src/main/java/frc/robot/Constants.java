@@ -85,12 +85,12 @@ public class Constants {
 
     public static final class CoralConstants { // TODO: need to change all of the values!
 
-        public static final int ELEVATOR_TOLERANCE = 1; // TODO: Need to change when testing elevator
+        public static final double ELEVATOR_TOLERANCE = 0.25; // TODO: Need to change when testing elevator
 
         // Height in inches of coral node from default height (0 is L2).
         public static final double L2_HEIGHT = 0; // 31.875 from floor
-        public static final double L3_HEIGHT = 15.75/2; // 47.625 from floor //divided in half because of the elevator
-        public static final double L4_HEIGHT = 24.375/2; // 72 from floor; //divided in half because of the elevator
+        public static final double L3_HEIGHT = 13/2; //14.5 47.625 from floor //divided in half because of the elevator
+        public static final double L4_HEIGHT = 36/2; // 72 from floor; //divided in half because of the elevator
 
         public static final int SHOOT_ID = 10; // TODO: change id
         public static final int ELEVATOR_ID = 14;
@@ -102,12 +102,14 @@ public class Constants {
         public static final double AUX_DEADZONE = 0.1;
 
         public static final double ELEVATOR_GEAR_RATIO = 20; // 20:1 gear ratio
-        public static final double ELEVATOR_DRUM_CIRCUMFERENCE = 0.942 * Math.PI; // inches per rev
+        public static final double ELEVATOR_DRUM_CIRCUMFERENCE = 0.959 * Math.PI; //0.942 * Math.PI; // inches per rev
         public static final double ELEVATOR_INCHES_PER_ROTATION = ELEVATOR_DRUM_CIRCUMFERENCE / ELEVATOR_GEAR_RATIO; // inches per rev
 
-        public static final double ELEVATOR_SCALE_FACTOR = 0.079166667; //1/12 + 0.05 so max at 12+ difference - need to ajust if we change the NORMAL ELEVATOR SPEED DIFFERENCE // TODO: test
+        public static final double ELEVATOR_SCALE_FACTOR = 0.316667; //1/12 + 0.05 so max at 12+ difference - need to ajust if we change the NORMAL ELEVATOR SPEED DIFFERENCE // TODO: test
         public static final double MINIMUM_ELEVATOR_SPEED_NEEDED = 0.05; //5% power
-        public static final double NORMAL_ELEVATOR_SPEED_DIFFERENCE = 12; //inches //TODO: test and change, start with 12 inches
+        public static final double NORMAL_ELEVATOR_SPEED_DIFFERENCE = 3; //inches //TODO: test and change, start with 12 inches
+
+        public static final int ELEVATOR_LIMIT_SWITCH_CHANNEL = 0;
     }
 
     public static final class ClimbConstants {

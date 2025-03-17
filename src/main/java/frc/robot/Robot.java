@@ -109,6 +109,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+    coralSystem.stopElevatorWithLimitSwitch();
+    coralSystem.resetEncodersWithLimitSwitch();
+
     switch (autoPaths.currentAutoAction) {
       case DRIVE:
         if (swerve.driveComplete()) {
@@ -157,8 +160,7 @@ public class Robot extends TimedRobot {
     coralSystem.shoot();
     swerve.driverResetTurnEncoders();
     climber.climb();
-    coralSystem.elevator(0.3, -0.1);
-    coralSystem.driveElevator(0.3);
+    coralSystem.elevator(0.7, -0.1);
   }
 
   private void driveWithJoystick(boolean fieldRelative) {

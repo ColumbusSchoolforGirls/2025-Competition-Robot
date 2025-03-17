@@ -9,6 +9,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -29,6 +30,8 @@ public class CoralSystem {
 
     private final RelativeEncoder elevatorEncoder = elevatorMotor.getEncoder();
 
+    private static DigitalInput elevatorLimitSwitch = new DigitalInput(Constants.CoralConstants.ELEVATOR_LIMIT_SWITCH_CHANNEL); 
+
     double startShootTime;
 
     public Limelight limelight;
@@ -40,18 +43,18 @@ public class CoralSystem {
 
     /** Returns the current height of elevator in inches. */
     private double getHeight() {
-        return elevatorEncoder.getPosition() * CoralConstants.ELEVATOR_INCHES_PER_ROTATION;
+        return -(elevatorEncoder.getPosition() * CoralConstants.ELEVATOR_INCHES_PER_ROTATION)*2; //spinning opposite direction 
     }
 
-    /**
-     * Sets the elevator encoder tick count to 0. Only for use on robot-init when
-     * the elevator has been reset to bottom.
-     */
-    public void setElevator(double power) {
+    public void setElevator(double power) { //inverts
         elevatorMotor.set(-power);
         SmartDashboard.putNumber("elevator power", power);
     }
 
+     /**
+     * Sets the elevator encoder tick count to 0. Only for use on robot-init when
+     * the elevator has been reset to bottom.
+     */
     public void resetElevatorEncoders() {
         elevatorEncoder.setPosition(0);
     }
@@ -74,7 +77,7 @@ public class CoralSystem {
     }
 
     private double getDifference() {
-        return controllerInputTargetHeight() - getHeight();
+        return controllerInputTargetHeight()*2 - getHeight();
     }
 
 
@@ -84,6 +87,22 @@ public class CoralSystem {
 
     public boolean elevatorComplete() {
         return Math.abs(getDifference()) < CoralConstants.ELEVATOR_TOLERANCE;
+    }
+
+    private boolean isElevatorLimitReached() {
+        return elevatorLimitSwitch.get();
+    }
+
+    public void stopElevatorWithLimitSwitch() {
+        if (isElevatorLimitReached()) {
+            setElevator(0);
+        }
+    }
+
+    public void resetEncodersWithLimitSwitch() {
+        if (isElevatorLimitReached()) {
+            resetElevatorEncoders();
+        }
     }
 
     public void elevator(double normalElevatorSpeed, double downwardElevatorSpeed) {
@@ -97,21 +116,32 @@ public class CoralSystem {
         SmartDashboard.putNumber("ele encoder value", elevatorEncoder.getPosition());
 
         double scaledElevatorSpeedSlope = Constants.CoralConstants.ELEVATOR_SCALE_FACTOR * getDifference();
+
+        stopElevatorWithLimitSwitch();
+        resetEncodersWithLimitSwitch();
         
-        if (getDifference() < -Constants.CoralConstants.ELEVATOR_TOLERANCE) {
-            setElevator(downwardElevatorSpeed);
+        if (AUX.getRightBumperButton()) {
+            driveElevator(normalElevatorSpeed);
 
-        } else { //trapezoid drive
+        } else {
 
-            if (Math.abs(getDifference()) < Constants.CoralConstants.ELEVATOR_TOLERANCE) {
-                setElevator(0);
-            } else if (getDifference() < Constants.CoralConstants.NORMAL_ELEVATOR_SPEED_DIFFERENCE) {
-                setElevator((scaledElevatorSpeedSlope * normalElevatorSpeed) + Constants.CoralConstants.MINIMUM_ELEVATOR_SPEED_NEEDED);
-            } else {
-                setElevator(normalElevatorSpeed);
+            if (getDifference() < -Constants.CoralConstants.ELEVATOR_TOLERANCE) {
+                setElevator(downwardElevatorSpeed);
+
+            } else { //trapezoid drive
+
+                if (Math.abs(getDifference()) < Constants.CoralConstants.ELEVATOR_TOLERANCE) {
+                    setElevator(0);
+                } else if (getDifference() < Constants.CoralConstants.NORMAL_ELEVATOR_SPEED_DIFFERENCE) {
+                    setElevator((scaledElevatorSpeedSlope * normalElevatorSpeed) + Constants.CoralConstants.MINIMUM_ELEVATOR_SPEED_NEEDED);
+                } else {
+                    setElevator(normalElevatorSpeed);
+                }
+
+
             }
-
         }
+        
 
     }
 
@@ -120,9 +150,12 @@ public class CoralSystem {
 ;
         if (Math.abs(elevatorSpeed) > Constants.CoralConstants.AUX_DEADZONE) {
             setElevator(elevatorSpeed * normalElevatorSpeed);
+        } else if (Math.abs(elevatorSpeed) < Constants.CoralConstants.AUX_DEADZONE) {
+            setElevator(0);
         }
   
-      }
+    }
+
     // public void driveElevator(double normalElevatorSpeed) {
 
     // }
