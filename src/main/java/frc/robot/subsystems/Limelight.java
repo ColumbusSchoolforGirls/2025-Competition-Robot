@@ -4,7 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.DriveConstants;;
+import frc.robot.Constants.DriveConstants;
 
 public class Limelight {
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -26,7 +26,6 @@ public class Limelight {
         SmartDashboard.putNumber("LimelightTY", getTY());
         SmartDashboard.putNumber("LimelightTA", getTA());
     }
-
     public double limelight_aim_proportional() {
         // kP (constant of proportionality)
         // this is a hand-tuned number that determines the aggressiveness of our proportional control loop
@@ -34,6 +33,8 @@ public class Limelight {
         // if it is too low, the robot will never reach its target
         // if the robot never turns in the correct direction, kP should be inverted.
         double kP = .035;
+
+        
 
         // tx ranges from (-hfov/2) to (hfov/2) in degrees. If your target is on the
         // rightmost edge of your limelight 3 feed, tx should return roughly 31 degrees.
@@ -45,9 +46,10 @@ public class Limelight {
         // invert since tx is positive when the target is to the right of the crosshair
         targetingAngularVelocity *= -1.0;
 
-        return targetingAngularVelocity;
-    }
-
+            return targetingAngularVelocity;
+   
+        }
+    
     // Simple proportional ranging control with Limelight's "ty" value this works
     // best if your Limelight's mount height and target mount height are different.
     // If your limelight and target are mounted at the same or similar heights, use
@@ -59,6 +61,8 @@ public class Limelight {
         targetingForwardSpeed *= -1.0;
         return targetingForwardSpeed;
     }
+
+    
 
     /** Get rotation z value from botpose array. */
     public double getRotation() {

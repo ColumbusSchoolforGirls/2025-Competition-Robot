@@ -13,10 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Timer;
-
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
@@ -34,20 +31,20 @@ public class Drivetrain {
   private double targetDistance;
 
   private final Translation2d frontLeftLocation = new Translation2d(DriveConstants.TRANSLATION_2D_OFFSET,
-      DriveConstants.TRANSLATION_2D_OFFSET);
+      -DriveConstants.TRANSLATION_2D_OFFSET);
   private final Translation2d frontRightLocation = new Translation2d(DriveConstants.TRANSLATION_2D_OFFSET,
-      -DriveConstants.TRANSLATION_2D_OFFSET);
-  private final Translation2d backLeftLocation = new Translation2d(-DriveConstants.TRANSLATION_2D_OFFSET,
       DriveConstants.TRANSLATION_2D_OFFSET);
-  private final Translation2d backRightLocation = new Translation2d(-DriveConstants.TRANSLATION_2D_OFFSET,
+  private final Translation2d backLeftLocation = new Translation2d(-DriveConstants.TRANSLATION_2D_OFFSET,
       -DriveConstants.TRANSLATION_2D_OFFSET);
+  private final Translation2d backRightLocation = new Translation2d(-DriveConstants.TRANSLATION_2D_OFFSET,
+      DriveConstants.TRANSLATION_2D_OFFSET);
 
   private final SwerveModule frontLeft = new SwerveModule(DriveConstants.FL_DRIVE_ID, DriveConstants.FL_TURN_ID,
       DriveConstants.FL_DIO, DriveConstants.FL_CHASSIS_ANGULAR_OFFSET);
-  private final SwerveModule frontRight = new SwerveModule(DriveConstants.FR_DRIVE_ID, DriveConstants.FR_TURN_ID,
-      DriveConstants.FR_DIO, DriveConstants.FR_CHASSIS_ANGULAR_OFFSET);
   private final SwerveModule backLeft = new SwerveModule(DriveConstants.BL_DRIVE_ID, DriveConstants.BL_TURN_ID,
       DriveConstants.BL_DIO, DriveConstants.BL_CHASSIS_ANGULAR_OFFSET);
+  private final SwerveModule frontRight = new SwerveModule(DriveConstants.FR_DRIVE_ID, DriveConstants.FR_TURN_ID,
+      DriveConstants.FR_DIO, DriveConstants.FR_CHASSIS_ANGULAR_OFFSET);
   private final SwerveModule backRight = new SwerveModule(DriveConstants.BR_DRIVE_ID, DriveConstants.BR_TURN_ID,
       DriveConstants.BR_DIO, DriveConstants.BR_CHASSIS_ANGULAR_OFFSET);
 
@@ -71,10 +68,10 @@ public class Drivetrain {
   }
 
   public void getDriveEncoders() {
-    frontLeft.getDrivePositionInches();
-    frontRight.getDrivePositionInches();
-    backLeft.getDrivePositionInches();
-    backRight.getDrivePositionInches();
+    frontLeft.getDrivePositionMeters();
+    frontRight.getDrivePositionMeters();
+    backLeft.getDrivePositionMeters();
+    backRight.getDrivePositionMeters();
   }
 
   public void resetTurnEncoders() {
@@ -84,6 +81,12 @@ public class Drivetrain {
     backRight.resetRelativeTurnEncoder();
   }
 
+  public void driverResetTurnEncoders() {
+    if (DRIVE_CONTROLLER.getBButtonPressed()) {
+      resetTurnEncoders();
+    }
+  }
+
   public void setZero() {
     if (DRIVE_CONTROLLER.getAButtonPressed()) {
       frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
@@ -91,10 +94,14 @@ public class Drivetrain {
       backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
       backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
 
+    }
+
+    frontLeft.updateModule();
+    frontRight.updateModule();
+    backLeft.updateModule();
+    backRight.updateModule();
   }
 
-  }
-  
   /**
    * Method to drive the robot using joystick info.
    *
@@ -150,6 +157,11 @@ public class Drivetrain {
         });
   }
 
+  /* Updates the front left swerve module on dashboard FOR TESTING. */
+  public void updateSmartDashboard() {
+    frontLeft.updateSmartDashboard();
+  }
+
   /** Returns the currently-estimated pose of the robot. */
   public Pose2d getPose() {
     return odometry.getPoseMeters();
@@ -183,17 +195,21 @@ public class Drivetrain {
             backRight.getPosition()
         });
 
-      SmartDashboard.putNumber("BL Encoder", backLeft.turnRelativeEncoder.getPosition());
-      SmartDashboard.putNumber("FL Encoder", frontLeft.turnRelativeEncoder.getPosition());
-      SmartDashboard.putNumber("BR Encoder", backRight.turnRelativeEncoder.getPosition());
-      SmartDashboard.putNumber("FR Encoder", frontRight.turnRelativeEncoder.getPosition());
+    SmartDashboard.putNumber("BL Encoder", (backLeft.turnRelativeEncoder.getPosition() * 180) / 3.14159);
+    SmartDashboard.putNumber("FL Encoder", (frontLeft.turnRelativeEncoder.getPosition() * 180) / 3.14159);
+    SmartDashboard.putNumber("BR Encoder", (backRight.turnRelativeEncoder.getPosition() * 180) / 3.14159);
+    SmartDashboard.putNumber("FR Encoder", (frontRight.turnRelativeEncoder.getPosition() * 180) / 3.14159);
 
-      SmartDashboard.putNumber("BLAngOfset", backLeft.turnAbsoluteEncoder.get()*360);
-      SmartDashboard.putNumber("FLAngOfset", frontLeft.turnAbsoluteEncoder.get()*360);
-      SmartDashboard.putNumber("BRAngOfset", backRight.turnAbsoluteEncoder.get()*360 );
-      SmartDashboard.putNumber("FRAngOfset", frontRight.turnAbsoluteEncoder.get()*360); 
+    SmartDashboard.putNumber("BL AbsEncoder", backLeft.turnAbsoluteEncoder.get() * 360);
+    SmartDashboard.putNumber("FL AbsEncoder", frontLeft.turnAbsoluteEncoder.get() * 360);
+    SmartDashboard.putNumber("BR AbsEncoder", backRight.turnAbsoluteEncoder.get() * 360);
+    SmartDashboard.putNumber("FR AbsEncoder", frontRight.turnAbsoluteEncoder.get() * 360);
 
-      }
+    SmartDashboard.putNumber("BL TargetRel", backLeft.getAbsoluteEncoderAngle() * 180 / Math.PI);
+    SmartDashboard.putNumber("FL TargetRel", frontLeft.getAbsoluteEncoderAngle() * 180 / Math.PI);
+    SmartDashboard.putNumber("BR TargetRel", backRight.getAbsoluteEncoderAngle() * 180 / Math.PI);
+    SmartDashboard.putNumber("FR TargetRel", frontRight.getAbsoluteEncoderAngle() * 180 / Math.PI);
+  }
 
   public void resetEncoders() {
     frontLeft.resetEncoder();
@@ -209,14 +225,13 @@ public class Drivetrain {
     backRight.setBrakeMode();
   }
 
-  public void setCoastMode() { 
+  public void setCoastMode() {
     frontLeft.setCoastMode();
     frontRight.setCoastMode();
     backLeft.setCoastMode();
     backRight.setCoastMode();
   }
 
-  // TODO: use after aligning with AprilTag (to make sure we're at 0)?
   public void zeroHeading() {
     gyro.reset();
   }
@@ -232,77 +247,85 @@ public class Drivetrain {
   }
 
   public void driveInit() {
-    // TODO: make the robot align with the AprilTag first to make sure we're at 0
     zeroHeading();
     resetEncoders();
     resetTurnEncoders();
     setBrakeMode();
   }
-//This is for auto turning
+
+  // This is for auto turning
   public void setAutoTargetAngle(double targetAngle) {
     this.targetAngle = targetAngle;
-
-
   }
 
-  
-    public boolean turnComplete() {
-        gyroDifference = (getHeading() - targetAngle);
+  public boolean turnComplete() {
+    gyroDifference = (getHeading() - targetAngle);
 
-        return Math.abs(gyroDifference) < Constants.DriveConstants.TURN_TOLERANCE;
-    }
+    return Math.abs(gyroDifference) < Constants.DriveConstants.TURN_TOLERANCE;
+  }
+
+  double stallStart = 0.0;
 
   public boolean driveComplete() {
-        driveDifference = targetDistance - frontLeft.getDrivePositionInches(); //change to make better
-        if (Math.abs(driveDifference) < Constants.DriveConstants.DISTANCE_TOLERANCE) {
-            return true;    
-          //if (frontLeftEncoder.getVelocity() < 0.03) { // to prevent skidding bc of turning before drive is complete
-                //return true;
-            //}
-        //} else if (Math.abs(gyro.getVelocityY()) < Constants.AUTO_DRIVE_VELOCITY_THRESHHOLD && Timer.getFPGATimestamp() - startAutoDriveTime > 0.5) { // change: test //change                                                                                
-            //System.out.println("Drive stalled - TESTING");
-            //return true;
+    driveDifference = targetDistance - odometry.getPoseMeters().getX();
+    if (Math.abs(driveDifference) < Constants.DriveConstants.DISTANCE_TOLERANCE) {
+      stallStart = 0.0;
+      return true;
+    }
+
+    // Prevents the robot from burning out driving continuously into a wall // TODO:
+    // check if this works // TODO: velocityZ is probably wrong
+    if (gyro.getVelocityZ() < 0.01) {
+      if (stallStart != 0.0) {
+        if (Timer.getFPGATimestamp() - stallStart > 0.5) {
+          return true;
         }
-        return false;
+      } else {
+        stallStart = Timer.getFPGATimestamp();
+      }
+    } else {
+      stallStart = 0.0;
     }
+    return false;
+  }
 
-    public void startTurn(double angle) {
-        this.targetAngle = (angle + getHeading());
+  public void startTurn(double angle) {
+    this.targetAngle = (angle + getHeading());
+  }
+
+  public void resetGyro() {
+    gyro.reset();
+  }
+
+  public void startDrive(double distanceMeters) {
+    resetEncoders();
+    targetDistance = distanceMeters;
+  }
+
+  public void gyroTurn(double periodSeconds) {
+    gyroDifference = (getHeading() - targetAngle);
+
+    if (Math.abs(gyroDifference) < Constants.DriveConstants.TURN_TOLERANCE) {
+      drive(0, 0, 0, true, periodSeconds);
+    } else if (gyroDifference < 0) {
+      drive(0, 0, 0.0035 * Math.abs(gyroDifference) + 0.05, true, periodSeconds);
+    } else if (gyroDifference > 0) {
+      drive(0, 0, -0.0035 * Math.abs(gyroDifference) - 0.05, true, periodSeconds);
     }
+  }
 
-    public void resetGyro() {
-        gyro.reset();
-    }
+  public void autoAlignLimelight(double periodSeconds) {
+    final var rot_limelight = limelight.limelight_aim_proportional();
+    final var forward_limelight = limelight.limelight_range_proportional();
+    // while using Limelight, turn off field-relative driving.
+    boolean fieldRelative = false;
+    this.drive(forward_limelight, 0.0, rot_limelight, fieldRelative, periodSeconds);
+  }
 
-    public void startDrive(double distanceInches) {
-        resetEncoders();
-        targetDistance = distanceInches;
-    }
-
-    public void gyroTurn(double periodSeconds) {
-        gyroDifference = (getHeading() - targetAngle);
-
-        if (Math.abs(gyroDifference) < Constants.DriveConstants.TURN_TOLERANCE) {
-            drive(0,0,0,true, periodSeconds);
-        } else if (gyroDifference < 0) {
-          drive(0,0,  0.0035 * Math.abs(gyroDifference) + 0.05,true, periodSeconds) ;
-        } else if (gyroDifference > 0) {
-          drive(0,0, -0.0035 * Math.abs(gyroDifference) - 0.05,true, periodSeconds);
-        }
-    }
-
-    public void autoAlignLimelight(double periodSeconds) {
-      final var rot_limelight = limelight.limelight_aim_proportional();
-      final var forward_limelight = limelight.limelight_range_proportional();
-      //while using Limelight, turn off field-relative driving.
-      boolean fieldRelative = false;
-      this.drive(forward_limelight, 0.0, rot_limelight, fieldRelative, periodSeconds);
-    }
-
-    public boolean isLimelightAligned() {
-      double tx = limelight.getTX();
-      double ty = limelight.getTY();
-      // TODO: tune these on robot
-      return (tx < 0.1 && ty < 0.1);
-    }
+  public boolean isLimelightAligned() {
+    double tx = limelight.getTX();
+    double ty = limelight.getTY();
+    // TODO: tune these on robot
+    return (tx < 0.1 && ty < 0.1);
+  }
 }
