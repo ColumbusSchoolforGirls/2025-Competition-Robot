@@ -79,6 +79,7 @@ public class Constants {
 
         public static final double TX_TOLERANCE = 2.0;
         public static final double TY_TOLERANCE = 2.0;
+        public static final double TARGET_TA_VALUE = 8.0;
     }
 
     public static final class AutoConstants {

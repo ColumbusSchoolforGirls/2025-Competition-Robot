@@ -31,4 +31,9 @@ public class AutoStep {
     public double getElevatorHeight() {
         return elevatorHeight;
     }
+
+    @Override
+    public String toString() {
+        return String.format("AutoAction(%s)",action.name());
+    }
 }

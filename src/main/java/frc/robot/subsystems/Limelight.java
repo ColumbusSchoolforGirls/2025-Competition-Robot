@@ -4,6 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 
 public class Limelight {
@@ -41,7 +42,7 @@ public class Limelight {
         // if it is too high, the robot will oscillate.
         // if it is too low, the robot will never reach its target
         // if the robot never turns in the correct direction, kP should be inverted.
-        double kP = .035;
+        double kP = .05;
 
         
 
@@ -50,7 +51,7 @@ public class Limelight {
         double targetingAngularVelocity = getTX() * kP; // TODO: Add the limelight string back when we have the exact Apriltag ID
 
         // convert to radians per second for our drive method
-        targetingAngularVelocity *= DriveConstants.MAX_ANGULAR_SPEED*0.2; //TODO: make into constant
+        targetingAngularVelocity *= DriveConstants.MAX_ANGULAR_SPEED*0.5; //TODO: make into constant
 
         // invert since tx is positive when the target is to the right of the crosshair
 
@@ -63,10 +64,10 @@ public class Limelight {
     // If your limelight and target are mounted at the same or similar heights, use
     // "ta" (area) for target ranging rather than "ty"
     public double limelight_range_proportional() {
-        double kP = .1;
-        double targetingForwardSpeed = getTY() * kP;// TODO: Add the limelight string back when we have the exact Apriltag ID
-        targetingForwardSpeed *= DriveConstants.MAX_SPEED*0.2;
-        targetingForwardSpeed *= -1.0;
+        double kP = .09;
+        double targetingForwardSpeed = Math.max(Math.sqrt(Constants.DriveConstants.TARGET_TA_VALUE - getTA()), 0.1) * kP;// TODO: Add the limelight string back when we have the exact Apriltag ID
+        targetingForwardSpeed *= DriveConstants.MAX_SPEED;
+        targetingForwardSpeed *= 1.0;
         return targetingForwardSpeed;
     }
 

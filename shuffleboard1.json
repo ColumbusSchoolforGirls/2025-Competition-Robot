@@ -511,7 +511,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "6,2": {
+          "6,1": {
             "size": [
               1,
               1
@@ -537,6 +537,19 @@
               "_showGlyph": false
             }
           },
+          "7,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///limelight-coral/ty",
+              "_title": "/limelight-coral/ty",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
           "7,1": {
             "size": [
               1,
@@ -550,15 +563,28 @@
               "_showGlyph": false
             }
           },
-          "7,2": {
+          "4,1": {
             "size": [
-              1,
+              2,
               1
             ],
             "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///limelight-coral/ty",
-              "_title": "/limelight-coral/ty",
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/LimelightTX",
+              "_title": "/SmartDashboard/LimelightTX",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "4,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/LimelightTY",
+              "_title": "/SmartDashboard/LimelightTY",
               "_glyph": 148,
               "_showGlyph": false
             }

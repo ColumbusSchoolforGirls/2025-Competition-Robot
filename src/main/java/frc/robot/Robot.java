@@ -56,7 +56,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     // coralSystem.elevator();
     // climber.climb();
-    // limelight.updateLimelight();
+    limelightCoral.updateLimelight();
     swerve.updateOdometry();
     swerve.periodic();
     swerve.updateSmartDashboard();
@@ -71,15 +71,24 @@ public class Robot extends TimedRobot {
     swerve.setBrakeMode();
     swerve.resetTurnEncoders();
     autoActions = autoPaths.buildPath();
+    System.out.println("Auto path: ");
+    autoActions.forEach(action -> System.out.println(action));
+    state = -1;
+    goToNextState();
   }
 
   public void goToNextState() {
     state++;
     if (state >= autoActions.size()) {
+      System.out.println("End of auto path :)");
       return;
     }
 
-    AutoStep currentAction = autoActions.get(state);
+    AutoStep currentAction = new AutoStep(AutoAction.STOP);
+    if (state < autoActions.size()) {
+      currentAction = autoActions.get(state);
+    } //TODO: make into funciton later
+    System.out.println("New action: " + currentAction);
 
     switch (currentAction.getAction()) {
       case DRIVE:
@@ -104,7 +113,6 @@ public class Robot extends TimedRobot {
       case STOP:
         break;
       default:
-        autoPaths.currentAutoAction = AutoAction.STOP;
         break;
     }
   }
@@ -114,11 +122,18 @@ public class Robot extends TimedRobot {
     coralSystem.stopElevatorWithLimitSwitch();
     coralSystem.resetEncodersWithLimitSwitch();
 
-    switch (autoPaths.currentAutoAction) {
+    AutoStep currentAction = new AutoStep(AutoAction.STOP);
+    if (state < autoActions.size()) {
+      currentAction = autoActions.get(state);
+    }
+    SmartDashboard.putString("auto action", currentAction.toString());
+    SmartDashboard.putNumber("auto state", state);
+    switch (currentAction.getAction()) {
       case DRIVE:
         if (swerve.driveComplete()) {
           goToNextState();
         }
+        swerve.autoDrive(getPeriod());
         break;
       case TURN:
         if (swerve.turnComplete()) {
@@ -139,9 +154,9 @@ public class Robot extends TimedRobot {
         }
         break;
       case STOP:
+      swerve.stop(getPeriod());
         break;
       default:
-        autoPaths.currentAutoAction = AutoAction.STOP;
         break;
     }
   }
@@ -152,7 +167,7 @@ public class Robot extends TimedRobot {
     swerve.resetTurnEncoders();
     coralSystem.resetElevatorEncoders();
     coralSystem.setShootMotor();
-    climber.setClimb();
+    climber.setClimbZero();
     climber.setCoast();
   }
 

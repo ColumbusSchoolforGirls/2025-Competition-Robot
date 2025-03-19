@@ -3,6 +3,7 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.CoralConstants;
@@ -122,14 +123,14 @@ public class AutoPaths {
         createChooser(coralLevelChooser2, CoralLevel.values(), "2nd Coral Level");
         createChooser(leftOrRIghtChooser2, LeftOrRight.values(), "2nd L or R");
 
-        SmartDashboard.putBoolean("LEAVE ONLY", false);
-        SmartDashboard.putBoolean("To Reef", false);
-        SmartDashboard.putBoolean("Place Coral", false);
-        SmartDashboard.putBoolean("To Station", false);
+        // SmartDashboard.putBoolean("LEAVE ONLY", false);
+        // SmartDashboard.putBoolean("To Reef", false);
+        // SmartDashboard.putBoolean("Place Coral", false);
+        // SmartDashboard.putBoolean("To Station", false);
 
-        SmartDashboard.putBoolean("To Reef AGAIN", false);
-        SmartDashboard.putBoolean("Place Coral AGAIN", false);
-        SmartDashboard.putBoolean("To Station AGAIN", false);
+        // SmartDashboard.putBoolean("To Reef AGAIN", false);
+        // SmartDashboard.putBoolean("Place Coral AGAIN", false);
+        // SmartDashboard.putBoolean("To Station AGAIN", false);
 
         this.currentAutoAction = null;
     }
@@ -137,7 +138,7 @@ public class AutoPaths {
     public ArrayList<AutoStep> buildPath() {
         ArrayList<AutoStep> path = new ArrayList<>();
 
-        if (getIfSelected("LEAVE ONLY")) {
+        if (getIfSelected("LEAVE ONLY") || true) {
             path.add(new AutoStep(AutoAction.DRIVE, AutoConstants.LEAVE_ONLY_DISTANCE));
             return path;
         }

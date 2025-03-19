@@ -16,7 +16,7 @@ public class Climber {
 
     public static final XboxController reverseClimbController = new XboxController(ControllerConstants.REVERSE_CLIMBER_AUX_PORT);
 
-    public void setClimb() {
+    public void setClimbZero() {
         climbMotor.set(0); //huh? Elaborate?- Yinan & Lillie
     }
 
@@ -24,11 +24,15 @@ public class Climber {
         climbMotor.setNeutralMode(NeutralMode.Coast);
     }
 
+    public void setClimb(double power) {
+        climbMotor.set(-power);
+    }
+
     public void climb() {
         if (AUX.getLeftTriggerAxis() > ControllerConstants.TRIGGER_DEADZONE) {
-            climbMotor.set(ClimbConstants.CLIMB_SPEED);
+            setClimb(ClimbConstants.CLIMB_SPEED);
         } else if (reverseClimbController.getRightTriggerAxis() > ControllerConstants.TRIGGER_DEADZONE) {
-            climbMotor.set(-ClimbConstants.CLIMB_SPEED);
+            setClimb(-ClimbConstants.CLIMB_SPEED);
         } else {
             climbMotor.set(0);
         }
