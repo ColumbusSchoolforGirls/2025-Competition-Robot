@@ -20,9 +20,9 @@ public class AutoPaths {
         N, NE, SE, S, SW, NW // cardinal directions from the drive station perspective
     }
 
-    public enum LeftOrRight {
-        LEFT, RIGHT
-    }
+    // public enum LeftOrRight {
+    //     LEFT, RIGHT
+    // }
 
     // L3 is always blocked at start
     public enum CoralLevel {
@@ -56,9 +56,9 @@ public class AutoPaths {
     public float getInitialTurnAngle() {
         StartingPosition startingPosition = positionChooser.getSelected();
         if (startingPosition == StartingPosition.LEFT) {
-            return 60; // TODO: change to some positive (counter) value
+            return 50;
         } else if (startingPosition == StartingPosition.RIGHT) {
-            return -60; // TODO: change to some negative (clockwise) value
+            return -50; 
         } else if (startingPosition == StartingPosition.MIDDLE) {
             return 0;
         } else {
@@ -78,7 +78,7 @@ public class AutoPaths {
         CoralLevel coralLevel = coralLevelChooser.getSelected();
         switch (coralLevel) {
             case TROUGH:
-                return CoralConstants.L2_HEIGHT;
+                return CoralConstants.L2_HEIGHT; //no
             case L2:
                 return CoralConstants.L2_HEIGHT;
             case L3:
@@ -91,7 +91,14 @@ public class AutoPaths {
     }
 
     public double getDriveDistance() {
-        return 0; // TODO: change value
+        StartingPosition startingPosition = positionChooser.getSelected();
+        if (startingPosition == StartingPosition.LEFT || startingPosition == StartingPosition.RIGHT) {
+            return 2.2;
+        } else if (startingPosition == StartingPosition.MIDDLE) {
+            return 0;
+        } else {
+            return 0;
+        }
     }
 
     // Shuffleboard
@@ -100,11 +107,11 @@ public class AutoPaths {
 
     private final SendableChooser<StartingPosition> positionChooser = new SendableChooser<>();
     private final SendableChooser<ReefFace> reefFaceChooser = new SendableChooser<>();
-    private final SendableChooser<LeftOrRight> leftOrRightChooser = new SendableChooser<>();
+    //private final SendableChooser<LeftOrRight> leftOrRightChooser = new SendableChooser<>();
     private final SendableChooser<CoralLevel> coralLevelChooser = new SendableChooser<>();
     private final SendableChooser<ReefFace> reefFaceChooser2 = new SendableChooser<>();
     private final SendableChooser<CoralLevel> coralLevelChooser2 = new SendableChooser<>();
-    private final SendableChooser<LeftOrRight> leftOrRIghtChooser2 = new SendableChooser<>();
+    //private final SendableChooser<LeftOrRight> leftOrRIghtChooser2 = new SendableChooser<>();
 
     private <K extends Enum<K>> void createChooser(SendableChooser<K> chooser, K[] values, String chooserName, int w, int h, int x, int y) {
         for (K value : values) {
@@ -120,12 +127,12 @@ public class AutoPaths {
     public void autoShuffleboardStartup() { // TODO: if time allows (HAH) write this using Shuffleboard documentation instead!!, definite to-do next year
         createChooser(positionChooser, StartingPosition.values(), "Start Position", 2, 1, 0, 0);
         createChooser(reefFaceChooser, ReefFace.values(), "Reef Face", 1, 1, 1, 1);
-        createChooser(leftOrRightChooser, LeftOrRight.values(), "L or R", 1, 1, 2, 1);
+        // createChooser(leftOrRightChooser, LeftOrRight.values(), "L or R", 1, 1, 2, 1);
         createChooser(coralLevelChooser, CoralLevel.values(), "Coral Level", 1, 1, 3, 1);
         // To return to the reef after getting a second coral
         createChooser(reefFaceChooser2, ReefFace.values(), "2nd Reef Face", 1, 1, 6, 1);
         createChooser(coralLevelChooser2, CoralLevel.values(), "2nd Coral Level", 1, 1, 7, 1);
-        createChooser(leftOrRIghtChooser2, LeftOrRight.values(), "2nd L or R", 1, 1, 8, 1);
+        // createChooser(leftOrRIghtChooser2, LeftOrRight.values(), "2nd L or R", 1, 1, 8, 1);
 
         leaveOnly = tab.add("LEAVE ONLY", false).withWidget("Toggle Button").withSize(2,1).withPosition(2,0).getEntry();
         toReef = tab.add("To Reef", false).withWidget("Toggle Button").withSize(1,1).withPosition(0,1).getEntry();
@@ -151,6 +158,7 @@ public class AutoPaths {
     public ArrayList<AutoStep> buildPath() {
         ArrayList<AutoStep> path = new ArrayList<>();
 
+        // if (getIfSelected("LEAVE ONLY")) {
         if (getIfSelected("LEAVE ONLY")) {
             path.add(new AutoStep(AutoAction.DRIVE, AutoConstants.LEAVE_ONLY_DISTANCE));
             System.out.println("test: " + leaveOnly.getBoolean(false));
@@ -160,10 +168,11 @@ public class AutoPaths {
 
         if (getIfSelected("TO REEF")) {
             path.addAll(Arrays.asList(
-                    new AutoStep(AutoAction.DRIVE_AND_ELEVATOR, Constants.AutoConstants.INITIAL_DISTANCE, getAutoTargetHeight()),
-                    new AutoStep(AutoAction.TURN, getInitialTurnAngle()),
-                    new AutoStep(AutoAction.ALIGN),
-                    new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
+                new AutoStep(AutoAction.DRIVE, getDriveDistance()),
+                new AutoStep(AutoAction.TURN, getInitialTurnAngle()),
+                new AutoStep(AutoAction.ALIGN),
+                new AutoStep(AutoAction.DRIVE, 0.3), //TODO: test: 30 centimeters to reef after aligning??
+                new AutoStep(AutoAction.ELEVATOR, getAutoTargetHeight())));
         } else {
             return path;
         }
@@ -188,9 +197,9 @@ public class AutoPaths {
         if (getIfSelected("TO REEF AGAIN")) {
             path.addAll(Arrays.asList(
                     new AutoStep(AutoAction.TURN, getAtStationTurnAngle()), // TODO: change this? might need to be a different value
-                    new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()),
-                    new AutoStep(AutoAction.ALIGN),
-                    new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
+                    //new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()),
+                    new AutoStep(AutoAction.ALIGN)));
+                    //new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
         } else {
             return path;
         }

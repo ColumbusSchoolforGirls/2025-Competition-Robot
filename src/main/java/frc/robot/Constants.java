@@ -71,7 +71,7 @@ public class Constants {
         public static final double BR_CHASSIS_ANGULAR_OFFSET = -178 * Math.PI / 180;
 
         public static final int TURN_TOLERANCE = 2; // TODO: need to change when testing turning
-        public static final double DISTANCE_TOLERANCE = 0.1; // TODO: need to change when testing distance
+        public static final double DISTANCE_TOLERANCE = 0.02; // TODO: need to change when testing distance
 
         // Gyro
         public static final boolean GyroReversed = false; // TODO: is this always false?????
@@ -79,12 +79,16 @@ public class Constants {
 
         public static final double TX_TOLERANCE = 2.0;
         public static final double TY_TOLERANCE = 2.0;
-        public static final double TARGET_TA_VALUE = 8.0;
+        public static final double TARGET_TA_VALUE = 3.40;
+
+        public static final double METERS_TO_INCHES = 39.37; //inches/meter
+
     }
 
     public static final class AutoConstants {
         public static final double INITIAL_DISTANCE = 58.5; // inches
-        public static final double LEAVE_ONLY_DISTANCE = 10; // inches
+        public static final double LEAVE_ONLY_DISTANCE = 1.0;//10.0/DriveConstants.METERS_TO_INCHES; // inches
+
     }
 
     public static final class CoralConstants { // TODO: need to change all of the values!

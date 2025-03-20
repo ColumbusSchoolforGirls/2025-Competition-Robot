@@ -109,7 +109,6 @@ public class CoralSystem {
 
         double scaledElevatorSpeedSlope = Constants.CoralConstants.ELEVATOR_SCALE_FACTOR * getDifference();
 
-        stopElevatorWithLimitSwitch();
         resetEncodersWithLimitSwitch();
         
         if (AUX.getRightBumperButton()) {
@@ -119,6 +118,8 @@ public class CoralSystem {
 
             if (getDifference() < -Constants.CoralConstants.ELEVATOR_TOLERANCE) {
                 setElevator(downwardElevatorSpeed);
+
+                stopElevatorWithLimitSwitch();
 
             } else { //trapezoid drive
 

@@ -568,28 +568,49 @@
               "_showGlyph": false
             }
           },
-          "4,1": {
+          "0,0": {
             "size": [
-              2,
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Camera Stream",
+              "_source0": "camera_server://limelight-coral",
+              "_title": "limelight-coral",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "NONE",
+              "compression": -1.0,
+              "fps": -1,
+              "imageWidth": 0,
+              "imageHeight": 0
+            }
+          },
+          "3,0": {
+            "size": [
+              1,
               1
             ],
             "content": {
-              "_type": "Network Table Tree",
-              "_source0": "network_table:///SmartDashboard/LimelightTX",
-              "_title": "/SmartDashboard/LimelightTX",
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/distance",
+              "_title": "/SmartDashboard/distance",
               "_glyph": 148,
               "_showGlyph": false
             }
           },
-          "4,2": {
+          "4,0": {
             "size": [
-              2,
+              1,
               1
             ],
             "content": {
-              "_type": "Network Table Tree",
-              "_source0": "network_table:///SmartDashboard/LimelightTY",
-              "_title": "/SmartDashboard/LimelightTY",
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/gyro angle",
+              "_title": "/SmartDashboard/gyro angle",
               "_glyph": 148,
               "_showGlyph": false
             }

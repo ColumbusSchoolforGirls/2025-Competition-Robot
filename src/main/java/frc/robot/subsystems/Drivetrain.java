@@ -238,7 +238,7 @@ public class Drivetrain {
 
   /** Returns the heading of the robot in degrees from -180 to 180. */
   public double getHeading() {
-    return Rotation2d.fromDegrees(gyro.getAngle()).getDegrees();
+    return gyro.getYaw();//gyro.getRotation2d().getDegrees();
   }
 
   /** Returns the turn rate of the robot in degrees per second. */
@@ -267,8 +267,7 @@ public class Drivetrain {
   double stallStart = 0.0;
 
   public boolean driveComplete() {
-    driveDifference = targetDistance - odometry.getPoseMeters().getX();
-    System.out.println(odometry.getPoseMeters().getX());
+    driveDifference = targetDistance - Math.abs(frontLeft.getDrivePositionMeters());
     if (Math.abs(driveDifference) < Constants.DriveConstants.DISTANCE_TOLERANCE) {
       stallStart = 0.0;
       System.out.println("Reached drive target");
@@ -277,11 +276,11 @@ public class Drivetrain {
 
     // Prevents the robot from burning out driving continuously into a wall // TODO:
     // check if this works // TODO: velocityZ is probably wrong
-    if (gyro.getVelocityZ() < 0.01) {
+    if (gyro.getVelocityY() < 0.01) {
       if (stallStart != 0.0) {
         if (Timer.getFPGATimestamp() - stallStart > 0.5) {
-          //System.out.println("STALL");
-          //return true;
+          // System.out.println("STALL");
+          // return true;
         }
       } else {
         System.out.println("Start stall");
@@ -294,14 +293,21 @@ public class Drivetrain {
   }
 
   public void autoDrive(double periodSeconds) {
-    driveDifference = targetDistance - odometry.getPoseMeters().getX();
+    
+    driveDifference = targetDistance - Math.abs(frontLeft.getDrivePositionMeters());
     if (Math.abs(driveDifference) > Constants.DriveConstants.DISTANCE_TOLERANCE) {
       drive(1.0, 0, 0, false, periodSeconds);
-    }
+    } 
   }
 
   public void startTurn(double angle) {
+    zeroHeading();
     this.targetAngle = (angle + getHeading());
+  }
+
+  public void updateDistanceAndAngleValues() {
+    SmartDashboard.putNumber("gyro angle", getHeading());
+    SmartDashboard.putNumber("distance", frontLeft.getDrivePositionMeters());
   }
 
   public void resetGyro() {
@@ -317,11 +323,11 @@ public class Drivetrain {
     gyroDifference = (getHeading() - targetAngle);
 
     if (Math.abs(gyroDifference) < Constants.DriveConstants.TURN_TOLERANCE) {
-      drive(0, 0, 0, true, periodSeconds);
+      drive(0, 0, 0, false, periodSeconds);
     } else if (gyroDifference < 0) {
-      drive(0, 0, 0.0035 * Math.abs(gyroDifference) + 0.05, true, periodSeconds);
+      drive(0, 0, 0.05 * Math.abs(gyroDifference) + 0.2, false, periodSeconds);
     } else if (gyroDifference > 0) {
-      drive(0, 0, -0.0035 * Math.abs(gyroDifference) - 0.05, true, periodSeconds);
+      drive(0, 0, -0.05 * gyroDifference - 0.2, false, periodSeconds);
     }
   }
 
