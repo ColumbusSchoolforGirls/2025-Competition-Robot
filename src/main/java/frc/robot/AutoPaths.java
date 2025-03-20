@@ -128,7 +128,7 @@ public class AutoPaths {
         createChooser(positionChooser, StartingPosition.values(), "Start Position", 2, 1, 0, 0);
         createChooser(reefFaceChooser, ReefFace.values(), "Reef Face", 1, 1, 1, 1);
         // createChooser(leftOrRightChooser, LeftOrRight.values(), "L or R", 1, 1, 2, 1);
-        createChooser(coralLevelChooser, CoralLevel.values(), "Coral Level", 1, 1, 3, 1);
+        createChooser(coralLevelChooser, CoralLevel.values(), "Coral Level", 1, 1, 2, 1);
         // To return to the reef after getting a second coral
         createChooser(reefFaceChooser2, ReefFace.values(), "2nd Reef Face", 1, 1, 6, 1);
         createChooser(coralLevelChooser2, CoralLevel.values(), "2nd Coral Level", 1, 1, 7, 1);
@@ -158,7 +158,6 @@ public class AutoPaths {
     public ArrayList<AutoStep> buildPath() {
         ArrayList<AutoStep> path = new ArrayList<>();
 
-        // if (getIfSelected("LEAVE ONLY")) {
         if (getIfSelected("LEAVE ONLY")) {
             path.add(new AutoStep(AutoAction.DRIVE, AutoConstants.LEAVE_ONLY_DISTANCE));
             System.out.println("test: " + leaveOnly.getBoolean(false));
@@ -194,7 +193,7 @@ public class AutoPaths {
             return path;
         }
 
-        if (getIfSelected("TO REEF AGAIN")) {
+        if (getIfSelected("2nd TO REEF")) {
             path.addAll(Arrays.asList(
                     new AutoStep(AutoAction.TURN, getAtStationTurnAngle()), // TODO: change this? might need to be a different value
                     //new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()),
@@ -204,13 +203,13 @@ public class AutoPaths {
             return path;
         }
 
-        if (getIfSelected("PLACE CORAL AGAIN")) {
+        if (getIfSelected("2nd PLACE CORAL")) {
             path.add(new AutoStep(AutoAction.SHOOT));
         } else {
             return path;
         }
 
-        if (getIfSelected("TO STATION AGAIN")) {
+        if (getIfSelected("2nd TO STATION")) {
             path.addAll(Arrays.asList(
                     new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance()),
                     new AutoStep(AutoAction.TURN, getTurnAngleToStation()), // drive backward to station
