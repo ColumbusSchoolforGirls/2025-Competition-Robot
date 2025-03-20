@@ -55,9 +55,9 @@ public class AutoPaths {
     public float getInitialTurnAngle() {
         StartingPosition startingPosition = positionChooser.getSelected();
         if (startingPosition == StartingPosition.LEFT) {
-            return 60; // TODO: change to some positive (counter) value
+            return 50;
         } else if (startingPosition == StartingPosition.RIGHT) {
-            return -60; // TODO: change to some negative (clockwise) value
+            return -50; 
         } else if (startingPosition == StartingPosition.MIDDLE) {
             return 0;
         } else {
@@ -90,7 +90,14 @@ public class AutoPaths {
     }
 
     public double getDriveDistance() {
-        return 0; // TODO: change value
+        StartingPosition startingPosition = positionChooser.getSelected();
+        if (startingPosition == StartingPosition.LEFT || startingPosition == StartingPosition.RIGHT) {
+            return 2.2;
+        } else if (startingPosition == StartingPosition.MIDDLE) {
+            return 0;
+        } else {
+            return 0;
+        }
     }
 
     // Choosers for the shuffleboard
@@ -138,17 +145,20 @@ public class AutoPaths {
     public ArrayList<AutoStep> buildPath() {
         ArrayList<AutoStep> path = new ArrayList<>();
 
-        if (getIfSelected("LEAVE ONLY") || true) {
+        if (getIfSelected("LEAVE ONLY")) {
             path.add(new AutoStep(AutoAction.DRIVE, AutoConstants.LEAVE_ONLY_DISTANCE));
+            //path.add(new AutoStep(AutoAction.TURN, 90));
+            //path.add(new AutoStep(AutoAction.ALIGN));
             return path;
         }
 
         if (getIfSelected("TO REEF")) {
             path.addAll(Arrays.asList(
-                    new AutoStep(AutoAction.DRIVE_AND_ELEVATOR, Constants.AutoConstants.INITIAL_DISTANCE, getAutoTargetHeight()),
-                    new AutoStep(AutoAction.TURN, getInitialTurnAngle()),
-                    new AutoStep(AutoAction.ALIGN),
-                    new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
+                new AutoStep(AutoAction.DRIVE, getDriveDistance()),
+                new AutoStep(AutoAction.TURN, getInitialTurnAngle()),
+                new AutoStep(AutoAction.ALIGN),
+                new AutoStep(AutoAction.DRIVE, 0.3), //TODO: test: 30 centimeters to reef after aligning??
+                new AutoStep(AutoAction.ELEVATOR, getAutoTargetHeight())));
         } else {
             return path;
         }
@@ -173,9 +183,9 @@ public class AutoPaths {
         if (getIfSelected("TO REEF AGAIN")) {
             path.addAll(Arrays.asList(
                     new AutoStep(AutoAction.TURN, getAtStationTurnAngle()), // TODO: change this? might need to be a different value
-                    new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()),
-                    new AutoStep(AutoAction.ALIGN),
-                    new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
+                    //new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()),
+                    new AutoStep(AutoAction.ALIGN)));
+                    //new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
         } else {
             return path;
         }

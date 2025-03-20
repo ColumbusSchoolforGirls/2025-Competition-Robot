@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -64,6 +65,8 @@ public class Robot extends TimedRobot {
     if (AUX.getXButtonPressed()) {
       fieldRelative = false;
     } // TODO:Change Button if needed AND move to periodic
+
+    swerve.updateDistanceAndAngleValues();
   }
 
   @Override
@@ -101,11 +104,8 @@ public class Robot extends TimedRobot {
       case ALIGN:
         swerve.autoAlignLimelight(getPeriod());
         break;
-      case DRIVE_AND_ELEVATOR:
-        //coralSystem.setAutoTargetHeight(currentAction.getValue()); // or autoPaths.getAutoTargetHeight() BUT this is better for abstraction
-        // swerve.startTurn(autoPaths.getInitialEndAutoTargetAngle());
-        autoPaths.getDriveDistance();
-        // swerve.startDrive(autoPaths.getInitialEndAutoTargetDistance());
+      case ELEVATOR:
+        autoPaths.getAutoTargetHeight();
         break;
       case SHOOT:
         coralSystem.autoShoot();
@@ -139,12 +139,14 @@ public class Robot extends TimedRobot {
         if (swerve.turnComplete()) {
           goToNextState();
         }
+        swerve.gyroTurn(getPeriod());
+        System.out.println(swerve.getHeading());
         break;
       case ALIGN:
         // TODO: implement AprilTag alignment
         break;
-      case DRIVE_AND_ELEVATOR:
-        if (coralSystem.elevatorComplete() && swerve.driveComplete()) {
+      case ELEVATOR:
+        if (coralSystem.elevatorComplete()) {
           goToNextState();
         }
         break;

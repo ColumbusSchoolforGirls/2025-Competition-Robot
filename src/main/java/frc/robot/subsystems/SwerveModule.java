@@ -107,7 +107,7 @@ public class SwerveModule implements SwerveModuleInterface {
   }
 
   public double getDrivePositionMeters() {
-    return driveEncoder.getPosition() / SwerveConstants.GEAR_RATIO * SwerveConstants.WheelCircumferenceMeters;
+    return driveEncoder.getPosition();
   }
 
   public double getVelocityMetersPerSecond() {
