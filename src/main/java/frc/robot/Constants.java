@@ -44,7 +44,7 @@ public class Constants {
     public static final class DriveConstants {
 
         public static final double MAX_SPEED = 3.0; // 3 meters per second
-        public static final double MAX_ANGULAR_SPEED = Math.PI; // 1/2 rotation per second
+        public static final double MAX_ANGULAR_SPEED = Math.PI * 2; // 1 rotation per second
 
         public static final double TRANSLATION_2D_OFFSET = 0.3048; // 12 inches to meters
 
@@ -91,7 +91,7 @@ public class Constants {
 
     }
 
-    public static final class CoralConstants { // TODO: need to change all of the values!
+    public static final class CoralConstants {
 
         public static final double ELEVATOR_TOLERANCE = 0.25; // TODO: Need to change when testing elevator
 
@@ -100,7 +100,7 @@ public class Constants {
         public static final double L3_HEIGHT = 13/2; //14.5 47.625 from floor //divided in half because of the elevator
         public static final double L4_HEIGHT = 36/2; // 72 from floor; //divided in half because of the elevator
 
-        public static final int SHOOT_ID = 10; // TODO: change id
+        public static final int SHOOT_ID = 10;
         public static final int ELEVATOR_ID = 14;
 
         public static final double SHOOT_MOTOR_SPEED = 1.0;
@@ -122,7 +122,7 @@ public class Constants {
 
     public static final class ClimbConstants {
 
-        public static final int CLIMBER_ID = 15; // TODO: change id to 11
+        public static final int CLIMBER_ID = 15;
 
         public static final double CLIMB_SPEED = 1.0;
     }
@@ -144,6 +144,6 @@ public class Constants {
 
         public static final double ALGAE_SPEED = 0.5;
 
-        public static final double ALGAE_TIME = 2; // TODO: change time
+        public static final double ALGAE_TIME = 2;
     }
 }

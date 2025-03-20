@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Configs;
-import frc.robot.Constants;
 import frc.robot.Constants.CoralConstants;
 import static frc.robot.Constants.ControllerConstants.AUX;
 
@@ -30,7 +29,7 @@ public class CoralSystem {
 
     private final RelativeEncoder elevatorEncoder = elevatorMotor.getEncoder();
 
-    private static DigitalInput elevatorLimitSwitch = new DigitalInput(Constants.CoralConstants.ELEVATOR_LIMIT_SWITCH_CHANNEL); 
+    private static DigitalInput elevatorLimitSwitch = new DigitalInput(CoralConstants.ELEVATOR_LIMIT_SWITCH_CHANNEL); 
 
     double startShootTime;
 
@@ -107,7 +106,7 @@ public class CoralSystem {
 
     public void elevator(double normalElevatorSpeed, double downwardElevatorSpeed) {
 
-        double scaledElevatorSpeedSlope = Constants.CoralConstants.ELEVATOR_SCALE_FACTOR * getDifference();
+        double scaledElevatorSpeedSlope = CoralConstants.ELEVATOR_SCALE_FACTOR * getDifference();
 
         resetEncodersWithLimitSwitch();
         
@@ -116,17 +115,17 @@ public class CoralSystem {
 
         } else {
 
-            if (getDifference() < -Constants.CoralConstants.ELEVATOR_TOLERANCE) {
+            if (getDifference() < -CoralConstants.ELEVATOR_TOLERANCE) {
                 setElevator(downwardElevatorSpeed);
 
                 stopElevatorWithLimitSwitch();
 
             } else { //trapezoid drive
 
-                if (Math.abs(getDifference()) < Constants.CoralConstants.ELEVATOR_TOLERANCE) {
+                if (Math.abs(getDifference()) < CoralConstants.ELEVATOR_TOLERANCE) {
                     setElevator(0);
-                } else if (getDifference() < Constants.CoralConstants.NORMAL_ELEVATOR_SPEED_DIFFERENCE) {
-                    setElevator((scaledElevatorSpeedSlope * normalElevatorSpeed) + Constants.CoralConstants.MINIMUM_ELEVATOR_SPEED_NEEDED);
+                } else if (getDifference() < CoralConstants.NORMAL_ELEVATOR_SPEED_DIFFERENCE) {
+                    setElevator((scaledElevatorSpeedSlope * normalElevatorSpeed) + CoralConstants.MINIMUM_ELEVATOR_SPEED_NEEDED);
                 } else {
                     setElevator(normalElevatorSpeed);
                 }
@@ -141,9 +140,9 @@ public class CoralSystem {
     public void driveElevator(double normalElevatorSpeed) {
         double elevatorSpeed = -AUX.getLeftY(); //it is inverted
 ;
-        if (Math.abs(elevatorSpeed) > Constants.CoralConstants.AUX_DEADZONE) {
+        if (Math.abs(elevatorSpeed) > CoralConstants.AUX_DEADZONE) {
             setElevator(elevatorSpeed * normalElevatorSpeed);
-        } else if (Math.abs(elevatorSpeed) < Constants.CoralConstants.AUX_DEADZONE) {
+        } else if (Math.abs(elevatorSpeed) < CoralConstants.AUX_DEADZONE) {
             setElevator(0);
         }
   
@@ -156,7 +155,7 @@ public class CoralSystem {
     // TODO: Change this to time-based if needed (driver visibility)
     public void shoot() {
 
-        if (AUX.getXButton()) {
+        if (AUX.getRightTriggerAxis() > CoralConstants.AUX_DEADZONE) {
             shootMotor.set(CoralConstants.SHOOT_MOTOR_SPEED);
         } else {
             shootMotor.set(0);

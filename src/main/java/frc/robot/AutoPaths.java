@@ -31,17 +31,13 @@ public class AutoPaths {
 
     public AutoAction currentAutoAction;
 
-    /**
-     * Returns the initial drive distance in meters based on the starting position
-     * chooser.
-     */
-    // TODO: implement
+    // isn't used
     public double getTurnRadiusDistance() { // TODO: immplementation, maybe (for after alignment) change to a constant distance?
         StartingPosition startingPosition = positionChooser.getSelected();
         if (startingPosition == StartingPosition.LEFT || startingPosition == StartingPosition.RIGHT) {
             return 0; // Constants.AutoConstants._RADIUS_DISTANCE; // TODO: change to some positive value
         } else if (positionChooser.getSelected() == StartingPosition.MIDDLE) {
-            return 0; // TODO: change to some positive value
+            return 0;
         } else {
             return 0;
         }
@@ -106,10 +102,10 @@ public class AutoPaths {
     GenericEntry leaveOnly, toReef, placeCoral, toStation, toReefAgain, placeCoralAgain, toStationAgain;
 
     private final SendableChooser<StartingPosition> positionChooser = new SendableChooser<>();
-    private final SendableChooser<ReefFace> reefFaceChooser = new SendableChooser<>();
+    // private final SendableChooser<ReefFace> reefFaceChooser = new SendableChooser<>();
     //private final SendableChooser<LeftOrRight> leftOrRightChooser = new SendableChooser<>();
     private final SendableChooser<CoralLevel> coralLevelChooser = new SendableChooser<>();
-    private final SendableChooser<ReefFace> reefFaceChooser2 = new SendableChooser<>();
+    // private final SendableChooser<ReefFace> reefFaceChooser2 = new SendableChooser<>();
     private final SendableChooser<CoralLevel> coralLevelChooser2 = new SendableChooser<>();
     //private final SendableChooser<LeftOrRight> leftOrRIghtChooser2 = new SendableChooser<>();
 
@@ -121,17 +117,18 @@ public class AutoPaths {
         tab.add(chooserName, chooser).withSize(w, h).withPosition(x, y);
     }
 
-    private boolean getIfSelected(String name) {
-        return tab.add(name, false).getEntry().getBoolean(false);
+    private boolean getIfSelected(GenericEntry entry) {
+        return entry.getBoolean(false);
     }
-    public void autoShuffleboardStartup() { // TODO: if time allows (HAH) write this using Shuffleboard documentation instead!!, definite to-do next year
+
+    public void autoShuffleboardStartup() {
         createChooser(positionChooser, StartingPosition.values(), "Start Position", 2, 1, 0, 0);
-        createChooser(reefFaceChooser, ReefFace.values(), "Reef Face", 1, 1, 1, 1);
+        // createChooser(reefFaceChooser, ReefFace.values(), "Reef Face", 1, 1, 1, 1);
         // createChooser(leftOrRightChooser, LeftOrRight.values(), "L or R", 1, 1, 2, 1);
-        createChooser(coralLevelChooser, CoralLevel.values(), "Coral Level", 1, 1, 2, 1);
+        createChooser(coralLevelChooser, CoralLevel.values(), "Coral Level", 1, 1, 1, 1);
         // To return to the reef after getting a second coral
-        createChooser(reefFaceChooser2, ReefFace.values(), "2nd Reef Face", 1, 1, 6, 1);
-        createChooser(coralLevelChooser2, CoralLevel.values(), "2nd Coral Level", 1, 1, 7, 1);
+        // createChooser(reefFaceChooser2, ReefFace.values(), "2nd Reef Face", 1, 1, 6, 1);
+        createChooser(coralLevelChooser2, CoralLevel.values(), "2nd Coral Level", 1, 1, 6, 1);
         // createChooser(leftOrRIghtChooser2, LeftOrRight.values(), "2nd L or R", 1, 1, 8, 1);
 
         leaveOnly = tab.add("LEAVE ONLY", false).withWidget("Toggle Button").withSize(2,1).withPosition(2,0).getEntry();
@@ -158,14 +155,12 @@ public class AutoPaths {
     public ArrayList<AutoStep> buildPath() {
         ArrayList<AutoStep> path = new ArrayList<>();
 
-        if (getIfSelected("LEAVE ONLY")) {
+        if (getIfSelected(leaveOnly)) {
             path.add(new AutoStep(AutoAction.DRIVE, AutoConstants.LEAVE_ONLY_DISTANCE));
-            System.out.println("test: " + leaveOnly.getBoolean(false));
-
             return path;
         }
 
-        if (getIfSelected("TO REEF")) {
+        if (getIfSelected(toReef)) {
             path.addAll(Arrays.asList(
                 new AutoStep(AutoAction.DRIVE, getDriveDistance()),
                 new AutoStep(AutoAction.TURN, getInitialTurnAngle()),
@@ -176,16 +171,17 @@ public class AutoPaths {
             return path;
         }
 
-        if (getIfSelected("PLACE CORAL")) {
+        if (getIfSelected(placeCoral)) {
             path.add(new AutoStep(AutoAction.SHOOT));
+            path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L2_HEIGHT));
         } else {
             return path;
         }
 
-        if (getIfSelected("TO STATION")) {
+        if (getIfSelected(toStation)) {
             path.addAll(Arrays.asList(
                     new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance()),
-                    new AutoStep(AutoAction.TURN, getTurnAngleToStation()), // TODO: turn should be backward (back up to station)
+                    new AutoStep(AutoAction.TURN, getTurnAngleToStation()),
                     new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()),
                     new AutoStep(AutoAction.TURN, getAtStationTurnAngle()),
                     new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
@@ -193,9 +189,9 @@ public class AutoPaths {
             return path;
         }
 
-        if (getIfSelected("2nd TO REEF")) {
+        if (getIfSelected(toReefAgain)) {
             path.addAll(Arrays.asList(
-                    new AutoStep(AutoAction.TURN, getAtStationTurnAngle()), // TODO: change this? might need to be a different value
+                    new AutoStep(AutoAction.TURN, getAtStationTurnAngle()),
                     //new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()),
                     new AutoStep(AutoAction.ALIGN)));
                     //new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance())));
@@ -203,13 +199,13 @@ public class AutoPaths {
             return path;
         }
 
-        if (getIfSelected("2nd PLACE CORAL")) {
+        if (getIfSelected(placeCoralAgain)) {
             path.add(new AutoStep(AutoAction.SHOOT));
         } else {
             return path;
         }
 
-        if (getIfSelected("2nd TO STATION")) {
+        if (getIfSelected(toStationAgain)) {
             path.addAll(Arrays.asList(
                     new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance()),
                     new AutoStep(AutoAction.TURN, getTurnAngleToStation()), // drive backward to station

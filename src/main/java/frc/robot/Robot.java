@@ -63,9 +63,9 @@ public class Robot extends TimedRobot {
     swerve.periodic();
     swerve.updateSmartDashboard();
 
-    if (AUX.getXButtonPressed()) {
-      fieldRelative = false;
-    } // TODO:Change Button if needed AND move to periodic
+    // if (AUX.getXButtonPressed()) {
+    //   fieldRelative = false;
+    // }
 
     swerve.updateDistanceAndAngleValues();
   }
@@ -91,7 +91,7 @@ public class Robot extends TimedRobot {
     AutoStep currentAction = new AutoStep(AutoAction.STOP);
     if (state < autoActions.size()) {
       currentAction = autoActions.get(state);
-    } //TODO: make into funciton later
+    }
     System.out.println("New action: " + currentAction);
 
     switch (currentAction.getAction()) {
@@ -103,7 +103,6 @@ public class Robot extends TimedRobot {
         swerve.startTurn(currentAction.getValue());
         break;
       case ALIGN:
-        swerve.autoAlignLimelight(getPeriod());
         break;
       case ELEVATOR:
         autoPaths.getAutoTargetHeight();
@@ -127,10 +126,10 @@ public class Robot extends TimedRobot {
     if (state < autoActions.size()) {
       currentAction = autoActions.get(state);
     }
+
+    // for testing
     // SmartDashboard.putString("auto action", currentAction.toString());
     // SmartDashboard.putNumber("auto state", state);
-    GenericEntry shuffleAction = Shuffleboard.getTab("Auto").add("Auto Action", currentAction.toString()).withSize(2, 1).withPosition(5, 0).getEntry();
-    GenericEntry shuffleState = Shuffleboard.getTab("Auto").add("Auto State", state).withSize(1, 1).withPosition(7,0).getEntry();
 
     switch (currentAction.getAction()) {
       case DRIVE:
@@ -147,7 +146,7 @@ public class Robot extends TimedRobot {
         System.out.println(swerve.getHeading());
         break;
       case ALIGN:
-        // TODO: implement AprilTag alignment
+        swerve.autoAlignLimelight(getPeriod());
         break;
       case ELEVATOR:
         if (coralSystem.elevatorComplete()) {
@@ -177,14 +176,14 @@ public class Robot extends TimedRobot {
     climber.setCoast();
   }
 
-  public void isFieldRelative() {
+  // public void isFieldRelative() {
     
-    if (DRIVE_CONTROLLER.getYButtonPressed()) {
-      fieldRelative = !fieldRelative;
-      SmartDashboard.putBoolean("Field Relative?", false);
-    } 
+  //   if (DRIVE_CONTROLLER.getYButtonPressed()) {
+  //     fieldRelative = !fieldRelative;
+  //     SmartDashboard.putBoolean("Field Relative?", false);
+  //   } 
 
-  }
+  // }
 
   @Override
   public void teleopPeriodic() {
@@ -192,9 +191,9 @@ public class Robot extends TimedRobot {
     coralSystem.shoot();
     swerve.driverResetTurnEncoders();
     climber.climb();
-    coralSystem.elevator(0.7, -0.15);
+    coralSystem.elevator(0.7, -0.25);
     swerve.teleopAutoAlign(getPeriod());
-    isFieldRelative(); //TODO: fix
+    // isFieldRelative(); //TODO: fix
 
 
   }
