@@ -19,9 +19,9 @@ public class AutoPaths {
         N, NE, SE, S, SW, NW // cardinal directions from the drive station perspective
     }
 
-    public enum LeftOrRight {
-        LEFT, RIGHT
-    }
+    // public enum LeftOrRight {
+    //     LEFT, RIGHT
+    // }
 
     // L3 is always blocked at start
     public enum CoralLevel {
@@ -77,7 +77,7 @@ public class AutoPaths {
         CoralLevel coralLevel = coralLevelChooser.getSelected();
         switch (coralLevel) {
             case TROUGH:
-                return CoralConstants.L2_HEIGHT;
+                return CoralConstants.L2_HEIGHT; //no
             case L2:
                 return CoralConstants.L2_HEIGHT;
             case L3:
@@ -103,11 +103,11 @@ public class AutoPaths {
     // Choosers for the shuffleboard
     private final SendableChooser<StartingPosition> positionChooser = new SendableChooser<>();
     private final SendableChooser<ReefFace> reefFaceChooser = new SendableChooser<>();
-    private final SendableChooser<LeftOrRight> leftOrRightChooser = new SendableChooser<>();
+    //private final SendableChooser<LeftOrRight> leftOrRightChooser = new SendableChooser<>();
     private final SendableChooser<CoralLevel> coralLevelChooser = new SendableChooser<>();
     private final SendableChooser<ReefFace> reefFaceChooser2 = new SendableChooser<>();
     private final SendableChooser<CoralLevel> coralLevelChooser2 = new SendableChooser<>();
-    private final SendableChooser<LeftOrRight> leftOrRIghtChooser2 = new SendableChooser<>();
+    //private final SendableChooser<LeftOrRight> leftOrRIghtChooser2 = new SendableChooser<>();
 
     private <K extends Enum<K>> void createChooser(SendableChooser<K> chooser, K[] values, String chooserName) {
         for (K value : values) {
@@ -123,12 +123,12 @@ public class AutoPaths {
     public void autoShuffleboardStartup() { // TODO: if time allows (HAH) write this using Shuffleboard documentation instead!!, definite to-do next year
         createChooser(positionChooser, StartingPosition.values(), "Start Position");
         createChooser(reefFaceChooser, ReefFace.values(), "Reef Face");
-        createChooser(leftOrRightChooser, LeftOrRight.values(), "L or R");
+        //createChooser(leftOrRightChooser, LeftOrRight.values(), "L or R");
         createChooser(coralLevelChooser, CoralLevel.values(), "Coral Level");
         // To return to the reef after getting a second coral
         createChooser(reefFaceChooser2, ReefFace.values(), "2nd Reef Face");
         createChooser(coralLevelChooser2, CoralLevel.values(), "2nd Coral Level");
-        createChooser(leftOrRIghtChooser2, LeftOrRight.values(), "2nd L or R");
+        //createChooser(leftOrRIghtChooser2, LeftOrRight.values(), "2nd L or R");
 
         // SmartDashboard.putBoolean("LEAVE ONLY", false);
         // SmartDashboard.putBoolean("To Reef", false);
