@@ -3,9 +3,10 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.AutoConstants;
 
@@ -93,7 +94,10 @@ public class AutoPaths {
         return 0; // TODO: change value
     }
 
-    // Choosers for the shuffleboard
+    // Shuffleboard
+    ShuffleboardTab tab = Shuffleboard.getTab("Auto");
+    GenericEntry leaveOnly, toReef, placeCoral, toStation, toReefAgain, placeCoralAgain, toStationAgain;
+
     private final SendableChooser<StartingPosition> positionChooser = new SendableChooser<>();
     private final SendableChooser<ReefFace> reefFaceChooser = new SendableChooser<>();
     private final SendableChooser<LeftOrRight> leftOrRightChooser = new SendableChooser<>();
@@ -102,27 +106,36 @@ public class AutoPaths {
     private final SendableChooser<CoralLevel> coralLevelChooser2 = new SendableChooser<>();
     private final SendableChooser<LeftOrRight> leftOrRIghtChooser2 = new SendableChooser<>();
 
-    private <K extends Enum<K>> void createChooser(SendableChooser<K> chooser, K[] values, String chooserName) {
+    private <K extends Enum<K>> void createChooser(SendableChooser<K> chooser, K[] values, String chooserName, int w, int h, int x, int y) {
         for (K value : values) {
             chooser.addOption(value.name(), value);
         }
-        SmartDashboard.putData(chooserName, chooser);
+        // SmartDashboard.putData(chooserName, chooser);
+        tab.add(chooserName, chooser).withSize(w, h).withPosition(x, y);
     }
 
-    private boolean getIfSelected(String key) {
-        return SmartDashboard.getBoolean(key, false);
+    private boolean getIfSelected(String name) {
+        return tab.add(name, false).getEntry().getBoolean(false);
     }
-
     public void autoShuffleboardStartup() { // TODO: if time allows (HAH) write this using Shuffleboard documentation instead!!, definite to-do next year
-        createChooser(positionChooser, StartingPosition.values(), "Start Position");
-        createChooser(reefFaceChooser, ReefFace.values(), "Reef Face");
-        createChooser(leftOrRightChooser, LeftOrRight.values(), "L or R");
-        createChooser(coralLevelChooser, CoralLevel.values(), "Coral Level");
+        createChooser(positionChooser, StartingPosition.values(), "Start Position", 2, 1, 0, 0);
+        createChooser(reefFaceChooser, ReefFace.values(), "Reef Face", 1, 1, 1, 1);
+        createChooser(leftOrRightChooser, LeftOrRight.values(), "L or R", 1, 1, 2, 1);
+        createChooser(coralLevelChooser, CoralLevel.values(), "Coral Level", 1, 1, 3, 1);
         // To return to the reef after getting a second coral
-        createChooser(reefFaceChooser2, ReefFace.values(), "2nd Reef Face");
-        createChooser(coralLevelChooser2, CoralLevel.values(), "2nd Coral Level");
-        createChooser(leftOrRIghtChooser2, LeftOrRight.values(), "2nd L or R");
+        createChooser(reefFaceChooser2, ReefFace.values(), "2nd Reef Face", 1, 1, 6, 1);
+        createChooser(coralLevelChooser2, CoralLevel.values(), "2nd Coral Level", 1, 1, 7, 1);
+        createChooser(leftOrRIghtChooser2, LeftOrRight.values(), "2nd L or R", 1, 1, 8, 1);
 
+        leaveOnly = tab.add("LEAVE ONLY", false).withWidget("Toggle Button").withSize(2,1).withPosition(2,0).getEntry();
+        toReef = tab.add("To Reef", false).withWidget("Toggle Button").withSize(1,1).withPosition(0,1).getEntry();
+        placeCoral = tab.add("Place Coral", false).withWidget("Toggle Button").withSize(2,1).withPosition(0,2).getEntry();
+        toStation = tab.add("To Station", false).withWidget("Toggle Button").withSize(2,1).withPosition(0,3).getEntry();
+
+        toReefAgain = tab.add("To Reef AGAIN", false).withWidget("Toggle Button").withSize(1,1).withPosition(5,1).getEntry();
+        placeCoralAgain = tab.add("Place Coral AGAIN", false).withWidget("Toggle Button").withSize(2,1).withPosition(5,2).getEntry();
+        toStationAgain = tab.add("To Station AGAIN", false).withWidget("Toggle Button").withSize(2,1).withPosition(5,3).getEntry();
+        
         // SmartDashboard.putBoolean("LEAVE ONLY", false);
         // SmartDashboard.putBoolean("To Reef", false);
         // SmartDashboard.putBoolean("Place Coral", false);
@@ -138,8 +151,10 @@ public class AutoPaths {
     public ArrayList<AutoStep> buildPath() {
         ArrayList<AutoStep> path = new ArrayList<>();
 
-        if (getIfSelected("LEAVE ONLY") || true) {
+        if (getIfSelected("LEAVE ONLY")) {
             path.add(new AutoStep(AutoAction.DRIVE, AutoConstants.LEAVE_ONLY_DISTANCE));
+            System.out.println("test: " + leaveOnly.getBoolean(false));
+
             return path;
         }
 

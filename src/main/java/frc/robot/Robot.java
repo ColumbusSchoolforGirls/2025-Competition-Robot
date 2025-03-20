@@ -11,10 +11,11 @@ import java.util.ArrayList;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
-
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.CoralSystem;
@@ -126,8 +127,11 @@ public class Robot extends TimedRobot {
     if (state < autoActions.size()) {
       currentAction = autoActions.get(state);
     }
-    SmartDashboard.putString("auto action", currentAction.toString());
-    SmartDashboard.putNumber("auto state", state);
+    // SmartDashboard.putString("auto action", currentAction.toString());
+    // SmartDashboard.putNumber("auto state", state);
+    GenericEntry shuffleAction = Shuffleboard.getTab("Auto").add("Auto Action", currentAction.toString()).withSize(2, 1).withPosition(5, 0).getEntry();
+    GenericEntry shuffleState = Shuffleboard.getTab("Auto").add("Auto State", state).withSize(1, 1).withPosition(7,0).getEntry();
+
     switch (currentAction.getAction()) {
       case DRIVE:
         if (swerve.driveComplete()) {
@@ -186,7 +190,7 @@ public class Robot extends TimedRobot {
     coralSystem.shoot();
     swerve.driverResetTurnEncoders();
     climber.climb();
-    coralSystem.elevator(0.7, -0.1);
+    coralSystem.elevator(0.7, -0.15);
     swerve.teleopAutoAlign(getPeriod());
     isFieldRelative(); //TODO: fix
 
