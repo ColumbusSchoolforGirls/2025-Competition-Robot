@@ -32,6 +32,7 @@ public class CoralSystem {
     private static DigitalInput elevatorLimitSwitch = new DigitalInput(CoralConstants.ELEVATOR_LIMIT_SWITCH_CHANNEL); 
 
     double startShootTime;
+    double elevatorStartTime;
 
     public Limelight limelight;
 
@@ -79,16 +80,20 @@ public class CoralSystem {
         return controllerInputTargetHeight()*2 - getHeight();
     }
 
+    private double getAutoDifference(double targetHeight) {
+        return targetHeight*2 - getHeight();
+    }
+
 
     // public void setAutoTargetHeight(double targetHeight) { //TODO: change this?
     //     this.targetHeight = targetHeight;
     // }
 
-    public boolean elevatorComplete() {
-        return Math.abs(getDifference()) < CoralConstants.ELEVATOR_TOLERANCE;
+    public boolean autoElevatorComplete(double targetHeight) {
+        return (Math.abs(getAutoDifference(targetHeight)) < CoralConstants.ELEVATOR_TOLERANCE) || (Timer.getFPGATimestamp() - elevatorStartTime > CoralConstants.MAX_ELEVATOR_AUTO_TIME);
     }
 
-    private boolean isElevatorLimitReached() {
+    public boolean isElevatorLimitReached() {
         return elevatorLimitSwitch.get();
     }
 
@@ -104,9 +109,17 @@ public class CoralSystem {
         }
     }
 
-    public void elevator(double normalElevatorSpeed, double downwardElevatorSpeed) {
+    public void elevator(double normalElevatorSpeed, double downwardElevatorSpeed, boolean isAuto, double targetHeight) {
+        double difference;
 
-        double scaledElevatorSpeedSlope = CoralConstants.ELEVATOR_SCALE_FACTOR * getDifference();
+
+        if (isAuto) {
+            difference = getAutoDifference(targetHeight);
+        } else {
+            difference = getDifference();
+        }
+
+        double scaledElevatorSpeedSlope = CoralConstants.ELEVATOR_SCALE_FACTOR * difference;
 
         resetEncodersWithLimitSwitch();
         
@@ -115,26 +128,26 @@ public class CoralSystem {
 
         } else {
 
-            if (getDifference() < -CoralConstants.ELEVATOR_TOLERANCE) {
+            if (difference < -CoralConstants.ELEVATOR_TOLERANCE) {
                 setElevator(downwardElevatorSpeed);
 
                 stopElevatorWithLimitSwitch();
 
             } else { //trapezoid drive
 
-                if (Math.abs(getDifference()) < CoralConstants.ELEVATOR_TOLERANCE) {
+                if (Math.abs(difference) < CoralConstants.ELEVATOR_TOLERANCE) {
                     setElevator(0);
-                } else if (getDifference() < CoralConstants.NORMAL_ELEVATOR_SPEED_DIFFERENCE) {
+                } else if (difference < CoralConstants.NORMAL_ELEVATOR_SPEED_DIFFERENCE) {
                     setElevator((scaledElevatorSpeedSlope * normalElevatorSpeed) + CoralConstants.MINIMUM_ELEVATOR_SPEED_NEEDED);
                 } else {
                     setElevator(normalElevatorSpeed);
                 }
-
-
             }
         }
-        
+    }
 
+    public void startElevatorAutoTimer() {
+        elevatorStartTime = Timer.getFPGATimestamp();
     }
 
     public void driveElevator(double normalElevatorSpeed) {
@@ -162,10 +175,12 @@ public class CoralSystem {
         }
     }
 
-    public void autoShoot() {
-
-        shootMotor.set(CoralConstants.SHOOT_MOTOR_SPEED);
+    public void autoShootStart() {
         startShootTime = Timer.getFPGATimestamp();
+    }
+
+    public void autoShoot() {
+        shootMotor.set(CoralConstants.SHOOT_MOTOR_SPEED);
     }
 
     public boolean autoShootComplete() {

@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 
 import frc.robot.Constants.ClimbConstants;
@@ -28,13 +29,17 @@ public class Climber {
         climbMotor.set(-power);
     }
 
+    // public void climb() {
+    //     if (AUX.getLeftTriggerAxis() > ControllerConstants.TRIGGER_DEADZONE) {
+    //         setClimb(ClimbConstants.CLIMB_SPEED);
+    //     } else if (reverseClimbController.getRightTriggerAxis() > ControllerConstants.TRIGGER_DEADZONE) {
+    //         setClimb(-ClimbConstants.CLIMB_SPEED);
+    //     } else {
+    //         climbMotor.set(0);
+    //     }
+    // }
+
     public void climb() {
-        if (AUX.getLeftTriggerAxis() > ControllerConstants.TRIGGER_DEADZONE) {
-            setClimb(ClimbConstants.CLIMB_SPEED);
-        } else if (reverseClimbController.getRightTriggerAxis() > ControllerConstants.TRIGGER_DEADZONE) {
-            setClimb(-ClimbConstants.CLIMB_SPEED);
-        } else {
-            climbMotor.set(0);
-        }
+        climbMotor.set(MathUtil.applyDeadband(-AUX.getLeftTriggerAxis(), 0.1));
     }
 }

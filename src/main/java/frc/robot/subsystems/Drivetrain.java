@@ -19,6 +19,7 @@ import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
 import frc.robot.Constants;
+import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.DriveConstants;
 import static frc.robot.Constants.ControllerConstants.DRIVE_CONTROLLER;
 
@@ -29,6 +30,7 @@ public class Drivetrain {
   private double targetAngle;
   private double driveDifference;
   private double targetDistance;
+  double startDriveTime;
 
   private final Translation2d frontLeftLocation = new Translation2d(DriveConstants.TRANSLATION_2D_OFFSET,
       -DriveConstants.TRANSLATION_2D_OFFSET);
@@ -268,14 +270,14 @@ public class Drivetrain {
 
   public boolean driveComplete() {
     driveDifference = targetDistance - Math.abs(frontLeft.getDrivePositionMeters());
-    if (Math.abs(driveDifference) < Constants.DriveConstants.DISTANCE_TOLERANCE) {
+    if ((Math.abs(driveDifference) < Constants.DriveConstants.DISTANCE_TOLERANCE) || (Timer.getFPGATimestamp() - startDriveTime > DriveConstants.MAX_DRIVE_AUTO_TIME))  {
       stallStart = 0.0;
       System.out.println("Reached drive target");
       return true;
     }
 
     // Prevents the robot from burning out driving continuously into a wall // TODO:
-    // check if this works // TODO: velocityZ is probably wrong
+    // check if this works
     if (gyro.getVelocityY() < 0.01) {
       if (stallStart != 0.0) {
         if (Timer.getFPGATimestamp() - stallStart > 0.5) {
@@ -296,7 +298,7 @@ public class Drivetrain {
     
     driveDifference = targetDistance - Math.abs(frontLeft.getDrivePositionMeters());
     if (Math.abs(driveDifference) > Constants.DriveConstants.DISTANCE_TOLERANCE) {
-      drive(1.0, 0, 0, false, periodSeconds);
+      drive(0.8, 0, 0, false, periodSeconds);
     } 
   }
 
@@ -317,6 +319,7 @@ public class Drivetrain {
   public void startDrive(double distanceMeters) {
     resetEncoders();
     targetDistance = distanceMeters;
+    startDriveTime = Timer.getFPGATimestamp();
   }
 
   public void gyroTurn(double periodSeconds) {

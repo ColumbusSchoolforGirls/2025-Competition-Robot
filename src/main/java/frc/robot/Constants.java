@@ -53,7 +53,7 @@ public class Constants {
         public static final int FL_DRIVE_ID = 2;
         public static final int FL_TURN_ID = 3;
         public static final int FL_DIO = 8;
-        public static final double FL_CHASSIS_ANGULAR_OFFSET = (-25 * Math.PI) / 180; 
+        public static final double FL_CHASSIS_ANGULAR_OFFSET = (52.7 * Math.PI) / 180;  //-25
 
         public static final int FR_DRIVE_ID = 4;
         public static final int FR_TURN_ID = 5;
@@ -83,6 +83,10 @@ public class Constants {
 
         public static final double METERS_TO_INCHES = 39.37; //inches/meter
 
+        public static final double CRAWL_SPEED = 0.5;
+
+        public static final double MAX_DRIVE_AUTO_TIME = 3.0;
+
     }
 
     public static final class AutoConstants {
@@ -97,8 +101,8 @@ public class Constants {
 
         // Height in inches of coral node from default height (0 is L2).
         public static final double L2_HEIGHT = 0; // 31.875 from floor
-        public static final double L3_HEIGHT = 13/2; //14.5 47.625 from floor //divided in half because of the elevator
-        public static final double L4_HEIGHT = 36/2; // 72 from floor; //divided in half because of the elevator
+        public static final double L3_HEIGHT = 15/2; //14.5 47.625 from floor //divided in half because of the elevator
+        public static final double L4_HEIGHT = 37/2; // 72 from floor; //divided in half because of the elevator
 
         public static final int SHOOT_ID = 10;
         public static final int ELEVATOR_ID = 14;
@@ -106,6 +110,7 @@ public class Constants {
         public static final double SHOOT_MOTOR_SPEED = 1.0;
 
         public static final double SHOOT_TIME = 1.5; // TODO: change time
+        public static final double MAX_ELEVATOR_AUTO_TIME = 3;
 
         public static final double AUX_DEADZONE = 0.1;
 
@@ -118,6 +123,7 @@ public class Constants {
         public static final double NORMAL_ELEVATOR_SPEED_DIFFERENCE = 3; //inches //TODO: test and change, start with 12 inches
 
         public static final int ELEVATOR_LIMIT_SWITCH_CHANNEL = 0;
+
     }
 
     public static final class ClimbConstants {

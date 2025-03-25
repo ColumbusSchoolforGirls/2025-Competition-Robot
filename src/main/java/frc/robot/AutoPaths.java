@@ -52,9 +52,9 @@ public class AutoPaths {
     public float getInitialTurnAngle() {
         StartingPosition startingPosition = positionChooser.getSelected();
         if (startingPosition == StartingPosition.LEFT) {
-            return 50;
+            return -50;
         } else if (startingPosition == StartingPosition.RIGHT) {
-            return -50; 
+            return 50; 
         } else if (startingPosition == StartingPosition.MIDDLE) {
             return 0;
         } else {
@@ -72,6 +72,7 @@ public class AutoPaths {
 
     public double getAutoTargetHeight() {
         CoralLevel coralLevel = coralLevelChooser.getSelected();
+
         switch (coralLevel) {
             case TROUGH:
                 return CoralConstants.L2_HEIGHT; //no
@@ -89,7 +90,7 @@ public class AutoPaths {
     public double getDriveDistance() {
         StartingPosition startingPosition = positionChooser.getSelected();
         if (startingPosition == StartingPosition.LEFT || startingPosition == StartingPosition.RIGHT) {
-            return 2.2;
+            return 2.0;
         } else if (startingPosition == StartingPosition.MIDDLE) {
             return 0;
         } else {
@@ -152,28 +153,34 @@ public class AutoPaths {
         this.currentAutoAction = null;
     }
 
+    public void testAuto() {
+        System.out.println("CORAL LEVEL -----------------: " + coralLevelChooser.getSelected());
+    }
+
     public ArrayList<AutoStep> buildPath() {
         ArrayList<AutoStep> path = new ArrayList<>();
 
         if (getIfSelected(leaveOnly)) {
-            path.add(new AutoStep(AutoAction.DRIVE, AutoConstants.LEAVE_ONLY_DISTANCE));
+            // path.add(new AutoStep(AutoAction.DRIVE, AutoConstants.LEAVE_ONLY_DISTANCE));
+            path. add(new AutoStep(AutoAction.TURN, getInitialTurnAngle()));
             return path;
         }
+
 
         if (getIfSelected(toReef)) {
             path.addAll(Arrays.asList(
                 new AutoStep(AutoAction.DRIVE, getDriveDistance()),
                 new AutoStep(AutoAction.TURN, getInitialTurnAngle()),
                 new AutoStep(AutoAction.ALIGN),
-                new AutoStep(AutoAction.DRIVE, 0.3), //TODO: test: 30 centimeters to reef after aligning??
+                new AutoStep(AutoAction.DRIVE, 0.5), //TODO: test: 30 centimeters to reef after aligning??
                 new AutoStep(AutoAction.ELEVATOR, getAutoTargetHeight())));
         } else {
             return path;
         }
 
         if (getIfSelected(placeCoral)) {
-            path.add(new AutoStep(AutoAction.SHOOT));
-            path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L2_HEIGHT));
+            path.add(new AutoStep(AutoAction.SHOOT, getAutoTargetHeight()));
+            //path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L2_HEIGHT));
         } else {
             return path;
         }

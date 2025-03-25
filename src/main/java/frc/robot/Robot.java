@@ -52,16 +52,17 @@ public class Robot extends TimedRobot {
     swerve.driveInit();
     autoPaths.autoShuffleboardStartup();
     coralSystem.resetElevatorEncoders();
+    coralSystem.setShootMotor();
   }
 
   @Override
   public void robotPeriodic() {
-    // coralSystem.elevator();
-    // climber.climb();
     limelightCoral.updateLimelight();
     swerve.updateOdometry();
     swerve.periodic();
     swerve.updateSmartDashboard();
+    SmartDashboard.putBoolean("limit swtich", coralSystem.isElevatorLimitReached());
+
 
     // if (AUX.getXButtonPressed()) {
     //   fieldRelative = false;
@@ -96,19 +97,18 @@ public class Robot extends TimedRobot {
 
     switch (currentAction.getAction()) {
       case DRIVE:
-        swerve.startDrive(currentAction.getValue()); // value = autopaths.getInitialDriveDistance()
+        swerve.startDrive(currentAction.getValue());
         break;
       case TURN:
-        // float initialTurnAngle = autoPaths.getInitialTurnAngle();
         swerve.startTurn(currentAction.getValue());
         break;
       case ALIGN:
         break;
       case ELEVATOR:
-        autoPaths.getAutoTargetHeight();
+        coralSystem.startElevatorAutoTimer();
         break;
       case SHOOT:
-        coralSystem.autoShoot();
+        coralSystem.autoShootStart();
         break;
       case STOP:
         break;
@@ -128,38 +128,49 @@ public class Robot extends TimedRobot {
     }
 
     // for testing
-    // SmartDashboard.putString("auto action", currentAction.toString());
-    // SmartDashboard.putNumber("auto state", state);
+    SmartDashboard.putString("auto action", currentAction.toString());
+    SmartDashboard.putNumber("auto state", state);
 
     switch (currentAction.getAction()) {
       case DRIVE:
         if (swerve.driveComplete()) {
           goToNextState();
+        } else {
+          swerve.autoDrive(getPeriod());
         }
-        swerve.autoDrive(getPeriod());
         break;
       case TURN:
         if (swerve.turnComplete()) {
           goToNextState();
+        } else {
+          swerve.gyroTurn(getPeriod());
+          System.out.println(swerve.getHeading());
         }
-        swerve.gyroTurn(getPeriod());
-        System.out.println(swerve.getHeading());
         break;
       case ALIGN:
-        swerve.autoAlignLimelight(getPeriod());
+        if (swerve.isLimelightAligned()) {
+          goToNextState();
+        } else {
+          swerve.autoAlignLimelight(getPeriod());
+        }
         break;
       case ELEVATOR:
-        if (coralSystem.elevatorComplete()) {
+        if (coralSystem.autoElevatorComplete(currentAction.getValue())) {
           goToNextState();
+        } else {
+          coralSystem.elevator(0.85, -0.25, true, currentAction.getValue());
         }
         break;
       case SHOOT:
         if (coralSystem.autoShootComplete()) {
           goToNextState();
+        } else {
+          coralSystem.autoShoot();
+          coralSystem.elevator(0.85, -0.25, true, currentAction.getValue());
         }
         break;
       case STOP:
-      swerve.stop(getPeriod());
+        swerve.stop(getPeriod());
         break;
       default:
         break;
@@ -171,7 +182,6 @@ public class Robot extends TimedRobot {
     swerve.setBrakeMode();
     swerve.resetTurnEncoders();
     coralSystem.resetElevatorEncoders();
-    coralSystem.setShootMotor();
     climber.setClimbZero();
     climber.setCoast();
   }
@@ -191,7 +201,7 @@ public class Robot extends TimedRobot {
     coralSystem.shoot();
     swerve.driverResetTurnEncoders();
     climber.climb();
-    coralSystem.elevator(0.7, -0.25);
+    coralSystem.elevator(0.85, -0.25, false, 0);
     swerve.teleopAutoAlign(getPeriod());
     // isFieldRelative(); //TODO: fix
 
@@ -199,24 +209,31 @@ public class Robot extends TimedRobot {
   }
 
   private void driveWithJoystick(boolean fieldRelative) {
-    // Get the x speed. We are inverting this because Xbox controllers return
-    // negative values when we push forward.
-    final double xSpeed = -xspeedLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getLeftY(), 0.1))
-        * Constants.DriveConstants.MAX_SPEED;
+
+    double xSpeed = -xspeedLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getLeftY(), 0.1))
+    * Constants.DriveConstants.MAX_SPEED;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default. // nah positive
     // now
-    final double ySpeed = yspeedLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getLeftX(), 0.1))
+    double ySpeed = yspeedLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getLeftX(), 0.1))
         * Constants.DriveConstants.MAX_SPEED;
 
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left (remember, CCW is positive in
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default. // uh no, positive now
-    final double rot = rotLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getRightX(), 0.1))
+    double rot = rotLimiter.calculate(MathUtil.applyDeadband(DRIVE_CONTROLLER.getRightX(), 0.1))
         * Constants.DriveConstants.MAX_ANGULAR_SPEED;
+
+    if (DRIVE_CONTROLLER.getLeftBumperButton()) {
+      xSpeed *= Constants.DriveConstants.CRAWL_SPEED; //if you click the left bumper you go at a slow scaled speed
+      ySpeed *= Constants.DriveConstants.CRAWL_SPEED; 
+      rot *= Constants.DriveConstants.CRAWL_SPEED; 
+    }
+    // Get the x speed. We are inverting this because Xbox controllers return
+    // negative values when we push forward.
 
     swerve.drive(xSpeed, ySpeed, rot, fieldRelative, getPeriod());
   }
