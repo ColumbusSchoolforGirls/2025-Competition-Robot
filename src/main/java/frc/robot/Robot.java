@@ -147,11 +147,11 @@ public class Robot extends TimedRobot {
           System.out.println(swerve.getHeading());
         }
         break;
-      case ALIGN:
+      case ALIGN: //TODO: need to add left and right align
         if (swerve.isLimelightAligned()) {
           goToNextState();
         } else {
-          swerve.autoAlignLimelight(getPeriod());
+          swerve.autoAlignLimelight(getPeriod(), autoPaths.getXAxisSpeed());
         }
         break;
       case ELEVATOR:

@@ -20,9 +20,9 @@ public class AutoPaths {
         N, NE, SE, S, SW, NW // cardinal directions from the drive station perspective
     }
 
-    // public enum LeftOrRight {
-    //     LEFT, RIGHT
-    // }
+    public enum LeftOrRight {
+        LEFT, RIGHT //TODO: put into auto
+    }
 
     // L3 is always blocked at start
     public enum CoralLevel {
@@ -57,6 +57,17 @@ public class AutoPaths {
             return 50; 
         } else if (startingPosition == StartingPosition.MIDDLE) {
             return 0;
+        } else {
+            return 0;
+        }
+    }
+
+    public double getXAxisSpeed() {
+        LeftOrRight leftOrRight = leftOrRightChooser.getSelected();
+        if (leftOrRight == LeftOrRight.LEFT) {
+            return -0.3;
+        } else if (leftOrRight == LeftOrRight.RIGHT) {
+            return 0.3;
         } else {
             return 0;
         }
@@ -104,7 +115,7 @@ public class AutoPaths {
 
     private final SendableChooser<StartingPosition> positionChooser = new SendableChooser<>();
     // private final SendableChooser<ReefFace> reefFaceChooser = new SendableChooser<>();
-    //private final SendableChooser<LeftOrRight> leftOrRightChooser = new SendableChooser<>();
+    private final SendableChooser<LeftOrRight> leftOrRightChooser = new SendableChooser<>();
     private final SendableChooser<CoralLevel> coralLevelChooser = new SendableChooser<>();
     // private final SendableChooser<ReefFace> reefFaceChooser2 = new SendableChooser<>();
     private final SendableChooser<CoralLevel> coralLevelChooser2 = new SendableChooser<>();

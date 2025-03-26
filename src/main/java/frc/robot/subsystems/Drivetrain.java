@@ -269,7 +269,7 @@ public class Drivetrain {
 
   double stallStart = 0.0;
 
-  public boolean limelightAlignDriveComplete() {
+  public boolean limelightAlignDriveComplete(double periodSeconds) {
     limelightAlignDriveDifference = 0.5 - Math.abs(frontLeft.getDrivePositionMeters());
     if ((Math.abs(limelightAlignDriveDifference)) < Constants.DriveConstants.DISTANCE_TOLERANCE) {
       return true;
@@ -278,6 +278,7 @@ public class Drivetrain {
     }
 
   }
+
   public boolean driveComplete() {
     driveDifference = targetDistance - Math.abs(frontLeft.getDrivePositionMeters());
     if ((Math.abs(driveDifference) < Constants.DriveConstants.DISTANCE_TOLERANCE) || (Timer.getFPGATimestamp() - startDriveTime > DriveConstants.MAX_DRIVE_AUTO_TIME))  {
@@ -351,7 +352,7 @@ public class Drivetrain {
     }
   }
 
-  public void autoAlignLimelight(double periodSeconds) {
+  public void autoAlignLimelight(double periodSeconds, double limelightAlignXSpeed) {
     final var rot_limelight = limelight.limelight_aim_proportional();
     final var forward_limelight = limelight.limelight_range_proportional();
     final var strafe_limelight = limelight.limlight_strafe_proportional();
@@ -366,16 +367,18 @@ public class Drivetrain {
     } else if (!isLimelightAligned()) {
       this.drive(forward_limelight, 0.0, 0.0, fieldRelative, periodSeconds);
     } else if (isLimelightAligned()) {
-
-
+      limelightAlignAutoDrive(periodSeconds, limelightAlignXSpeed);
+    } else if (limelightAlignDriveComplete(periodSeconds)) {
+        drive(0, 0, 0, false, periodSeconds);
     }
 
   }
 
   public void teleopAutoAlign(double periodSeconds) {
-    if (DRIVE_CONTROLLER.getXButton()) {
-      autoAlignLimelight(periodSeconds);
-
+    if (DRIVE_CONTROLLER.getRightTriggerAxis() > Constants.ControllerConstants.TRIGGER_DEADZONE) {
+      autoAlignLimelight(periodSeconds, 0.3);
+    } else if (DRIVE_CONTROLLER.getLeftTriggerAxis() > Constants.ControllerConstants.TRIGGER_DEADZONE) {
+      autoAlignLimelight(periodSeconds, -0.3);
     }
   }
 
