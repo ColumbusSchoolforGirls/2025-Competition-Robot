@@ -34,6 +34,7 @@ public class Limelight {
         SmartDashboard.putNumber("LimelightTX", getTX());
         SmartDashboard.putNumber("LimelightTY", getTY());
         SmartDashboard.putNumber("LimelightTA", getTA());
+        SmartDashboard.putNumber("LimelightROT", getRotation());
     }
 
     public double limelight_aim_proportional() { //gets it to flush angle with target

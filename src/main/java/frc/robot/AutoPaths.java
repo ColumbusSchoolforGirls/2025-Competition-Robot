@@ -65,9 +65,9 @@ public class AutoPaths {
     public double getXAxisSpeed() {
         LeftOrRight leftOrRight = leftOrRightChooser.getSelected();
         if (leftOrRight == LeftOrRight.LEFT) {
-            return -0.3;
+            return Constants.DriveConstants.BRANCH_DISTANCE;
         } else if (leftOrRight == LeftOrRight.RIGHT) {
-            return 0.3;
+            return 0.0;
         } else {
             return 0;
         }

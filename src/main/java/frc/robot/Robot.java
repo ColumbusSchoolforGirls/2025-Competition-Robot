@@ -204,6 +204,7 @@ public class Robot extends TimedRobot {
     coralSystem.elevator(0.85, -0.25, false, 0);
     swerve.teleopAutoAlign(getPeriod());
     // isFieldRelative(); //TODO: fix
+    swerve.teleopAutoAlignAngle(getPeriod());
 
 
   }
