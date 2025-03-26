@@ -112,7 +112,7 @@ public class Constants {
         public static final double SHOOT_TIME = 1.5; // TODO: change time
         public static final double MAX_ELEVATOR_AUTO_TIME = 3;
 
-        public static final double AUX_DEADZONE = 0.1;
+        public static final double AUX_DEADZONE = 0.05;
 
         public static final double ELEVATOR_GEAR_RATIO = 20; // 20:1 gear ratio
         public static final double ELEVATOR_DRUM_CIRCUMFERENCE = 0.959 * Math.PI; //0.942 * Math.PI; // inches per rev
@@ -140,7 +140,8 @@ public class Constants {
 
         public static final int REVERSE_CLIMBER_AUX_PORT = 2;
 
-        public static final double TRIGGER_DEADZONE = 0.1;
+        public static final double TRIGGER_DEADZONE = 0.05;
+        public static final double JOYSTICK_DEADZONE = 0.05;
     }
 
     public static final class AlgaeConstants {
