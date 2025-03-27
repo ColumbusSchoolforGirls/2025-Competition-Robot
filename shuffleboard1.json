@@ -501,7 +501,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "8,3": {
+          "6,0": {
             "size": [
               1,
               1
@@ -516,7 +516,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "8,0": {
+          "6,1": {
             "size": [
               1,
               1
@@ -529,10 +529,75 @@
               "_showGlyph": false
             }
           },
-          "4,0": {
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///limelight-coral/ta",
+              "_title": "/limelight-coral/ta",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///limelight-coral/ty",
+              "_title": "/limelight-coral/ty",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///limelight-coral/tx",
+              "_title": "/limelight-coral/tx",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "4,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/LimelightTX",
+              "_title": "/SmartDashboard/LimelightTX",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "4,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/LimelightTY",
+              "_title": "/SmartDashboard/LimelightTY",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,0": {
             "size": [
               4,
-              4
+              2
             ],
             "content": {
               "_type": "Camera Stream",
@@ -550,10 +615,10 @@
               "imageHeight": 0
             }
           },
-          "0,0": {
+          "0,2": {
             "size": [
               4,
-              4
+              2
             ],
             "content": {
               "_type": "Camera Stream",
@@ -571,19 +636,17 @@
               "imageHeight": 0
             }
           },
-          "8,1": {
+          "4,0": {
             "size": [
               1,
               1
             ],
             "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/limit swtich",
-              "_title": "/SmartDashboard/limit swtich",
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/LimelightROT",
+              "_title": "/SmartDashboard/LimelightROT",
               "_glyph": 148,
-              "_showGlyph": false,
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
+              "_showGlyph": false
             }
           }
         }

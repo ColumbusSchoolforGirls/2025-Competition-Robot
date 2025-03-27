@@ -197,14 +197,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    driveWithJoystick(false);
+    driveWithJoystick(false); 
     coralSystem.shoot();
     swerve.driverResetTurnEncoders();
     climber.climb();
     coralSystem.elevator(0.85, -0.25, false, 0);
     swerve.teleopAutoAlign(getPeriod());
     // isFieldRelative(); //TODO: fix
-    swerve.teleopAutoAlignAngle(getPeriod());
+    swerve.teleopAutoAlignTesting(getPeriod());
 
 
   }

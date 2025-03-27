@@ -8,6 +8,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 
 public class Limelight {
+    private static final long NO_APRIL_TAG_ID = -1;
+
     NetworkTableEntry tx; 
     NetworkTableEntry ty; 
     NetworkTableEntry tv; 
@@ -16,6 +18,8 @@ public class Limelight {
     NetworkTableEntry pos; 
     NetworkTableEntry pos1; 
     NetworkTableEntry pos2; 
+    NetworkTableEntry tid;
+    long lastAprilTagID = NO_APRIL_TAG_ID;
     
     public Limelight(String limelightName) {
         NetworkTable table = NetworkTableInstance.getDefault().getTable(limelightName);
@@ -26,6 +30,7 @@ public class Limelight {
         pos = table.getEntry("campose"); // 3D translation and rotations?
         pos1 = table.getEntry("targetpose_cameraspace");
         pos2 = table.getEntry("targetpose_robotspace");
+        tid = table.getEntry("tid");
 
     }
 
@@ -34,6 +39,7 @@ public class Limelight {
         SmartDashboard.putNumber("LimelightTY", getTY());
         SmartDashboard.putNumber("LimelightTA", getTA());
         SmartDashboard.putNumber("LimelightROT", getRotation());
+        SmartDashboard.putNumber("April Tag ID", getAprilTagID());
     }
 
     public double limelight_aim_proportional() { //gets it to flush angle with target
@@ -72,8 +78,9 @@ public class Limelight {
     }
 
     public double limlight_strafe_proportional() { //gets it aligned in x axis
-        double kP = .09;
-        double targetingStrafeSpeed = Math.max(getTX(), 0.1) * kP;// TODO: Add the limelight string back when we have the exact Apriltag ID
+        double kP = .03;
+        double targetingStrafeSpeed = getTX() * kP;// TODO: Add the limelight string back when we have the exact Apriltag ID
+        System.out.println(getTX());
         targetingStrafeSpeed *= DriveConstants.MAX_SPEED;
         targetingStrafeSpeed *= 1.0;
         return targetingStrafeSpeed;
@@ -82,6 +89,16 @@ public class Limelight {
     
 
     /** Get rotation z value from botpose array. */
+    public long getAprilTagID() {
+        long currentAprilTagID = tid.getInteger(NO_APRIL_TAG_ID);
+        if (currentAprilTagID == NO_APRIL_TAG_ID) {
+            return lastAprilTagID; 
+        } else {
+            lastAprilTagID = currentAprilTagID;
+            return currentAprilTagID;
+        }
+    }
+    
     public double getRotation() {
         return pos.getDoubleArray(new double[6])[4];
     }

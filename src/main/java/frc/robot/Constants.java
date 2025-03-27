@@ -45,6 +45,8 @@ public class Constants {
 
         public static final double BRANCH_DISTANCE = 0.33; //13 inches in meters
 
+        public static final double ROTATION_TOLERANCE = 3;
+
         public static final double MAX_SPEED = 3.0; // 3 meters per second
         public static final double MAX_ANGULAR_SPEED = Math.PI * 2; // 1 rotation per second
 
