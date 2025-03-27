@@ -85,7 +85,7 @@ public class Constants {
 
         public static final double CRAWL_SPEED = 0.5;
 
-        public static final double MAX_DRIVE_AUTO_TIME = 3.0;
+        public static final double MAX_DRIVE_AUTO_TIME = 8.0;
 
     }
 

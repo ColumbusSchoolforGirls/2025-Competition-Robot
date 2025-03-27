@@ -8,4 +8,5 @@ public enum AutoAction {
    ALIGN,
    SHOOT,
    STOP,
+   WAIT,
 }

@@ -13,8 +13,10 @@ import java.util.ArrayList;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.CoralConstants;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CoralSystem;
 import frc.robot.subsystems.Drivetrain;
@@ -32,6 +34,7 @@ public class Robot extends TimedRobot {
   ArrayList<AutoStep> autoActions = new ArrayList<>();
 
   int state;
+  double startWaitTIme;
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
@@ -107,6 +110,9 @@ public class Robot extends TimedRobot {
       case SHOOT:
         coralSystem.autoShootStart();
         break;
+      case WAIT:
+        startWaitTIme = Timer.getFPGATimestamp();
+        break;
       case STOP:
         break;
       default:
@@ -164,6 +170,11 @@ public class Robot extends TimedRobot {
         } else {
           coralSystem.autoShoot();
           coralSystem.elevator(0.85, -0.25, true, currentAction.getValue());
+        }
+        break;
+      case WAIT: 
+        if (Timer.getFPGATimestamp() - startWaitTIme > 1) {
+          goToNextState();
         }
         break;
       case STOP:

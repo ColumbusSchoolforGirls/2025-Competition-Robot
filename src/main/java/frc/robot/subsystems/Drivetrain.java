@@ -298,7 +298,7 @@ public class Drivetrain {
     
     driveDifference = targetDistance - Math.abs(frontLeft.getDrivePositionMeters());
     if (Math.abs(driveDifference) > Constants.DriveConstants.DISTANCE_TOLERANCE) {
-      drive(0.8, 0, 0, false, periodSeconds);
+      drive(1, 0, 0, false, periodSeconds);
     } 
   }
 
