@@ -23,10 +23,9 @@ public class Limelight {
         ty = table.getEntry("ty"); // y axis position
         tv = table.getEntry("tv"); // is there valid target
         ta = table.getEntry("ta"); // area in view
-        ts = table.getEntry("ts0"); // area in view
-        pos = table.getEntry("camera-pose_targetspace"); // 3D translation and rotations?
-        pos1 = table.getEntry("target-pose_cameraspace");
-        pos2 = table.getEntry("target-pose_robotspace");
+        pos = table.getEntry("campose"); // 3D translation and rotations?
+        pos1 = table.getEntry("targetpose_cameraspace");
+        pos2 = table.getEntry("targetpose_robotspace");
 
     }
 
@@ -52,7 +51,7 @@ public class Limelight {
         double targetingAngularVelocity = getRotation() * kP; // TODO: Add the limelight string back when we have the exact Apriltag ID
 
         // convert to radians per second for our drive method
-        targetingAngularVelocity *= DriveConstants.MAX_ANGULAR_SPEED*0.2; //TODO: make into constant
+        targetingAngularVelocity *= -DriveConstants.MAX_ANGULAR_SPEED*0.2; //TODO: make into constant
 
         // invert since tx is positive when the target is to the right of the crosshair
 
@@ -84,7 +83,7 @@ public class Limelight {
 
     /** Get rotation z value from botpose array. */
     public double getRotation() {
-        return pos.getDoubleArray(new double[6])[5];
+        return pos.getDoubleArray(new double[6])[4];
     }
 
     public double getTX() {
