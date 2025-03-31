@@ -7,7 +7,6 @@ package frc.robot;
 import static frc.robot.Constants.ControllerConstants.AUX;
 import static frc.robot.Constants.ControllerConstants.DRIVE_CONTROLLER; // Noah HATES this, but says it's not a bad use . . .
 
-import java.lang.ModuleLayer.Controller;
 import java.util.ArrayList;
 
 import edu.wpi.first.math.MathUtil;
@@ -16,7 +15,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ControllerConstants;
-import frc.robot.Constants.CoralConstants;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CoralSystem;
 import frc.robot.subsystems.Drivetrain;
@@ -40,7 +38,7 @@ public class Robot extends TimedRobot {
   private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
-  private boolean fieldRelative = false;
+  // private boolean fieldRelative = false;
 
   @Override
   public void robotInit() {

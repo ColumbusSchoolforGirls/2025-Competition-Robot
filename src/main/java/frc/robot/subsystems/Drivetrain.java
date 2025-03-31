@@ -22,9 +22,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import pabeles.concurrency.IntOperatorTask.Max;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 
 public class Drivetrain {
@@ -40,7 +37,6 @@ public class Drivetrain {
   private double autoDriveTimeLimit;
   private double forwardFactor;
   private double autoSpeed;
-  private double limelightAlignDriveDifference;
 
   AlignAction step = AlignAction.NOT_RUNNING;
 
