@@ -53,6 +53,7 @@ public class Robot extends TimedRobot {
     autoPaths.autoShuffleboardStartup();
     coralSystem.resetElevatorEncoders();
     coralSystem.setShootMotor();
+    swerve.setAlignStateNotRunning();
   }
 
   @Override
@@ -157,11 +158,11 @@ public class Robot extends TimedRobot {
           swerve.gyroTurn(getPeriod());
         }
         break;
-      case ALIGN:
+      case ALIGN: //TODO: need to add left and right align
         if (swerve.isLimelightAligned()) {
           goToNextState();
         } else {
-          swerve.autoAlignLimelight(getPeriod());
+          swerve.autoAlignLimelight(getPeriod(), true);
         }
         break;
       case ELEVATOR:
@@ -214,14 +215,18 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    driveWithJoystick(false);
+    driveWithJoystick(false); 
     coralSystem.shoot();
     swerve.driverResetTurnEncoders();
     climber.climb();
     coralSystem.elevator(0.85, -0.25, false, 0);
-    swerve.teleopAutoAlign(getPeriod());
-    // isFieldRelative(); //TODO: fix
 
+    if (!swerve.isStepStopped()) {
+      swerve.teleopAutoAlign();
+      swerve.autoAlignLimelight(getPeriod(), false);
+    }
+    // isFieldRelative(); //TODO: fix
+    swerve.resetAlignState();
 
   }
 

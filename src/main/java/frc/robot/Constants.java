@@ -43,6 +43,10 @@ public class Constants {
 
     public static final class DriveConstants {
 
+        public static final double BRANCH_DISTANCE = 0.33; //13 inches in meters
+
+        public static final double ROTATION_TOLERANCE = 3;
+
         public static final double MAX_SPEED = 3.0; // 3 meters per second
         public static final double MAX_ANGULAR_SPEED = Math.PI * 2; // 1 rotation per second
 
@@ -79,7 +83,7 @@ public class Constants {
 
         public static final double TX_TOLERANCE = 2.0;
         public static final double TY_TOLERANCE = 2.0;
-        public static final double TARGET_TA_VALUE = 3.40;
+        public static final double TARGET_TA_VALUE = 2.7;
 
         public static final double METERS_TO_INCHES = 39.37; //inches/meter
 

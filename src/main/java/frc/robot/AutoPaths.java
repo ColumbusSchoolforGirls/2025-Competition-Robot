@@ -19,6 +19,9 @@ public class AutoPaths {
         N, NE, SE, S, SW, NW // cardinal directions from the drive station perspective
     }
 
+    public enum LeftOrRight {
+        LEFT, RIGHT //TODO: put into auto
+    }
     public enum CoralNumber {
         ONE, TWO
     }
@@ -65,6 +68,28 @@ public class AutoPaths {
             return -angle;
         } else if (startingPosition == StartingPosition.RIGHT) {
             return angle;
+        } else {
+            return 0;
+        }
+    }
+
+    public double getXAxisSpeed() {
+        LeftOrRight leftOrRight = leftOrRightChooser.getSelected();
+        if (leftOrRight == LeftOrRight.LEFT) {
+            return Constants.DriveConstants.BRANCH_DISTANCE;
+        } else if (leftOrRight == LeftOrRight.RIGHT) {
+            return 0.0;
+        } else {
+            return 0;
+        }
+    }
+
+    public double getXAxisSpeed() {
+        LeftOrRight leftOrRight = leftOrRightChooser.getSelected();
+        if (leftOrRight == LeftOrRight.LEFT) {
+            return Constants.DriveConstants.BRANCH_DISTANCE;
+        } else if (leftOrRight == LeftOrRight.RIGHT) {
+            return 0.0;
         } else {
             return 0;
         }
@@ -119,7 +144,7 @@ public class AutoPaths {
 
     private final SendableChooser<StartingPosition> positionChooser = new SendableChooser<>();
     // private final SendableChooser<ReefFace> reefFaceChooser = new SendableChooser<>();
-    //private final SendableChooser<LeftOrRight> leftOrRightChooser = new SendableChooser<>();
+    private final SendableChooser<LeftOrRight> leftOrRightChooser = new SendableChooser<>();
     private final SendableChooser<CoralLevel> coralLevelChooser = new SendableChooser<>();
     // private final SendableChooser<ReefFace> reefFaceChooser2 = new SendableChooser<>();
     private final SendableChooser<CoralLevel> coralLevelChooser2 = new SendableChooser<>();
@@ -185,9 +210,10 @@ public class AutoPaths {
             path.addAll(Arrays.asList(
                 new AutoStep(AutoAction.DRIVE, getDriveDistance(), 8),
                 new AutoStep(AutoAction.TURN, getInitialTurnAngle()),
-                new AutoStep(AutoAction.ALIGN), // TODO: align left if in 2 coral auto
-                new AutoStep(AutoAction.DRIVE, 0.5, 2), //TODO: test: 30 centimeters to reef after aligning??
-                new AutoStep(AutoAction.ELEVATOR, getAutoTargetHeight())));        } else {
+                new AutoStep(AutoAction.ALIGN),
+                new AutoStep(AutoAction.DRIVE, 0.787, 2), //TODO: test: 30 centimeters to reef after aligning??
+                new AutoStep(AutoAction.ELEVATOR, getAutoTargetHeight())));
+        } else {
             return path;
         }
 
