@@ -4,6 +4,11 @@
 
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.ControllerConstants.DRIVE_CONTROLLER;
+
+import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -14,14 +19,13 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import com.studica.frc.AHRS;
-import com.studica.frc.AHRS.NavXComType;
-
 import frc.robot.Constants;
-import frc.robot.Constants.CoralConstants;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import static frc.robot.Constants.ControllerConstants.DRIVE_CONTROLLER;
+import pabeles.concurrency.IntOperatorTask.Max;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+
 
 public class Drivetrain {
   private Limelight limelight;
@@ -30,7 +34,10 @@ public class Drivetrain {
   private double targetAngle;
   private double driveDifference;
   private double targetDistance;
-  double startDriveTime;
+  private double startDriveTime;
+  private double autoDriveTimeLimit;
+  private double forwardFactor;
+  private double autoSpeed;
 
   private final Translation2d frontLeftLocation = new Translation2d(DriveConstants.TRANSLATION_2D_OFFSET,
       -DriveConstants.TRANSLATION_2D_OFFSET);
@@ -268,38 +275,53 @@ public class Drivetrain {
 
   double stallStart = 0.0;
 
+  public void testShuffle() {
+    SmartDashboard.putNumber("FL Drive", frontLeft.getDrivePositionMeters());
+    SmartDashboard.putNumber("FR Drive", frontRight.getDrivePositionMeters());
+    SmartDashboard.putNumber("BL Drive", backLeft.getDrivePositionMeters());
+    SmartDashboard.putNumber("BR Drive", backRight.getDrivePositionMeters());
+  }
+
   public boolean driveComplete() {
     driveDifference = targetDistance - Math.abs(frontLeft.getDrivePositionMeters());
-    if ((Math.abs(driveDifference) < Constants.DriveConstants.DISTANCE_TOLERANCE) || (Timer.getFPGATimestamp() - startDriveTime > DriveConstants.MAX_DRIVE_AUTO_TIME))  {
+    if ((Math.abs(driveDifference) < Constants.DriveConstants.DISTANCE_TOLERANCE) || (Timer.getFPGATimestamp() - startDriveTime > autoDriveTimeLimit))  {
       stallStart = 0.0;
       System.out.println("Reached drive target");
       return true;
     }
+    System.out.println(driveDifference);
 
-    // Prevents the robot from burning out driving continuously into a wall // TODO:
-    // check if this works
-    if (gyro.getVelocityY() < 0.01) {
-      if (stallStart != 0.0) {
-        if (Timer.getFPGATimestamp() - stallStart > 0.5) {
-          // System.out.println("STALL");
-          // return true;
-        }
-      } else {
-        System.out.println("Start stall");
-        stallStart = Timer.getFPGATimestamp();
-      }
-    } else {
-      stallStart = 0.0;
-    }
+    // the IMU velocty functions are inconsistent and not reliable, do not use, maybe use this as an outline for current spike detection
+  //   if (Math.abs(gyro.getVelocityY()) < 0.01) {
+  //     if (stallStart != 0.0) {
+  //       if (Timer.getFPGATimestamp() - stallStart > 0.2) {
+  //         System.out.println("!STALL!");
+  //         return true;
+  //       }
+  //     } else {
+  //       System.out.println("Start stall");
+  //       stallStart = Timer.getFPGATimestamp();
+  //     }
+  //   } else {
+  //     stallStart = 0.0;
+  //   }
     return false;
   }
 
   public void autoDrive(double periodSeconds) {
-    
     driveDifference = targetDistance - Math.abs(frontLeft.getDrivePositionMeters());
+
     if (Math.abs(driveDifference) > Constants.DriveConstants.DISTANCE_TOLERANCE) {
-      drive(1, 0, 0, false, periodSeconds);
-    } 
+      if (Math.abs(driveDifference) < 0.5) {
+        autoSpeed -= 0.12;
+      } else {
+        if (autoSpeed < AutoConstants.MAX_AUTO_SPEED) {
+          autoSpeed += 0.1;
+        }
+      }
+      autoSpeed = Math.max(autoSpeed, AutoConstants.MIN_AUTO_SPEED); // Speed can never switch signs on us
+      drive(autoSpeed*forwardFactor, 0, 0, false, periodSeconds);
+    }
   }
 
   public void startTurn(double angle) {
@@ -316,10 +338,17 @@ public class Drivetrain {
     gyro.reset();
   }
 
-  public void startDrive(double distanceMeters) {
+  public void startDrive(double distanceMeters, double timeLimit) {
     resetEncoders();
-    targetDistance = distanceMeters;
+    targetDistance = Math.abs(distanceMeters);
+    autoDriveTimeLimit = timeLimit;
+    if (distanceMeters < 0) {
+      forwardFactor = -1;
+    } else {
+      forwardFactor = 1;
+    }
     startDriveTime = Timer.getFPGATimestamp();
+    autoSpeed = AutoConstants.MIN_AUTO_SPEED;
   }
 
   public void gyroTurn(double periodSeconds) {

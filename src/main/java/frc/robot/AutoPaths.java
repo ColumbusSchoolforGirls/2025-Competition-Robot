@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.CoralConstants;
-import frc.robot.Constants.AutoConstants;
 
 public class AutoPaths {
 
@@ -56,9 +55,9 @@ public class AutoPaths {
         if (coralNumber == CoralNumber.ONE) {
             angle = 50;
         } else if (coralNumber == CoralNumber.TWO) {
-            angle = 140;
+            angle = 125;
         } else {
-            angle = 140; // to be safe for now, edit
+            angle = 125; // to be safe for now, edit
         }
         if (startingPosition == StartingPosition.MIDDLE) {
             return 0;
@@ -170,22 +169,25 @@ public class AutoPaths {
     //     System.out.println("CORAL LEVEL -----------------: " + coralLevelChooser.getSelected());
     // }
 
+    // TODO: CHANGE ALL VALUES BACK TO OG CONSTANT
     public ArrayList<AutoStep> buildPath() {
         ArrayList<AutoStep> path = new ArrayList<>();
 
         if (getIfSelected(leaveOnly)) {
-            path.add(new AutoStep(AutoAction.DRIVE, 4.5)); // AutoConstants.LEAVE_ONLY_DISTANCE
+            path.add(new AutoStep(AutoAction.DRIVE, -3, 5)); // AutoConstants.
+            // path.add(new AutoStep(AutoAction.WAIT));
+            // path.add(new AutoStep(AutoAction.SHOOT, getAutoTargetHeight()));
+            // path.add(new AutoStep(AutoAction.DRIVE, -1, 3));
             return path;
         }
 
         if (getIfSelected(toReef)) {
             path.addAll(Arrays.asList(
-                new AutoStep(AutoAction.DRIVE, getDriveDistance()),
+                new AutoStep(AutoAction.DRIVE, getDriveDistance(), 8),
                 new AutoStep(AutoAction.TURN, getInitialTurnAngle()),
                 new AutoStep(AutoAction.ALIGN), // TODO: align left if in 2 coral auto
-                new AutoStep(AutoAction.DRIVE, 0.5), //TODO: test: 30 centimeters to reef after aligning??
-                new AutoStep(AutoAction.ELEVATOR, getAutoTargetHeight())));
-        } else {
+                new AutoStep(AutoAction.DRIVE, 0.5, 2), //TODO: test: 30 centimeters to reef after aligning??
+                new AutoStep(AutoAction.ELEVATOR, getAutoTargetHeight())));        } else {
             return path;
         }
 
@@ -198,20 +200,26 @@ public class AutoPaths {
 
         if (getIfSelected(toStation)) {
             path.addAll(Arrays.asList(
-                    new AutoStep(AutoAction.DRIVE, 0.1),
-                    new AutoStep(AutoAction.TURN, -10),
+                    new AutoStep(AutoAction.DRIVE, -1, 8),
+                    new AutoStep(AutoAction.TURN, -60),
                     // new AutoStep(AutoAction.DRIVE, getSidewaysDistance()), // actually... drive right 0.9 meters
-                    new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()-0.1), // backward!!!
-                    new AutoStep(AutoAction.WAIT)));
+                    new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()+2.3, 8), // backward!!!
+                    new AutoStep(AutoAction.TURN, 54),
+                    new AutoStep(AutoAction.DRIVE, -1.2, 2.5),
+                    new AutoStep(AutoAction.WAIT, 2)));
         } else {
             return path;
         }
 
+        //Second coral! (second pt of auto)
         if (getIfSelected(toReefAgain)) {
             path.addAll(Arrays.asList(
-                    new AutoStep(AutoAction.TURN, getAtStationTurnAngle()),
+                    new AutoStep(AutoAction.DRIVE, 0.5, 8),
+                    new AutoStep(AutoAction.TURN, -54), // getAtStationTurnAngle()
+                    new AutoStep(AutoAction.DRIVE, 1.5, 8),
+                    new AutoStep(AutoAction.TURN, 60), // getAtStationTurnAngle()
                     new AutoStep(AutoAction.ALIGN),
-                    new AutoStep(AutoAction.DRIVE, 0.5)));
+                    new AutoStep(AutoAction.DRIVE, 0.5, 8)));
         } else {
             return path;
         }
@@ -224,10 +232,13 @@ public class AutoPaths {
 
         if (getIfSelected(toStationAgain)) {
             path.addAll(Arrays.asList(
-                    new AutoStep(AutoAction.DRIVE, getTurnRadiusDistance()),
-                    new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation())));
+                new AutoStep(AutoAction.DRIVE, -1, 8),
+                new AutoStep(AutoAction.TURN, -60),
+                // new AutoStep(AutoAction.DRIVE, getSidewaysDistance()), // actually... drive right 0.9 meters
+                new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()+2.3, 8), // backward!!!
+                new AutoStep(AutoAction.TURN, 54),
+                new AutoStep(AutoAction.DRIVE, -1.2, 2.5)));
         }
-
         return path;
     }
 }

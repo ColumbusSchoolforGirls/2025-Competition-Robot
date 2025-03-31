@@ -58,12 +58,12 @@ public class Constants {
         public static final int FR_DRIVE_ID = 4;
         public static final int FR_TURN_ID = 5;
         public static final int FR_DIO = 7;
-        public static final double FR_CHASSIS_ANGULAR_OFFSET = (3.4 * Math.PI) / 180; 
+        public static final double FR_CHASSIS_ANGULAR_OFFSET = (2.9 * Math.PI) / 180; //3.4
 
         public static final int BL_DRIVE_ID = 6;
         public static final int BL_TURN_ID = 7;
         public static final int BL_DIO = 9;
-        public static final double BL_CHASSIS_ANGULAR_OFFSET = (85 * Math.PI) / 180; 
+        public static final double BL_CHASSIS_ANGULAR_OFFSET = (85 * Math.PI) / 180; //85
 
         public static final int BR_DRIVE_ID = 8;
         public static final int BR_TURN_ID = 9;
@@ -93,6 +93,9 @@ public class Constants {
         public static final double INITIAL_DISTANCE = 58.5; // inches
         public static final double LEAVE_ONLY_DISTANCE = 1.0;//10.0/DriveConstants.METERS_TO_INCHES; // inches
 
+        public static final double MAX_AUTO_SPEED = 2.5;
+        public static final double MIN_AUTO_SPEED = 0.2;
+
     }
 
     public static final class CoralConstants {
@@ -109,7 +112,7 @@ public class Constants {
 
         public static final double SHOOT_MOTOR_SPEED = 1.0;
 
-        public static final double SHOOT_TIME = 1.5; // TODO: change time
+        public static final double SHOOT_TIME = 1.0; // TODO: change time
         public static final double MAX_ELEVATOR_AUTO_TIME = 3;
 
         public static final double AUX_DEADZONE = 0.05;

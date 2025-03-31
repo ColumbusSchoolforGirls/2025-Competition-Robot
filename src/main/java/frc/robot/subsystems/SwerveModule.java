@@ -67,7 +67,7 @@ public class SwerveModule implements SwerveModuleInterface {
     // setBrakeMode();
 
     this.chassisAngularOffset = chassisAngularOffset;
-    System.out.println("chassis angular offset " + chassisAngularOffset);
+    // System.out.println("chassis angular offset " + chassisAngularOffset);
     driveEncoder.setPosition(0);
     turnRelativeEncoder.setPosition(0);
   }
@@ -154,18 +154,18 @@ public class SwerveModule implements SwerveModuleInterface {
   
 
     // TODO: add later with feedforward control
-    // // Calculate the drive output from the drive PID controller.
-    // final double driveOutput =cdrivePIDController.calculate(driveEncoder.getRate(), desiredState.speedMetersPerSecond);
+    // Calculate the drive output from the drive PID controller.
+    // final double driveOutput = drivePIDController.calculate(driveEncoder.getRate(), desiredState.speedMetersPerSecond);
 
     // final double finalDriveFeedforward = driveFeedforward.calculate(desiredState.speedMetersPerSecond);
 
     // // Calculate the turning motor output from the turning PID controller.
-    // final double turnOutput = turningPIDController.calculate(turningEncoder.getDistance(), desiredState.angle.getRadians());
+    // final double turnOutput = turningPIDController.calculate(turnRelativeEncoder.getDistance(), desiredState.angle.getRadians());
 
     // final double finalTurnFeedforward = turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);
 
     // driveMotor.setVoltage(driveOutput + finalDriveFeedforward);
-    // turningMotor.setVoltage(turnOutput + finalTurnFeedforward);
+    // turnMotor.setVoltage(turnOutput + finalTurnFeedforward);
   }
 
   public void setCurrentLimit() { // TODO: is this written correctly?

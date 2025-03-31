@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
   ArrayList<AutoStep> autoActions = new ArrayList<>();
 
   int state;
-  double startWaitTIme;
+  double startWaitTime;
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(3);
@@ -61,6 +61,12 @@ public class Robot extends TimedRobot {
     swerve.updateOdometry();
     swerve.periodic();
     swerve.updateSmartDashboard();
+    swerve.testShuffle();
+
+    if (DRIVE_CONTROLLER.getRightBumperButtonPressed()) {
+      swerve.driveInit();
+    }
+
     SmartDashboard.putBoolean("limit swtich", coralSystem.isElevatorLimitReached());
 
 
@@ -74,7 +80,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     swerve.setBrakeMode();
-    swerve.resetTurnEncoders();
+    swerve.driveInit();
     autoActions = autoPaths.buildPath();
     System.out.println("Auto path: ");
     autoActions.forEach(action -> System.out.println(action));
@@ -95,9 +101,11 @@ public class Robot extends TimedRobot {
     }
     System.out.println("New action: " + currentAction);
 
+    swerve.stop(getPeriod());
+
     switch (currentAction.getAction()) {
       case DRIVE:
-        swerve.startDrive(currentAction.getValue());
+        swerve.startDrive(currentAction.getValue(), currentAction.getTimeLimit());
         break;
       case TURN:
         swerve.startTurn(currentAction.getValue());
@@ -111,7 +119,7 @@ public class Robot extends TimedRobot {
         coralSystem.autoShootStart();
         break;
       case WAIT:
-        startWaitTIme = Timer.getFPGATimestamp();
+        startWaitTime = Timer.getFPGATimestamp();
         break;
       case STOP:
         break;
@@ -147,7 +155,6 @@ public class Robot extends TimedRobot {
           goToNextState();
         } else {
           swerve.gyroTurn(getPeriod());
-          System.out.println(swerve.getHeading());
         }
         break;
       case ALIGN:
@@ -173,7 +180,9 @@ public class Robot extends TimedRobot {
         }
         break;
       case WAIT: 
-        if (Timer.getFPGATimestamp() - startWaitTIme > 1) {
+        if (Timer.getFPGATimestamp() - startWaitTime > 5) {
+          startWaitTime = 0;
+          System.out.println("Wait complete");
           goToNextState();
         }
         break;
@@ -243,6 +252,8 @@ public class Robot extends TimedRobot {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
 
+
+    //swerve.drive(0.8, 0, 0, fieldRelative, getPeriod()); FOR TESTING OFFSET
     swerve.drive(xSpeed, ySpeed, rot, fieldRelative, getPeriod());
   }
 
