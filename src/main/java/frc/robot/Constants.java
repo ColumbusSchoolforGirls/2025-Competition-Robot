@@ -62,7 +62,7 @@ public class Constants {
         public static final int FR_DRIVE_ID = 4;
         public static final int FR_TURN_ID = 5;
         public static final int FR_DIO = 7;
-        public static final double FR_CHASSIS_ANGULAR_OFFSET = (3.4 * Math.PI) / 180; 
+        public static final double FR_CHASSIS_ANGULAR_OFFSET = (2.9 * Math.PI) / 180; 
 
         public static final int BL_DRIVE_ID = 6;
         public static final int BL_TURN_ID = 7;
@@ -83,7 +83,7 @@ public class Constants {
 
         public static final double TX_TOLERANCE = 2.0;
         public static final double TY_TOLERANCE = 2.0;
-        public static final double TARGET_TA_VALUE = 3.40;
+        public static final double TARGET_TA_VALUE = 2.7;
 
         public static final double METERS_TO_INCHES = 39.37; //inches/meter
 

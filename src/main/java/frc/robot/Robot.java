@@ -53,6 +53,7 @@ public class Robot extends TimedRobot {
     autoPaths.autoShuffleboardStartup();
     coralSystem.resetElevatorEncoders();
     coralSystem.setShootMotor();
+    swerve.setAlignStateNotRunning();
   }
 
   @Override
@@ -151,7 +152,7 @@ public class Robot extends TimedRobot {
         if (swerve.isLimelightAligned()) {
           goToNextState();
         } else {
-          swerve.autoAlignLimelight(getPeriod(), autoPaths.getXAxisSpeed());
+          swerve.autoAlignLimelight(getPeriod(), true);
         }
         break;
       case ELEVATOR:
@@ -202,10 +203,13 @@ public class Robot extends TimedRobot {
     swerve.driverResetTurnEncoders();
     climber.climb();
     coralSystem.elevator(0.85, -0.25, false, 0);
-    swerve.teleopAutoAlign(getPeriod());
-    // isFieldRelative(); //TODO: fix
-    swerve.teleopAutoAlignTesting(getPeriod());
 
+    if (!swerve.isStepStopped()) {
+      swerve.teleopAutoAlign();
+      swerve.autoAlignLimelight(getPeriod(), false);
+    }
+    // isFieldRelative(); //TODO: fix
+    swerve.resetAlignState();
 
   }
 
