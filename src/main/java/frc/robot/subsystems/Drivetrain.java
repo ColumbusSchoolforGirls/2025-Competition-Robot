@@ -36,8 +36,11 @@ public class Drivetrain {
   private double targetAlignAngle;
   private double driveDifference;
   private double targetDistance;
-  private double limelightAlignDriveDifference;
   private double startDriveTime;
+  private double autoDriveTimeLimit;
+  private double forwardFactor;
+  private double autoSpeed;
+  private double limelightAlignDriveDifference;
 
   AlignAction step = AlignAction.NOT_RUNNING;
 
@@ -46,9 +49,6 @@ public class Drivetrain {
   }
 
   AlignAction[] alignActions = {};
-  private double autoDriveTimeLimit;
-  private double forwardFactor;
-  private double autoSpeed;
 
   private final Translation2d frontLeftLocation = new Translation2d(DriveConstants.TRANSLATION_2D_OFFSET,
       -DriveConstants.TRANSLATION_2D_OFFSET);
@@ -342,6 +342,21 @@ public class Drivetrain {
     }
   }
 
+  // public void limelightAlignForwardDrive(double periodSeconds) {
+  //   limelightAlignDriveDifference = 0.787 - Math.abs(frontLeft.getDrivePositionMeters());
+  //   if (Math.abs(limelightAlignDriveDifference) > Constants.DriveConstants.DISTANCE_TOLERANCE) {
+  //     drive(0.3, 0.0, 0, false, periodSeconds); //figure out speeds
+  //   }
+  // }
+
+  // public void limelightAlignSideDrive(double periodSeconds, double targetSideAlignDistance) {
+  //   limelightAlignDriveDifference = targetSideAlignDistance - Math.abs(frontLeft.getDrivePositionMeters()); //maybe change 0.5
+  //   if (Math.abs(limelightAlignDriveDifference) > Constants.DriveConstants.DISTANCE_TOLERANCE) {
+  //     drive(0.0, -0.2, 0, false, periodSeconds); //figure out speeds
+  //   }
+
+  // }
+
   public void startTurn(double angle) {
     zeroHeading();
     this.targetAngle = (angle + getHeading());
@@ -367,6 +382,18 @@ public class Drivetrain {
     }
     startDriveTime = Timer.getFPGATimestamp();
     autoSpeed = AutoConstants.MIN_AUTO_SPEED;
+  }
+
+  public void autoAlignTurn( double periodSeconds, double targetAlignAngle) {
+    alignTurnDifference = (getHeading() - targetAlignAngle);
+    
+    if (Math.abs(alignTurnDifference) < Constants.DriveConstants.TURN_TOLERANCE) {
+      drive(0, 0, 0, false, periodSeconds);
+    } else if (alignTurnDifference < 0) {
+      drive(0, 0, 0.1 * Math.abs(gyroDifference) + 0.5, false, periodSeconds);
+    } else if (alignTurnDifference > 0) {
+      drive(0, 0, -0.1 * gyroDifference - 0.5, false, periodSeconds);
+    }
   }
 
   public void gyroTurn(double periodSeconds) {
