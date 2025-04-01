@@ -93,7 +93,7 @@ public class Limelight {
     }
 
     public double limlight_strafe_proportional() { //gets it aligned in x axis
-        double kP = .01;
+        double kP = .02;
         targetingStrafeSpeed = getBestTX() * kP;// TODO: Add the limelight string back when we have the exact Apriltag ID
         System.out.println(getBestTX());
         targetingStrafeSpeed *= DriveConstants.MAX_SPEED;
