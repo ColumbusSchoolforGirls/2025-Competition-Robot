@@ -200,7 +200,7 @@ public class AutoPaths {
                 new AutoStep(AutoAction.DRIVE, getDriveDistance(), 8),
                 new AutoStep(AutoAction.TURN, getInitialTurnAngle()),
                 new AutoStep(AutoAction.ALIGN),
-                new AutoStep(AutoAction.DRIVE, 0.787, 2), //TODO: test: 30 centimeters to reef after aligning??
+                new AutoStep(AutoAction.DRIVE, 0.25, 1.25), //TODO: test: 30 centimeters to reef after aligning??
                 new AutoStep(AutoAction.ELEVATOR, getAutoTargetHeight())));
         } else {
             return path;

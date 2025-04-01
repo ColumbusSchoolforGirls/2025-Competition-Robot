@@ -74,7 +74,7 @@ public class Constants {
         public static final int BR_DIO = 6;
         public static final double BR_CHASSIS_ANGULAR_OFFSET = -178 * Math.PI / 180;
 
-        public static final int TURN_TOLERANCE = 2; // TODO: need to change when testing turning
+        public static final int TURN_TOLERANCE = 1; // TODO: need to change when testing turning
         public static final double DISTANCE_TOLERANCE = 0.02; // TODO: need to change when testing distance
 
         // Gyro
@@ -83,7 +83,7 @@ public class Constants {
 
         public static final double TX_TOLERANCE = 2.0;
         public static final double TY_TOLERANCE = 2.0;
-        public static final double TARGET_TA_VALUE = 2.7;
+        public static final double TARGET_TA_VALUE = 12.8;
 
         public static final double METERS_TO_INCHES = 39.37; //inches/meter
 
