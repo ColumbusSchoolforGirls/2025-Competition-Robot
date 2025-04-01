@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.CoralConstants;
+import frc.robot.Constants.AutoConstants;
 
 public class AutoPaths {
 
@@ -188,10 +189,10 @@ public class AutoPaths {
         ArrayList<AutoStep> path = new ArrayList<>();
 
         if (getIfSelected(leaveOnly)) {
-            path.add(new AutoStep(AutoAction.DRIVE, -3, 5)); // AutoConstants.
-            // path.add(new AutoStep(AutoAction.WAIT));
-            // path.add(new AutoStep(AutoAction.SHOOT, getAutoTargetHeight()));
-            // path.add(new AutoStep(AutoAction.DRIVE, -1, 3));
+            // path.add(new AutoStep(AutoAction.DRIVE, AutoConstants.LEAVE_ONLY_DISTANCE, 3));
+            path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L4_HEIGHT));
+            path.add(new AutoStep(AutoAction.SHOOT, CoralConstants.L4_HEIGHT));
+            path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L2_HEIGHT));
             return path;
         }
 

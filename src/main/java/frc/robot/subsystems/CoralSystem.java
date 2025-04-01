@@ -151,13 +151,15 @@ public class CoralSystem {
 
     public void driveElevator(double normalElevatorSpeed) {
         double elevatorSpeed = -AUX.getLeftY(); //it is inverted
-;
         if (Math.abs(elevatorSpeed) > CoralConstants.AUX_DEADZONE) {
-            setElevator(elevatorSpeed * normalElevatorSpeed);
+            double speed = elevatorSpeed * normalElevatorSpeed;
+            if (isElevatorLimitReached()) {
+                speed *= 1/4;
+            }
+            setElevator(speed);
         } else if (Math.abs(elevatorSpeed) < CoralConstants.AUX_DEADZONE) {
             setElevator(0);
         }
-  
     }
 
     // public void driveElevator(double normalElevatorSpeed) {
