@@ -41,7 +41,7 @@ public class Drivetrain {
   AlignAction step = AlignAction.NOT_RUNNING;
 
   enum AlignAction {
-    TURN, STRAFE, RANGE, DRIVE_FORWARD, DRIVE_SIDEWAYS, NOT_RUNNING, STOPPED, TURN_AGAIN
+    TURN, STRAFE_AND_RANGE, DRIVE_FORWARD, DRIVE_SIDEWAYS, NOT_RUNNING, STOPPED, TURN_AGAIN
   }
 
   AlignAction[] alignActions = {};
@@ -424,16 +424,11 @@ public class Drivetrain {
     return DRIVE_CONTROLLER.getLeftTriggerAxis() > Constants.ControllerConstants.TRIGGER_DEADZONE || DRIVE_CONTROLLER.getRightTriggerAxis() > Constants.ControllerConstants.TRIGGER_DEADZONE;
   }
 
-  public void strafe(double periodSeconds) {
+  public void strafeAndRange(double periodSeconds) {
     final var strafe_limelight = limelight.limlight_strafe_proportional();
-    boolean fieldRelative = false;
-    this.drive(0.0, strafe_limelight, 0.0, fieldRelative, periodSeconds);
-  }
-
-  public void range(double periodSeconds) {
     final var forward_limelight = limelight.limelight_range_proportional();
     boolean fieldRelative = false;
-    this.drive(forward_limelight, 0.0, 0.0, fieldRelative, periodSeconds);
+    this.drive(forward_limelight, strafe_limelight, 0.0, fieldRelative, periodSeconds);
   }
 
   public void setAlignStateNotRunning() {
@@ -450,29 +445,21 @@ public class Drivetrain {
         step = AlignAction.TURN;
       } 
     } else if (step == AlignAction.TURN) {
-      if ((triggersPressed() && !isLimelightStrafeAligned() && turnToAprilTagComplete())|| isAuto) {
-        step = AlignAction.STRAFE;
+      if ((triggersPressed() && turnToAprilTagComplete())|| isAuto && turnToAprilTagComplete()) {
+        step = AlignAction.STRAFE_AND_RANGE;
       } else if (!triggersPressed()) {
         step = AlignAction.STOPPED;
       }
       turnToAprilTag(periodSeconds);
-    } else if (step == AlignAction.STRAFE) {
+    } else if (step == AlignAction.STRAFE_AND_RANGE) {
       //turnToAprilTag(periodSeconds);
-      if ((triggersPressed() && !isLimelightAligned() && isLimelightStrafeAligned()) || isAuto) {
+      if ((triggersPressed() && isLimelightAligned() && isLimelightStrafeAligned()) || isAuto && isLimelightAligned() && isLimelightStrafeAligned() ) {
         //resetTurnEncoders();
-        step = AlignAction.RANGE;
-      } else if (!triggersPressed()) {
-        step = AlignAction.STOPPED;
-      }
-      strafe(periodSeconds);
-    } else if (step == AlignAction.RANGE) {
-      //turnToAprilTag(periodSeconds);
-      if (isLimelightAligned() || isAuto) {
         step = AlignAction.TURN_AGAIN;
       } else if (!triggersPressed()) {
         step = AlignAction.STOPPED;
       }
-      range(periodSeconds);
+      strafeAndRange(periodSeconds);
     } else if (step == AlignAction.TURN_AGAIN) {
       if (turnToAprilTagComplete() || !triggersPressed() || !isAuto) {
         step = AlignAction.STOPPED;

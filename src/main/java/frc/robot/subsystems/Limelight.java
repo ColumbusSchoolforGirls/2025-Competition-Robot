@@ -27,6 +27,8 @@ public class Limelight {
     long lastAprilTagID = NO_APRIL_TAG_ID;
     double lastTXValue = NO_TX;
     double lastTAValue = NO_TA;
+    double targetingForwardSpeed = 0;
+    double targetingStrafeSpeed = 0;
 
     LinearFilter filter = LinearFilter.singlePoleIIR(0.1, 0.02);
     
@@ -50,6 +52,9 @@ public class Limelight {
         SmartDashboard.putNumber("LimelightTA", getLinearFilterTA());
         //SmartDashboard.putNumber("LimelightROT", getRotation());
         SmartDashboard.putNumber("April Tag ID", getAprilTagID());
+        SmartDashboard.putNumber("target strafe speed:", targetingStrafeSpeed);
+        SmartDashboard.putNumber("target forward speed:", targetingForwardSpeed);
+   
     }
 
     // public double limelight_aim_proportional() { //gets it to flush angle with target
@@ -81,15 +86,15 @@ public class Limelight {
     // "ta" (area) for target ranging rather than "ty"
     public double limelight_range_proportional() { //brings it forward to desired area of target
         double kP = .09;
-        double targetingForwardSpeed = Math.max(Math.sqrt(Math.abs((Constants.DriveConstants.TARGET_TA_VALUE - getLinearFilterTA()))), 0.1) * kP;// TODO: Add the limelight string back when we have the exact Apriltag ID
+        targetingForwardSpeed = Math.max(Math.sqrt(Math.abs((Constants.DriveConstants.TARGET_TA_VALUE - getLinearFilterTA()))), 0.1) * kP;// TODO: Add the limelight string back when we have the exact Apriltag ID
         targetingForwardSpeed *= DriveConstants.MAX_SPEED;
         targetingForwardSpeed *= 1.0;
         return targetingForwardSpeed;
     }
 
     public double limlight_strafe_proportional() { //gets it aligned in x axis
-        double kP = .03;
-        double targetingStrafeSpeed = getBestTX() * kP;// TODO: Add the limelight string back when we have the exact Apriltag ID
+        double kP = .01;
+        targetingStrafeSpeed = getBestTX() * kP;// TODO: Add the limelight string back when we have the exact Apriltag ID
         System.out.println(getBestTX());
         targetingStrafeSpeed *= DriveConstants.MAX_SPEED;
         targetingStrafeSpeed *= 1.0;
