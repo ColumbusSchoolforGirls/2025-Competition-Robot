@@ -83,7 +83,7 @@ public class Constants {
 
         public static final double TX_TOLERANCE = 2.0;
         public static final double TY_TOLERANCE = 2.0;
-        public static final double TARGET_TA_VALUE = 12.8;
+        public static final double TARGET_TA_VALUE = 12.5; //was 12.8
 
         public static final double METERS_TO_INCHES = 39.37; //inches/meter
 
