@@ -117,7 +117,7 @@ public class AutoPaths {
             return 0;
         } else if (startingPosition == StartingPosition.LEFT || startingPosition == StartingPosition.RIGHT) {
             if (coralNumber == CoralNumber.ONE) {
-                return 2.0;
+                return 1.8;
             } else if (coralNumber == CoralNumber.TWO) {
                 return 4.9;
             } else {

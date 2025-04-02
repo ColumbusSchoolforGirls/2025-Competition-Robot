@@ -445,7 +445,7 @@ public class Drivetrain {
         step = AlignAction.TURN;
       } 
     } else if (step == AlignAction.TURN) {
-      if ((triggersPressed() && turnToAprilTagComplete())|| isAuto && turnToAprilTagComplete()) {
+      if ((triggersPressed() && turnToAprilTagComplete())|| (isAuto && turnToAprilTagComplete())) {
         step = AlignAction.STRAFE_AND_RANGE;
       } else if (!triggersPressed()) {
         step = AlignAction.STOPPED;
@@ -453,9 +453,9 @@ public class Drivetrain {
       turnToAprilTag(periodSeconds);
     } else if (step == AlignAction.STRAFE_AND_RANGE) {
       //turnToAprilTag(periodSeconds);
-      if ((triggersPressed() && isLimelightAligned() && isLimelightStrafeAligned()) || isAuto && isLimelightAligned() && isLimelightStrafeAligned() ) {
+      if ((triggersPressed() && isLimelightAligned() && isLimelightStrafeAligned()) || (isAuto && isLimelightAligned() && isLimelightStrafeAligned())) {
         //resetTurnEncoders();
-        step = AlignAction.TURN_AGAIN;
+        step = AlignAction.STOPPED; // TURN_AGAIN
       } else if (!triggersPressed()) {
         step = AlignAction.STOPPED;
       }
@@ -488,11 +488,11 @@ public class Drivetrain {
 
   public void turnToAprilTag(double periodSeconds) {
     if (limelight.getAprilTagID() == 10 || limelight.getAprilTagID() == 21) {
-      autoAlignTurn(periodSeconds, 0);
+      autoAlignTurn(periodSeconds, -60); // TODO: CHANGE BACK TO 0
     } else if (limelight.getAprilTagID() == 20 || limelight.getAprilTagID() == 11) {
-      autoAlignTurn(periodSeconds, -30); //change w testing
+      autoAlignTurn(periodSeconds, -60); //change w testing
     } else if (limelight.getAprilTagID() == 22 || limelight.getAprilTagID() == 9) {
-      autoAlignTurn(periodSeconds, 30); //change w testing
+      autoAlignTurn(periodSeconds, 60); //change w testing
     } else if (limelight.getAprilTagID() == 19 || limelight.getAprilTagID() == 6) {
       autoAlignTurn(periodSeconds, -150); //change w testing
     } else if (limelight.getAprilTagID() == 17 || limelight.getAprilTagID() == 8) {
@@ -519,7 +519,11 @@ public class Drivetrain {
 
   public boolean isLimelightStrafeAligned() {
     double tx = limelight.getBestTX();
-    return (Math.abs(tx) < Constants.DriveConstants.TX_TOLERANCE);
+    boolean aligned = (Math.abs(tx) < Constants.DriveConstants.TX_TOLERANCE);
+    if (aligned) {
+      System.out.println("STRAFE Aligned");
+    }
+    return aligned;
   }
 
   public boolean isLimelightAligned() {
@@ -527,7 +531,11 @@ public class Drivetrain {
     // double ty = limelight.getTY();
     double ta = limelight.getLinearFilterTA();
     // TODO: tune these on robot
-    return (Math.abs(ta) >= Constants.DriveConstants.TARGET_TA_VALUE - 0.02);
+    boolean aligned = (Math.abs(ta) >= Constants.DriveConstants.TARGET_TA_VALUE - 0.02);
+    if (aligned) {
+      System.out.println("Aligned");
+    }
+    return aligned;
   }
 
   public void stop(double periodSeconds) {
