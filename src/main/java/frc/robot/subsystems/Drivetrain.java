@@ -35,7 +35,7 @@ public class Drivetrain {
   private double targetDistance;
   private double startDriveTime;
   private double autoDriveTimeLimit;
-  private double forwardFactor;
+  private double positiveFactor;
   private double autoSpeed;
 
   AlignAction step = AlignAction.NOT_RUNNING;
@@ -340,7 +340,23 @@ public class Drivetrain {
         }
       }
       autoSpeed = Math.max(autoSpeed, AutoConstants.MIN_AUTO_SPEED); // Speed can never switch signs on us
-      drive(autoSpeed*forwardFactor, 0, 0, false, periodSeconds);
+      drive(autoSpeed*positiveFactor, 0, 0, false, periodSeconds);
+    }
+  }
+
+  public void autoSideDrive(double periodSeconds) {
+    driveDifference = targetDistance - Math.abs(frontLeft.getDrivePositionMeters());
+
+    if (Math.abs(driveDifference) > Constants.DriveConstants.DISTANCE_TOLERANCE) {
+      if (Math.abs(driveDifference) < 0.5) {
+        autoSpeed -= 0.12;
+      } else {
+        if (autoSpeed < AutoConstants.MAX_AUTO_SPEED) {
+          autoSpeed += 0.1;
+        }
+      }
+      autoSpeed = Math.max(autoSpeed, AutoConstants.MIN_AUTO_SPEED); // Speed can never switch signs on us
+      drive(0, autoSpeed*positiveFactor, 0, false, periodSeconds);
     }
   }
 
@@ -377,9 +393,9 @@ public class Drivetrain {
     targetDistance = Math.abs(distanceMeters);
     autoDriveTimeLimit = timeLimit;
     if (distanceMeters < 0) {
-      forwardFactor = -1;
+      positiveFactor = -1;
     } else {
-      forwardFactor = 1;
+      positiveFactor = 1;
     }
     startDriveTime = Timer.getFPGATimestamp();
     autoSpeed = AutoConstants.MIN_AUTO_SPEED;
@@ -447,31 +463,40 @@ public class Drivetrain {
   public void autoAlignLimelight(double periodSeconds, boolean isAuto) {
     //final var rot_limelight = limelight.limelight_aim_proportional();
     // while using Limelight, turn off field-relative driving.
-    //System.out.println("step:" + step);
 
     if (step == AlignAction.NOT_RUNNING) {
       if (triggersPressed() || isAuto) { //TODO: need to make sure auto can be implemented
         step = AlignAction.TURN;
+        System.out.println("step:" + step);
       } 
     } else if (step == AlignAction.TURN) {
-      if ((triggersPressed() && turnToAprilTagComplete()) || (isAuto && turnToAprilTagComplete())) {
+      if (((triggersPressed() || isAuto) && turnToAprilTagComplete())) {
         step = AlignAction.STRAFE_AND_RANGE;
-      } else if (!triggersPressed()) {
+        System.out.println("step:" + step);
+      } else if (!triggersPressed() && !isAuto) {
         step = AlignAction.STOPPED;
+        stop(periodSeconds);
+        System.out.println("step:" + step);
       }
       turnToAprilTag(periodSeconds);
     } else if (step == AlignAction.STRAFE_AND_RANGE) {
       //turnToAprilTag(periodSeconds);
-      if ((triggersPressed() && isLimelightAligned() && isLimelightStrafeAligned()) || (isAuto && isLimelightAligned() && isLimelightStrafeAligned())) {
+      if (((triggersPressed() || isAuto) && isLimelightAligned() && isLimelightStrafeAligned())) {
         //resetTurnEncoders();
         step = AlignAction.STOPPED; // TURN_AGAIN
-      } else if (!triggersPressed()) {
+        stop(periodSeconds);
+        System.out.println("step:" + step);
+      } else if ((!triggersPressed() && !isAuto)) {
         step = AlignAction.STOPPED;
+        stop(periodSeconds);
+        System.out.println("step:" + step);
       }
       strafeAndRange(periodSeconds);
     } else if (step == AlignAction.TURN_AGAIN) {
-      if (turnToAprilTagComplete() || !triggersPressed() || !isAuto) {
+      if (turnToAprilTagComplete() || (!triggersPressed() && !isAuto)) {
         step = AlignAction.STOPPED;
+        stop(periodSeconds);
+        System.out.println("step:" + step);
       }
       turnToAprilTag(periodSeconds);
     }
@@ -480,20 +505,6 @@ public class Drivetrain {
   public boolean isStepStopped() {
     return step == AlignAction.STOPPED;
   }
-
-
-    // if (!turnToAprilTagComplete()) {
-    //   turnToAprilTag(periodSeconds);
-    // } else if (!isLimelightStrafeAligned() && turnToAprilTagComplete()) {
-    //   this.drive(0.0, strafe_limelight, 0.0, fieldRelative, periodSeconds);
-    // } else if (!isLimelightAligned() && isLimelightStrafeAligned()) {
-    //   this.drive(forward_limelight, 0.0, 0.0, fieldRelative, periodSeconds);
-    //   resetEncoders();
-    // } else if (isLimelightAligned()) {
-    //   limelightAlignSideDrive(periodSeconds, targetSideAlignDistance);
-    // } else if (limelightSideDriveComplete(periodSeconds, targetSideAlignDistance)) {
-    //     drive(0, 0, 0, false, periodSeconds);
-    // }
 
   public void turnToAprilTag(double periodSeconds) {
     if (limelight.getAprilTagID() == 10 || limelight.getAprilTagID() == 21) {

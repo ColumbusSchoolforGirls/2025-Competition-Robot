@@ -188,7 +188,7 @@ public class AutoPaths {
     public ArrayList<AutoStep> buildPath() {
         ArrayList<AutoStep> path = new ArrayList<>();
 
-        if (getIfSelected(leaveOnly)) {
+        if (getIfSelected(leaveOnly)) { // TODO: remove testing
             // path.add(new AutoStep(AutoAction.DRIVE, AutoConstants.LEAVE_ONLY_DISTANCE, 3));
             path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L4_HEIGHT));
             path.add(new AutoStep(AutoAction.SHOOT, CoralConstants.L4_HEIGHT));
@@ -201,7 +201,7 @@ public class AutoPaths {
                 new AutoStep(AutoAction.DRIVE, getDriveDistance(), 8),
                 new AutoStep(AutoAction.TURN, getInitialTurnAngle()),
                 new AutoStep(AutoAction.ALIGN),
-                new AutoStep(AutoAction.DRIVE, 0.25, 1.25), //TODO: test: 30 centimeters to reef after aligning??
+                new AutoStep(AutoAction.DRIVE, 0.25, 1), //TODO: test: 30 centimeters to reef after aligning??
                 new AutoStep(AutoAction.ELEVATOR, getAutoTargetHeight())));
         } else {
             return path;
@@ -216,13 +216,17 @@ public class AutoPaths {
 
         if (getIfSelected(toStation)) {
             path.addAll(Arrays.asList(
-                    new AutoStep(AutoAction.DRIVE, -1, 8),
-                    new AutoStep(AutoAction.TURN, -60),
-                    // new AutoStep(AutoAction.DRIVE, getSidewaysDistance()), // actually... drive right 0.9 meters
-                    new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()+2.3, 8), // backward!!!
-                    new AutoStep(AutoAction.TURN, 54),
-                    new AutoStep(AutoAction.DRIVE, -1.2, 2.5),
-                    new AutoStep(AutoAction.WAIT, 2)));
+                    new AutoStep(AutoAction.SIDE_DRIVE, 1, 2), // TODO: test side drive
+                    new AutoStep(AutoAction.DRIVE, -4.9, 5)));
+                    
+                    // without side drive is a mess
+                    // new AutoStep(AutoAction.DRIVE, -1, 8),
+                    // new AutoStep(AutoAction.TURN, -60),
+                    // // new AutoStep(AutoAction.DRIVE, getSidewaysDistance()), // actually... drive right 0.9 meters
+                    // new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()+2.3, 8), // backward!!!
+                    // new AutoStep(AutoAction.TURN, 54),
+                    // new AutoStep(AutoAction.DRIVE, -1.2, 2.5),
+                    // new AutoStep(AutoAction.WAIT, 2)));
         } else {
             return path;
         }
@@ -230,30 +234,37 @@ public class AutoPaths {
         //Second coral! (second pt of auto)
         if (getIfSelected(toReefAgain)) {
             path.addAll(Arrays.asList(
-                    new AutoStep(AutoAction.DRIVE, 0.5, 8),
-                    new AutoStep(AutoAction.TURN, -54), // getAtStationTurnAngle()
-                    new AutoStep(AutoAction.DRIVE, 1.5, 8),
-                    new AutoStep(AutoAction.TURN, 60), // getAtStationTurnAngle()
+                    new AutoStep(AutoAction.SIDE_DRIVE, -1, 2),
+                    new AutoStep(AutoAction.DRIVE, 4.3, 4),
+
+                    // new AutoStep(AutoAction.DRIVE, 0.5, 8),
+                    // new AutoStep(AutoAction.TURN, -54), // getAtStationTurnAngle()
+                    // new AutoStep(AutoAction.DRIVE, 1.5, 8),
+                    // new AutoStep(AutoAction.TURN, 60), // getAtStationTurnAngle()
                     new AutoStep(AutoAction.ALIGN),
-                    new AutoStep(AutoAction.DRIVE, 0.5, 8)));
+                    new AutoStep(AutoAction.DRIVE, 0.25, 1)));
         } else {
             return path;
         }
 
         if (getIfSelected(placeCoralAgain)) {
-            path.add(new AutoStep(AutoAction.SHOOT, getAutoTargetHeight()));
+            path.add(new AutoStep(AutoAction.SHOOT, getAutoTargetHeight())); // might need to increase L4 1 inch
+            // TODO: wait 1 sec, drive to L2
         } else {
             return path;
         }
 
         if (getIfSelected(toStationAgain)) {
             path.addAll(Arrays.asList(
-                new AutoStep(AutoAction.DRIVE, -1, 8),
-                new AutoStep(AutoAction.TURN, -60),
-                // new AutoStep(AutoAction.DRIVE, getSidewaysDistance()), // actually... drive right 0.9 meters
-                new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()+2.3, 8), // backward!!!
-                new AutoStep(AutoAction.TURN, 54),
-                new AutoStep(AutoAction.DRIVE, -1.2, 2.5)));
+                new AutoStep(AutoAction.SIDE_DRIVE, 1, 2), // TODO: test side drive
+                new AutoStep(AutoAction.DRIVE, -4.9, 5)));
+
+                // new AutoStep(AutoAction.DRIVE, -1, 8),
+                // new AutoStep(AutoAction.TURN, -60),
+                // // new AutoStep(AutoAction.DRIVE, getSidewaysDistance()), // actually... drive right 0.9 meters
+                // new AutoStep(AutoAction.DRIVE, getDistanceToReefFromStation()+2.3, 8), // backward!!!
+                // new AutoStep(AutoAction.TURN, 54),
+                // new AutoStep(AutoAction.DRIVE, -1.2, 2.5)));
         }
         return path;
     }
