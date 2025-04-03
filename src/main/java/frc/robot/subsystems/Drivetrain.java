@@ -268,6 +268,7 @@ public class Drivetrain {
     resetEncoders();
     resetTurnEncoders();
     setBrakeMode();
+    step = AlignAction.NOT_RUNNING;
   }
 
   // This is for auto turning
@@ -284,7 +285,12 @@ public class Drivetrain {
   public boolean turnToAprilTagComplete() {
     alignTurnDifference = (getHeading() - targetAlignAngle);
 
-    return Math.abs(alignTurnDifference) < Constants.DriveConstants.TURN_TOLERANCE;
+    boolean complete = Math.abs(alignTurnDifference) < Constants.DriveConstants.TURN_TOLERANCE;
+    if (complete) {
+      System.out.println("Turn (limelight) complete");
+    }
+
+    return complete;
   }
 
   double stallStart = 0.0;
@@ -354,7 +360,6 @@ public class Drivetrain {
   // }
 
   public void startTurn(double angle) {
-    zeroHeading();
     this.targetAngle = (angle + getHeading());
   }
 
@@ -380,15 +385,15 @@ public class Drivetrain {
     autoSpeed = AutoConstants.MIN_AUTO_SPEED;
   }
 
-  public void autoAlignTurn( double periodSeconds, double targetAlignAngle) {
+  public void autoAlignTurn(double periodSeconds, double targetAlignAngle) {
     alignTurnDifference = (getHeading() - targetAlignAngle);
     
     if (Math.abs(alignTurnDifference) < Constants.DriveConstants.TURN_TOLERANCE) {
       drive(0, 0, 0, false, periodSeconds);
     } else if (alignTurnDifference < 0) {
-      drive(0, 0, 0.1 * Math.abs(gyroDifference) + 0.5, false, periodSeconds);
+      drive(0, 0, 0.05 * Math.abs(alignTurnDifference) + 0.5, false, periodSeconds);
     } else if (alignTurnDifference > 0) {
-      drive(0, 0, -0.1 * gyroDifference - 0.5, false, periodSeconds);
+      drive(0, 0, -0.05 * alignTurnDifference - 0.5, false, periodSeconds); // 0.1 * al
     }
   }
 
@@ -414,10 +419,14 @@ public class Drivetrain {
   //   }
   // }
 
-  public void resetAlignState() {
+  public void resetAlignStateWithButton() {
     if (DRIVE_CONTROLLER.getXButton()) {
-      step = AlignAction.NOT_RUNNING;
+      resetAlignState();
     }
+  }
+
+  public void resetAlignState() {
+    step = AlignAction.NOT_RUNNING;
   }
 
   public boolean triggersPressed() {
@@ -445,7 +454,7 @@ public class Drivetrain {
         step = AlignAction.TURN;
       } 
     } else if (step == AlignAction.TURN) {
-      if ((triggersPressed() && turnToAprilTagComplete())|| (isAuto && turnToAprilTagComplete())) {
+      if ((triggersPressed() && turnToAprilTagComplete()) || (isAuto && turnToAprilTagComplete())) {
         step = AlignAction.STRAFE_AND_RANGE;
       } else if (!triggersPressed()) {
         step = AlignAction.STOPPED;
@@ -488,7 +497,7 @@ public class Drivetrain {
 
   public void turnToAprilTag(double periodSeconds) {
     if (limelight.getAprilTagID() == 10 || limelight.getAprilTagID() == 21) {
-      autoAlignTurn(periodSeconds, -60); // TODO: CHANGE BACK TO 0
+      autoAlignTurn(periodSeconds, 0);
     } else if (limelight.getAprilTagID() == 20 || limelight.getAprilTagID() == 11) {
       autoAlignTurn(periodSeconds, -60); //change w testing
     } else if (limelight.getAprilTagID() == 22 || limelight.getAprilTagID() == 9) {

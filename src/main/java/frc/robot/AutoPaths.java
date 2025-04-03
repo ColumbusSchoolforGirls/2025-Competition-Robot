@@ -57,7 +57,7 @@ public class AutoPaths {
         CoralNumber coralNumber = coralNumberChooser.getSelected();
         int angle = 0;
         if (coralNumber == CoralNumber.ONE) {
-            angle = 50;
+            angle = 60;
         } else if (coralNumber == CoralNumber.TWO) {
             angle = 125;
         } else {
@@ -117,7 +117,7 @@ public class AutoPaths {
             return 0;
         } else if (startingPosition == StartingPosition.LEFT || startingPosition == StartingPosition.RIGHT) {
             if (coralNumber == CoralNumber.ONE) {
-                return 1.8;
+                return 1.5;
             } else if (coralNumber == CoralNumber.TWO) {
                 return 4.9;
             } else {

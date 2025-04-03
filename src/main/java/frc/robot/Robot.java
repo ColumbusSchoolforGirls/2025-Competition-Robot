@@ -62,10 +62,6 @@ public class Robot extends TimedRobot {
     swerve.updateSmartDashboard();
     swerve.testShuffle();
 
-    if (DRIVE_CONTROLLER.getRightBumperButtonPressed()) {
-      swerve.driveInit();
-    }
-
     SmartDashboard.putBoolean("limit swtich", coralSystem.isElevatorLimitReached());
 
 
@@ -78,8 +74,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    swerve.setBrakeMode();
     swerve.driveInit();
+    limelightCoral.setRightBranchPipeline();
     autoActions = autoPaths.buildPath();
     System.out.println("Auto path: ");
     autoActions.forEach(action -> System.out.println(action));
@@ -110,6 +106,7 @@ public class Robot extends TimedRobot {
         swerve.startTurn(currentAction.getValue());
         break;
       case ALIGN:
+        swerve.resetAlignState();
         break;
       case ELEVATOR:
         coralSystem.startElevatorAutoTimer();
@@ -224,7 +221,7 @@ public class Robot extends TimedRobot {
       swerve.autoAlignLimelight(getPeriod(), false);
     }
     // isFieldRelative(); //TODO: fix
-    swerve.resetAlignState();
+    swerve.resetAlignStateWithButton();
 
   }
 
