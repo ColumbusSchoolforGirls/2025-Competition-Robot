@@ -122,8 +122,12 @@ public class CoralSystem {
 
         resetEncodersWithLimitSwitch();
         
-        if (AUX.getRightBumperButton() && !isElevatorLimitReached()) {
-            driveElevator(normalElevatorSpeed);
+        if (AUX.getRightBumperButton()) {
+            if (!isElevatorLimitReached()) {
+                driveElevator(normalElevatorSpeed);
+            } else {
+                driveElevator(normalElevatorSpeed * 1/4);
+            }
 
         } else {
 
@@ -153,9 +157,6 @@ public class CoralSystem {
         double elevatorSpeed = -AUX.getLeftY(); //it is inverted
         if (Math.abs(elevatorSpeed) > CoralConstants.AUX_DEADZONE) {
             double speed = elevatorSpeed * normalElevatorSpeed;
-            if (isElevatorLimitReached()) {
-                speed *= 1/4;
-            }
             setElevator(speed);
         } else if (Math.abs(elevatorSpeed) < CoralConstants.AUX_DEADZONE) {
             setElevator(0);

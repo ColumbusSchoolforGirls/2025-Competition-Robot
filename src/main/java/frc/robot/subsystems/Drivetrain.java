@@ -401,7 +401,8 @@ public class Drivetrain {
     autoSpeed = AutoConstants.MIN_AUTO_SPEED;
   }
 
-  public void autoAlignTurn(double periodSeconds, double targetAlignAngle) {
+  public void autoAlignTurn(double periodSeconds, double target) {
+    targetAlignAngle = target;
     alignTurnDifference = (getHeading() - targetAlignAngle);
     
     if (Math.abs(alignTurnDifference) < Constants.DriveConstants.TURN_TOLERANCE) {
@@ -514,7 +515,7 @@ public class Drivetrain {
     } else if (limelight.getAprilTagID() == 22 || limelight.getAprilTagID() == 9) {
       autoAlignTurn(periodSeconds, 60); //change w testing
     } else if (limelight.getAprilTagID() == 19 || limelight.getAprilTagID() == 6) {
-      autoAlignTurn(periodSeconds, -150); //change w testing
+      autoAlignTurn(periodSeconds, 0); //change w testing //-150
     } else if (limelight.getAprilTagID() == 17 || limelight.getAprilTagID() == 8) {
       autoAlignTurn(periodSeconds, 150); //change w testing
     } else if (limelight.getAprilTagID() == 18 || limelight.getAprilTagID() == 7) {

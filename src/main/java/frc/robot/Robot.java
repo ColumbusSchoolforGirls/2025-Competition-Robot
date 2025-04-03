@@ -154,7 +154,7 @@ public class Robot extends TimedRobot {
         }
         break;
       case ALIGN: //TODO: need to add left and right align
-        if (swerve.isLimelightAligned()) {
+        if (swerve.isLimelightAligned() && swerve.isLimelightStrafeAligned()) {
           goToNextState();
         } else {
           swerve.autoAlignLimelight(getPeriod(), true);
@@ -194,7 +194,6 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     swerve.setBrakeMode();
     swerve.resetTurnEncoders();
-    coralSystem.resetElevatorEncoders();
     climber.setClimbZero();
     climber.setCoast();
   }
