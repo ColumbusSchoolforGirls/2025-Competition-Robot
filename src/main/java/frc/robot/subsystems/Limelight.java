@@ -4,6 +4,7 @@ import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
@@ -29,6 +30,7 @@ public class Limelight {
     double lastTAValue = NO_TA;
     double targetingForwardSpeed = 0;
     double targetingStrafeSpeed = 0;
+    double lastNoTagTime;
 
     LinearFilter filter = LinearFilter.singlePoleIIR(0.1, 0.02);
     
@@ -116,8 +118,16 @@ public class Limelight {
     public long getAprilTagID() {
         long currentAprilTagID = tid.getInteger(NO_APRIL_TAG_ID);
         if (currentAprilTagID == NO_APRIL_TAG_ID) {
+            if (lastNoTagTime == 0) {
+                lastNoTagTime = Timer.getFPGATimestamp();
+            } else {
+                if (Timer.getFPGATimestamp() - lastNoTagTime > 1) {
+                    return tid.getInteger(NO_APRIL_TAG_ID);
+                }
+            }
             return lastAprilTagID; 
         } else {
+            lastNoTagTime = 0;
             lastAprilTagID = currentAprilTagID;
             return currentAprilTagID;
         }

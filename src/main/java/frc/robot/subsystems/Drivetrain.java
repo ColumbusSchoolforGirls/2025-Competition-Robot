@@ -492,6 +492,11 @@ public class Drivetrain {
         stop(periodSeconds);
         System.out.println("step:" + step);
       }
+      if (limelight.getAprilTagID() == -1) {
+        step = AlignAction.STOPPED;
+        stop(periodSeconds);
+        System.out.println("step:" + step);
+      }
       strafeAndRange(periodSeconds);
     } else if (step == AlignAction.TURN_AGAIN) {
       if (turnToAprilTagComplete() || (!triggersPressed() && !isAuto)) {

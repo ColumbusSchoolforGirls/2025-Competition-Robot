@@ -154,7 +154,7 @@ public class Robot extends TimedRobot {
         }
         break;
       case ALIGN: //TODO: need to add left and right align
-        if (swerve.isLimelightAligned() && swerve.isLimelightStrafeAligned()) {
+        if (swerve.isStepStopped()) {
           goToNextState();
         } else {
           swerve.autoAlignLimelight(getPeriod(), true);
