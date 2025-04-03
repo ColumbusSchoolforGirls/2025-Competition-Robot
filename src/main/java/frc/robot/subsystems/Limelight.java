@@ -87,20 +87,20 @@ public class Limelight {
     // If your limelight and target are mounted at the same or similar heights, use
     // "ta" (area) for target ranging rather than "ty"
     public double limelight_range_proportional() { //brings it forward to desired area of target
-        double kP = .09;
+        double kP = .12;
         targetingForwardSpeed = Math.max(Math.sqrt(Math.abs((Constants.DriveConstants.TARGET_TA_VALUE - getLinearFilterTA()))), 0.1) * kP;// TODO: Add the limelight string back when we have the exact Apriltag ID
         targetingForwardSpeed *= DriveConstants.MAX_SPEED;
         targetingForwardSpeed *= 1.0;
-        return targetingForwardSpeed;
+        return Math.min(targetingForwardSpeed, 0.5);
     }
 
     public double limlight_strafe_proportional() { //gets it aligned in x axis
-        double kP = .03;
+        double kP = .015;
         targetingStrafeSpeed = getBestTX() * kP;// TODO: Add the limelight string back when we have the exact Apriltag ID
         System.out.println(getBestTX());
         targetingStrafeSpeed *= DriveConstants.MAX_SPEED;
         targetingStrafeSpeed *= 1.0;
-        return targetingStrafeSpeed;
+        return Math.min(targetingStrafeSpeed, 0.15);
     }
 
     

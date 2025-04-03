@@ -102,6 +102,9 @@ public class Robot extends TimedRobot {
       case DRIVE:
         swerve.startDrive(currentAction.getValue(), currentAction.getTimeLimit());
         break;
+      case SIDE_DRIVE:
+        swerve.startDrive(currentAction.getValue(), currentAction.getTimeLimit());
+        break;
       case TURN:
         swerve.startTurn(currentAction.getValue());
         break;
@@ -213,7 +216,7 @@ public class Robot extends TimedRobot {
     coralSystem.shoot();
     swerve.driverResetTurnEncoders();
     climber.climb();
-    coralSystem.elevator(0.85, -0.25, false, 0);
+    coralSystem.elevator(0.9, -0.3, false, 0);
 
     if (!swerve.isStepStopped()) {
       swerve.teleopAutoAlign();
@@ -280,34 +283,10 @@ public class Robot extends TimedRobot {
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
-    SmartDashboard.putBoolean("A", false);
-    SmartDashboard.putBoolean("B", false);
-    SmartDashboard.putBoolean("X", false);
-    SmartDashboard.putBoolean("Y", false);
   }
 
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {
-    if (AUX.getAButton()) {
-      SmartDashboard.putBoolean("A", true);
-    } else {
-      SmartDashboard.putBoolean("A", false);
-    }
-    if (AUX.getBButton()) {
-      SmartDashboard.putBoolean("B", true);
-    } else {
-      SmartDashboard.putBoolean("B", false);
-    }
-    if (AUX.getXButton()) {
-      SmartDashboard.putBoolean("X", true);
-    } else {
-      SmartDashboard.putBoolean("X", false);
-    }
-    if (AUX.getYButton()) {
-      SmartDashboard.putBoolean("Y", true);
-    } else {
-      SmartDashboard.putBoolean("Y", false);
-    }
   }
 }

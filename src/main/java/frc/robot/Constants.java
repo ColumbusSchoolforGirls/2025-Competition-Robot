@@ -109,7 +109,7 @@ public class Constants {
         // Height in inches of coral node from default height (0 is L2).
         public static final double L2_HEIGHT = 0; // 31.875 from floor
         public static final double L3_HEIGHT = 15/2; //14.5 47.625 from floor //divided in half because of the elevator
-        public static final double L4_HEIGHT = 37/2; // 72 from floor; //divided in half because of the elevator
+        public static final double L4_HEIGHT = 38/2; // 72 from floor; //divided in half because of the elevator
 
         public static final int SHOOT_ID = 10;
         public static final int ELEVATOR_ID = 14;

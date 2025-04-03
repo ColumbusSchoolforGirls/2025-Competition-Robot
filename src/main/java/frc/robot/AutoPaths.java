@@ -189,10 +189,10 @@ public class AutoPaths {
         ArrayList<AutoStep> path = new ArrayList<>();
 
         if (getIfSelected(leaveOnly)) { // TODO: remove testing
-            // path.add(new AutoStep(AutoAction.DRIVE, AutoConstants.LEAVE_ONLY_DISTANCE, 3));
-            path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L4_HEIGHT));
-            path.add(new AutoStep(AutoAction.SHOOT, CoralConstants.L4_HEIGHT));
-            path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L2_HEIGHT));
+            path.add(new AutoStep(AutoAction.DRIVE, AutoConstants.LEAVE_ONLY_DISTANCE, 2));
+            // path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L4_HEIGHT));
+            // path.add(new AutoStep(AutoAction.SHOOT, CoralConstants.L4_HEIGHT));
+            // path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L2_HEIGHT));
             return path;
         }
 

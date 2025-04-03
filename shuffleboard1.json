@@ -329,6 +329,21 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "5,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/limit swtich",
+              "_title": "SmartDashboard/limit swtich",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
           }
         }
       }
@@ -679,7 +694,7 @@
   "windowGeometry": {
     "x": -6.666666507720947,
     "y": 1.3333333730697632,
-    "width": 1292.0,
+    "width": 1292.6666259765625,
     "height": 685.3333129882812
   }
 }

@@ -282,8 +282,17 @@ public class Drivetrain {
     return Math.abs(gyroDifference) < Constants.DriveConstants.TURN_TOLERANCE;
   }
 
+  public double getSimplifiedHeading() {
+    double simplifiedHeading = getHeading()%360;
+    if (simplifiedHeading > 180) {
+      return simplifiedHeading - 360;
+    } else {
+      return simplifiedHeading;
+    }
+  }
+
   public boolean turnToAprilTagComplete() {
-    alignTurnDifference = (getHeading() - targetAlignAngle);
+    alignTurnDifference = (getSimplifiedHeading() - targetAlignAngle);
 
     boolean complete = Math.abs(alignTurnDifference) < Constants.DriveConstants.TURN_TOLERANCE;
     if (complete) {
@@ -309,7 +318,7 @@ public class Drivetrain {
       System.out.println("Reached drive target");
       return true;
     }
-    System.out.println(driveDifference);
+    // System.out.println(driveDifference);
 
     // the IMU velocty functions are inconsistent and not reliable, do not use, maybe use this as an outline for current spike detection
   //   if (Math.abs(gyro.getVelocityY()) < 0.01) {
@@ -382,6 +391,7 @@ public class Drivetrain {
   public void updateDistanceAndAngleValues() {
     SmartDashboard.putNumber("gyro angle", getHeading());
     SmartDashboard.putNumber("distance", frontLeft.getDrivePositionMeters());
+    SmartDashboard.putNumber("simplified heading:", getSimplifiedHeading());
   }
 
   public void resetGyro() {
@@ -520,11 +530,11 @@ public class Drivetrain {
     } else if (limelight.getAprilTagID() == 22 || limelight.getAprilTagID() == 9) {
       autoAlignTurn(periodSeconds, 60); //change w testing
     } else if (limelight.getAprilTagID() == 19 || limelight.getAprilTagID() == 6) {
-      autoAlignTurn(periodSeconds, 0); //change w testing //-150
+      autoAlignTurn(periodSeconds, -150); //change w testing //-150
     } else if (limelight.getAprilTagID() == 17 || limelight.getAprilTagID() == 8) {
       autoAlignTurn(periodSeconds, 150); //change w testing
     } else if (limelight.getAprilTagID() == 18 || limelight.getAprilTagID() == 7) {
-      autoAlignTurn(periodSeconds, 180); 
+      autoAlignTurn(periodSeconds, 0); //180
     }
   }
 
