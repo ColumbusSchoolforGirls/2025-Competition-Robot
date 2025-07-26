@@ -51,7 +51,6 @@ public class Robot extends TimedRobot {
     autoPaths.autoShuffleboardStartup();
     coralSystem.resetElevatorEncoders();
     coralSystem.setShootMotor();
-    swerve.setAlignStateNotRunning();
   }
 
   @Override
@@ -109,7 +108,6 @@ public class Robot extends TimedRobot {
         swerve.startTurn(currentAction.getValue());
         break;
       case ALIGN:
-        swerve.resetAlignState();
         break;
       case ELEVATOR:
         coralSystem.startElevatorAutoTimer();
@@ -157,10 +155,19 @@ public class Robot extends TimedRobot {
         }
         break;
       case ALIGN: //TODO: need to add left and right align
-        if (swerve.isStepStopped()) {
+        // if (swerve.turnToAprilTagComplete() && swerve.isLimelightAligned()) {
+        //   goToNextState();
+        // } else {
+        //   if (swerve.isLimelightAligned()) {
+        //     swerve.turnToAprilTag(getPeriod());
+        //   } else {
+        //     swerve.autoAlignLimelight(getPeriod());
+        //   }
+        // }
+        if (swerve.isLimelightAligned()) {
           goToNextState();
         } else {
-          swerve.autoAlignLimelight(getPeriod(), true);
+          swerve.autoAlignLimelight(getPeriod());
         }
         break;
       case ELEVATOR:
@@ -179,7 +186,7 @@ public class Robot extends TimedRobot {
         }
         break;
       case WAIT: 
-        if (Timer.getFPGATimestamp() - startWaitTime > 5) {
+        if (Timer.getFPGATimestamp() - startWaitTime > currentAction.getValue()) {
           startWaitTime = 0;
           System.out.println("Wait complete");
           goToNextState();
@@ -218,12 +225,15 @@ public class Robot extends TimedRobot {
     climber.climb();
     coralSystem.elevator(0.9, -0.3, false, 0);
 
-    if (!swerve.isStepStopped()) {
-      swerve.teleopAutoAlign();
-      swerve.autoAlignLimelight(getPeriod(), false);
-    }
-    // isFieldRelative(); //TODO: fix
-    swerve.resetAlignStateWithButton();
+    swerve.teleopAutoAlign(getPeriod());
+    swerve.teleopTurnToAprilTag(getPeriod());
+
+    // if (!swerve.isStepStopped()) {
+    //   swerve.teleopAutoAlign();
+    //   swerve.autoAlignLimelight(getPeriod(), false);
+    // }
+    // // isFieldRelative(); //TODO: fix
+    // swerve.resetAlignStateWithButton();
 
   }
 

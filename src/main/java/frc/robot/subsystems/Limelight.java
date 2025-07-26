@@ -86,24 +86,62 @@ public class Limelight {
     // best if your Limelight's mount height and target mount height are different.
     // If your limelight and target are mounted at the same or similar heights, use
     // "ta" (area) for target ranging rather than "ty"
-    public double limelight_range_proportional() { //brings it forward to desired area of target
-        double kP = .12;
-        targetingForwardSpeed = Math.max(Math.sqrt(Math.abs((Constants.DriveConstants.TARGET_TA_VALUE - getLinearFilterTA()))), 0.1) * kP;// TODO: Add the limelight string back when we have the exact Apriltag ID
-        targetingForwardSpeed *= DriveConstants.MAX_SPEED;
-        targetingForwardSpeed *= 1.0;
-        return Math.min(targetingForwardSpeed, 0.5);
-    }
+    // public double limelight_range_proportional() { //brings it forward to desired area of target
+    //     double kP = .12;
+    //     targetingForwardSpeed = Math.max(Math.sqrt(Math.abs((Constants.DriveConstants.TARGET_TA_VALUE - getLinearFilterTA()))), 0.1) * kP;// TODO: Add the limelight string back when we have the exact Apriltag ID
+    //     targetingForwardSpeed *= DriveConstants.MAX_SPEED;
+    //     targetingForwardSpeed *= 1.0;
+    //     return Math.min(targetingForwardSpeed, 0.5);
+    // }
 
-    public double limlight_strafe_proportional() { //gets it aligned in x axis
-        double kP = .015;
-        targetingStrafeSpeed = getBestTX() * kP;// TODO: Add the limelight string back when we have the exact Apriltag ID
-        System.out.println(getBestTX());
-        targetingStrafeSpeed *= DriveConstants.MAX_SPEED;
-        targetingStrafeSpeed *= 1.0;
-        return Math.min(targetingStrafeSpeed, 0.15);
-    }
+    // public double limlight_strafe_proportional() { //gets it aligned in x axis
+    //     double kP = .015;
+    //     targetingStrafeSpeed = getBestTX() * kP;// TODO: Add the limelight string back when we have the exact Apriltag ID
+    //     System.out.println(getBestTX());
+    //     targetingStrafeSpeed *= DriveConstants.MAX_SPEED;
+    //     targetingStrafeSpeed *= 1.0;
+    //     return Math.min(targetingStrafeSpeed, 0.15);
+    // }
 
+    public double limelight_aim_proportional() {
+        // kP (constant of proportionality)
+        // this is a hand-tuned number that determines the aggressiveness of our proportional control loop
+        // if it is too high, the robot will oscillate.
+        // if it is too low, the robot will never reach its target
+        // if the robot never turns in the correct direction, kP should be inverted.
+        double kP = .035;
+
+        
+
+        // tx ranges from (-hfov/2) to (hfov/2) in degrees. If your target is on the
+        // rightmost edge of your limelight 3 feed, tx should return roughly 31 degrees.
+        double targetingAngularVelocity = getBestTX() * kP; // TODO: Add the limelight string back when we have the exact Apriltag ID
+
+        // convert to radians per second for our drive method
+        targetingAngularVelocity *= DriveConstants.MAX_ANGULAR_SPEED*0.2; //TODO: make into constant
+
+        // invert since tx is positive when the target is to the right of the crosshair
+
+            return targetingAngularVelocity;
+   
+        }
     
+    // Simple proportional ranging control with Limelight's "ty" value this works
+    // best if your Limelight's mount height and target mount height are different.
+    // If your limelight and target are mounted at the same or similar heights, use
+    // "ta" (area) for target ranging rather than "ty"
+    public double limelight_range_proportional() {
+        double kP = .09;
+        double targetingForwardSpeed = Math.max(Math.sqrt(Constants.DriveConstants.TARGET_TA_VALUE - getBestTA()), 0.1) * kP;// TODO: Add the limelight string back when we have the exact Apriltag ID
+        targetingForwardSpeed *= DriveConstants.LIMELIGHT_MAX_SPEED;
+        targetingForwardSpeed *= 1.0;
+        return targetingForwardSpeed;
+    }
+
+    /** Get rotation z value from botpose array. */
+    public double getRotation() {
+        return pos.getDoubleArray(new double[6])[5];
+    }
 
     /** Get rotation z value from botpose array. */
     
@@ -111,9 +149,9 @@ public class Limelight {
         pipeline.setNumber(0);
     }
 
-    public void setLeftBranchPipeline() {
-        pipeline.setNumber(1);
-    }
+    // public void setLeftBranchPipeline() {
+    //     pipeline.setNumber(1);
+    // }
 
     public long getAprilTagID() {
         long currentAprilTagID = tid.getInteger(NO_APRIL_TAG_ID);
@@ -140,10 +178,10 @@ public class Limelight {
     public double getBestTX() {
         double currentTX = getTX();
         if (currentTX == NO_TX) {
-            return lastTXValue;
+            return lastTXValue + 1.6;
         } else {
             lastTXValue = currentTX;
-            return currentTX;
+            return currentTX + 1.6;
         }
     }
 

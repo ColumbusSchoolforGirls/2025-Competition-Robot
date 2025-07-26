@@ -38,13 +38,13 @@ public class Drivetrain {
   private double positiveFactor;
   private double autoSpeed;
 
-  AlignAction step = AlignAction.NOT_RUNNING;
+  //AlignAction step = AlignAction.NOT_RUNNING;
 
-  enum AlignAction {
-    TURN, STRAFE_AND_RANGE, DRIVE_FORWARD, DRIVE_SIDEWAYS, NOT_RUNNING, STOPPED, TURN_AGAIN
-  }
+  // enum AlignAction {
+  //   TURN, STRAFE_AND_RANGE, DRIVE_FORWARD, DRIVE_SIDEWAYS, NOT_RUNNING, STOPPED, TURN_AGAIN
+  // }
 
-  AlignAction[] alignActions = {};
+  //AlignAction[] alignActions = {};
 
   private final Translation2d frontLeftLocation = new Translation2d(DriveConstants.TRANSLATION_2D_OFFSET,
       -DriveConstants.TRANSLATION_2D_OFFSET);
@@ -176,7 +176,7 @@ public class Drivetrain {
   /* Updates the front left swerve module on dashboard FOR TESTING. */
   public void updateSmartDashboard() {
     frontLeft.updateSmartDashboard();
-    SmartDashboard.putString("step", step.toString());
+    //SmartDashboard.putString("step", step.toString());
   }
 
   /** Returns the currently-estimated pose of the robot. */
@@ -268,7 +268,7 @@ public class Drivetrain {
     resetEncoders();
     resetTurnEncoders();
     setBrakeMode();
-    step = AlignAction.NOT_RUNNING;
+    //step = AlignAction.NOT_RUNNING;
   }
 
   // This is for auto turning
@@ -313,6 +313,7 @@ public class Drivetrain {
 
   public boolean driveComplete() {
     driveDifference = targetDistance - Math.abs(frontLeft.getDrivePositionMeters());
+    System.out.println("difference " + driveDifference);
     if ((Math.abs(driveDifference) < Constants.DriveConstants.DISTANCE_TOLERANCE) || (Timer.getFPGATimestamp() - startDriveTime > autoDriveTimeLimit))  {
       stallStart = 0.0;
       System.out.println("Reached drive target");
@@ -339,6 +340,7 @@ public class Drivetrain {
 
   public void autoDrive(double periodSeconds) {
     driveDifference = targetDistance - Math.abs(frontLeft.getDrivePositionMeters());
+    System.out.println(frontLeft.getDrivePositionMeters());
 
     if (Math.abs(driveDifference) > Constants.DriveConstants.DISTANCE_TOLERANCE) {
       if (Math.abs(driveDifference) < 0.5) {
@@ -446,133 +448,165 @@ public class Drivetrain {
   //   }
   // }
 
-  public void resetAlignStateWithButton() {
-    if (DRIVE_CONTROLLER.getXButton()) {
-      resetAlignState();
-    }
-  }
+  // public void resetAlignStateWithButton() {
+  //   if (DRIVE_CONTROLLER.getXButton()) {
+  //     resetAlignState();
+  //   }
+  // }
 
-  public void resetAlignState() {
-    step = AlignAction.NOT_RUNNING;
-  }
+  // public void resetAlignState() {
+  //   step = AlignAction.NOT_RUNNING;
+  // }
 
-  public boolean triggersPressed() {
-    return DRIVE_CONTROLLER.getLeftTriggerAxis() > Constants.ControllerConstants.TRIGGER_DEADZONE || DRIVE_CONTROLLER.getRightTriggerAxis() > Constants.ControllerConstants.TRIGGER_DEADZONE;
-  }
+  // public boolean triggersPressed() {
+  //   return DRIVE_CONTROLLER.getLeftTriggerAxis() > Constants.ControllerConstants.TRIGGER_DEADZONE || DRIVE_CONTROLLER.getRightTriggerAxis() > Constants.ControllerConstants.TRIGGER_DEADZONE;
+  // }
 
-  public void strafeAndRange(double periodSeconds) {
-    final var strafe_limelight = limelight.limlight_strafe_proportional();
-    final var forward_limelight = limelight.limelight_range_proportional();
-    boolean fieldRelative = false;
-    this.drive(forward_limelight, strafe_limelight, 0.0, fieldRelative, periodSeconds);
-  }
+  // public void strafeAndRange(double periodSeconds) {
+  //   final var strafe_limelight = limelight.limlight_strafe_proportional();
+  //   final var forward_limelight = limelight.limelight_range_proportional();
+  //   boolean fieldRelative = false;
+  //   this.drive(forward_limelight, strafe_limelight, 0.0, fieldRelative, periodSeconds);
+  // }
 
-  public void setAlignStateNotRunning() {
-    step = AlignAction.NOT_RUNNING;
-  }
+  // public void setAlignStateNotRunning() {
+  //   step = AlignAction.NOT_RUNNING;
+  // }
 
-  public void autoAlignLimelight(double periodSeconds, boolean isAuto) {
+  // public void autoAlignLimelight(double periodSeconds, boolean isAuto) {
     //final var rot_limelight = limelight.limelight_aim_proportional();
     // while using Limelight, turn off field-relative driving.
 
-    if (step == AlignAction.NOT_RUNNING) {
-      if (triggersPressed() || isAuto) { //TODO: need to make sure auto can be implemented
-        step = AlignAction.TURN;
-        System.out.println("step:" + step);
-      } 
-    } else if (step == AlignAction.TURN) {
-      if (((triggersPressed() || isAuto) && turnToAprilTagComplete())) {
-        step = AlignAction.STRAFE_AND_RANGE;
-        System.out.println("step:" + step);
-      } else if (!triggersPressed() && !isAuto) {
-        step = AlignAction.STOPPED;
-        stop(periodSeconds);
-        System.out.println("step:" + step);
-      }
-      turnToAprilTag(periodSeconds);
-    } else if (step == AlignAction.STRAFE_AND_RANGE) {
-      //turnToAprilTag(periodSeconds);
-      if (((triggersPressed() || isAuto) && isLimelightAligned() && isLimelightStrafeAligned())) {
-        //resetTurnEncoders();
-        step = AlignAction.STOPPED; // TURN_AGAIN
-        stop(periodSeconds);
-        System.out.println("step:" + step);
-      } else if ((!triggersPressed() && !isAuto)) {
-        step = AlignAction.STOPPED;
-        stop(periodSeconds);
-        System.out.println("step:" + step);
-      }
-      if (limelight.getAprilTagID() == -1) {
-        step = AlignAction.STOPPED;
-        stop(periodSeconds);
-        System.out.println("step:" + step);
-      }
-      strafeAndRange(periodSeconds);
-    } else if (step == AlignAction.TURN_AGAIN) {
-      if (turnToAprilTagComplete() || (!triggersPressed() && !isAuto)) {
-        step = AlignAction.STOPPED;
-        stop(periodSeconds);
-        System.out.println("step:" + step);
-      }
-      turnToAprilTag(periodSeconds);
-    }
-  }
+  //   if (step == AlignAction.NOT_RUNNING) {
+  //     if (triggersPressed() || isAuto) { //TODO: need to make sure auto can be implemented
+  //       step = AlignAction.TURN;
+  //       System.out.println("step:" + step);
+  //     } 
+  //   } else if (step == AlignAction.TURN) {
+  //     if (((triggersPressed() || isAuto) && turnToAprilTagComplete())) {
+  //       step = AlignAction.STRAFE_AND_RANGE;
+  //       System.out.println("step:" + step);
+  //     } else if (!triggersPressed() && !isAuto) {
+  //       step = AlignAction.STOPPED;
+  //       stop(periodSeconds);
+  //       System.out.println("step:" + step);
+  //     }
+  //     turnToAprilTag(periodSeconds);
+  //   } else if (step == AlignAction.STRAFE_AND_RANGE) {
+  //     //turnToAprilTag(periodSeconds);
+  //     if (((triggersPressed() || isAuto) && isLimelightAligned() && isLimelightStrafeAligned())) {
+  //       //resetTurnEncoders();
+  //       step = AlignAction.STOPPED; // TURN_AGAIN
+  //       stop(periodSeconds);
+  //       System.out.println("step:" + step);
+  //     } else if ((!triggersPressed() && !isAuto)) {
+  //       step = AlignAction.STOPPED;
+  //       stop(periodSeconds);
+  //       System.out.println("step:" + step);
+  //     }
+  //     if (limelight.getAprilTagID() == -1) {
+  //       step = AlignAction.STOPPED;
+  //       stop(periodSeconds);
+  //       System.out.println("step:" + step);
+  //     }
+  //     strafeAndRange(periodSeconds);
+  //   } else if (step == AlignAction.TURN_AGAIN) {
+  //     if (turnToAprilTagComplete() || (!triggersPressed() && !isAuto)) {
+  //       step = AlignAction.STOPPED;
+  //       stop(periodSeconds);
+  //       System.out.println("step:" + step);
+  //     }
+  //     turnToAprilTag(periodSeconds);
+  //   }
+  // }
 
-  public boolean isStepStopped() {
-    return step == AlignAction.STOPPED;
-  }
+  // public boolean isStepStopped() {
+  //   return step == AlignAction.STOPPED;
+  // }
 
   public void turnToAprilTag(double periodSeconds) {
     if (limelight.getAprilTagID() == 10 || limelight.getAprilTagID() == 21) {
       autoAlignTurn(periodSeconds, 0);
     } else if (limelight.getAprilTagID() == 20 || limelight.getAprilTagID() == 11) {
-      autoAlignTurn(periodSeconds, -60); //change w testing
+      autoAlignTurn(periodSeconds, -60);
     } else if (limelight.getAprilTagID() == 22 || limelight.getAprilTagID() == 9) {
-      autoAlignTurn(periodSeconds, 60); //change w testing
+      autoAlignTurn(periodSeconds, 60);
     } else if (limelight.getAprilTagID() == 19 || limelight.getAprilTagID() == 6) {
-      autoAlignTurn(periodSeconds, -150); //change w testing //-150
+      autoAlignTurn(periodSeconds, -150);
     } else if (limelight.getAprilTagID() == 17 || limelight.getAprilTagID() == 8) {
-      autoAlignTurn(periodSeconds, 150); //change w testing
+      autoAlignTurn(periodSeconds, 150);
     } else if (limelight.getAprilTagID() == 18 || limelight.getAprilTagID() == 7) {
-      autoAlignTurn(periodSeconds, 0); //180
+      autoAlignTurn(periodSeconds, 0);
     }
   }
 
-  public void teleopAutoAlign() {
+  public void teleopTurnToAprilTag(double periodSeconds) {
     if (DRIVE_CONTROLLER.getRightTriggerAxis() > Constants.ControllerConstants.TRIGGER_DEADZONE) {
-      limelight.setRightBranchPipeline();
-      //autoAlignLimelight(periodSeconds);
-    } else if (DRIVE_CONTROLLER.getLeftTriggerAxis() > Constants.ControllerConstants.TRIGGER_DEADZONE) {
-      limelight.setLeftBranchPipeline();
-      //autoAlignLimelight(periodSeconds);
+      turnToAprilTag(periodSeconds);
     }
   }
+
+  public void autoAlignLimelight(double periodSeconds) {
+    final var rot_limelight = limelight.limelight_aim_proportional();
+    final var forward_limelight = limelight.limelight_range_proportional();
+    // while using Limelight, turn off field-relative driving.
+    boolean fieldRelative = false;
+
+    if (!isLimelightAligned()) {
+      this.drive(forward_limelight, 0.0, rot_limelight, fieldRelative, periodSeconds);
+    }
+  }
+
+  public void teleopAutoAlign(double periodSeconds) {
+    if (DRIVE_CONTROLLER.getXButton()) {
+      autoAlignLimelight(periodSeconds);
+
+    }
+  }
+
+  public boolean isLimelightAligned() {
+    // double tx = limelight.getTX();
+    // double ty = limelight.getTY();
+    double ta = limelight.getBestTA();
+    // TODO: tune these on robot
+    return (Math.abs(ta) > Constants.DriveConstants.TARGET_TA_VALUE);
+  }
+
+  // public void teleopAutoAlign() {
+  //   if (DRIVE_CONTROLLER.getRightTriggerAxis() > Constants.ControllerConstants.TRIGGER_DEADZONE) {
+  //     limelight.setRightBranchPipeline();
+  //     //autoAlignLimelight(periodSeconds);
+  //   } else if (DRIVE_CONTROLLER.getLeftTriggerAxis() > Constants.ControllerConstants.TRIGGER_DEADZONE) {
+  //     limelight.setLeftBranchPipeline();
+  //     //autoAlignLimelight(periodSeconds);
+  //   }
+  // }
 
   // public boolean isLimelightAngleAligned() {
   //   double rot = limelight.getRotation(); //rotation
   //   return (Math.abs(rot) < Constants.DriveConstants.ROTATION_TOLERANCE);
   // }
 
-  public boolean isLimelightStrafeAligned() {
-    double tx = limelight.getBestTX();
-    boolean aligned = (Math.abs(tx) < Constants.DriveConstants.TX_TOLERANCE);
-    if (aligned) {
-      System.out.println("STRAFE Aligned");
-    }
-    return aligned;
-  }
+  // public boolean isLimelightStrafeAligned() {
+  //   double tx = limelight.getBestTX();
+  //   boolean aligned = (Math.abs(tx) < Constants.DriveConstants.TX_TOLERANCE);
+  //   if (aligned) {
+  //     System.out.println("STRAFE Aligned");
+  //   }
+  //   return aligned;
+  // }
 
-  public boolean isLimelightAligned() {
-    // double tx = limelight.getTX();
-    // double ty = limelight.getTY();
-    double ta = limelight.getLinearFilterTA();
-    // TODO: tune these on robot
-    boolean aligned = (Math.abs(ta) >= Constants.DriveConstants.TARGET_TA_VALUE - 0.02);
-    if (aligned) {
-      System.out.println("Aligned");
-    }
-    return aligned;
-  }
+  // public boolean isLimelightAligned() {
+  //   // double tx = limelight.getTX();
+  //   // double ty = limelight.getTY();
+  //   double ta = limelight.getLinearFilterTA();
+  //   // TODO: tune these on robot
+  //   boolean aligned = (Math.abs(ta) >= Constants.DriveConstants.TARGET_TA_VALUE - 0.02);
+  //   if (aligned) {
+  //     System.out.println("Aligned");
+  //   }
+  //   return aligned;
+  // }
 
   public void stop(double periodSeconds) {
     drive(0, 0, 0, false, periodSeconds);

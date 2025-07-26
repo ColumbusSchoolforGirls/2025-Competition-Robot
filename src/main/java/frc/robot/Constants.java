@@ -47,7 +47,8 @@ public class Constants {
 
         public static final double ROTATION_TOLERANCE = 3;
 
-        public static final double MAX_SPEED = 3.0; // 3 meters per second
+        public static final double MAX_SPEED = 4.0; // 3 meters per second
+        public static final double LIMELIGHT_MAX_SPEED = 3.0; // 3 meters per second
         public static final double MAX_ANGULAR_SPEED = Math.PI * 2; // 1 rotation per second
 
         public static final double TRANSLATION_2D_OFFSET = 0.3048; // 12 inches to meters
@@ -83,7 +84,7 @@ public class Constants {
 
         public static final double TX_TOLERANCE = 2.0;
         public static final double TY_TOLERANCE = 2.0;
-        public static final double TARGET_TA_VALUE = 12.5; //was 12.8
+        public static final double TARGET_TA_VALUE = 5.35; //was 12.8
 
         public static final double METERS_TO_INCHES = 39.37; //inches/meter
 
@@ -109,7 +110,8 @@ public class Constants {
         // Height in inches of coral node from default height (0 is L2).
         public static final double L2_HEIGHT = 0; // 31.875 from floor
         public static final double L3_HEIGHT = 15/2; //14.5 47.625 from floor //divided in half because of the elevator
-        public static final double L4_HEIGHT = 38/2; // 72 from floor; //divided in half because of the elevator
+        public static final double L4_HEIGHT = 35.25/2; // 72 from floor; //divided in half because of the elevator
+        public static final double L4_PUSH_HEIGHT = 36/2;
 
         public static final int SHOOT_ID = 10;
         public static final int ELEVATOR_ID = 14;

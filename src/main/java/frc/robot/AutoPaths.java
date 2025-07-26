@@ -61,7 +61,7 @@ public class AutoPaths {
         } else if (coralNumber == CoralNumber.TWO) {
             angle = 125;
         } else {
-            angle = 125; // to be safe for now, edit
+            angle = 60; // to be safe for now, edit
         }
         if (startingPosition == StartingPosition.MIDDLE) {
             return 0;
@@ -189,10 +189,15 @@ public class AutoPaths {
         ArrayList<AutoStep> path = new ArrayList<>();
 
         if (getIfSelected(leaveOnly)) { // TODO: remove testing
-            path.add(new AutoStep(AutoAction.DRIVE, AutoConstants.LEAVE_ONLY_DISTANCE, 2));
-            // path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L4_HEIGHT));
-            // path.add(new AutoStep(AutoAction.SHOOT, CoralConstants.L4_HEIGHT));
-            // path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L2_HEIGHT));
+            // path.add(new AutoStep(AutoAction.DRIVE, AutoConstants.LEAVE_ONLY_DISTANCE, 2));
+            path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L4_HEIGHT));
+            path.add(new AutoStep(AutoAction.SHOOT, getAutoTargetHeight()));
+            if (coralLevelChooser.getSelected() == CoralLevel.L4) {
+                path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L4_PUSH_HEIGHT));
+                path.add (new AutoStep(AutoAction.WAIT, 1));
+            }
+            // path.add(new AutoStep(AutoAction.DRIVE, -0.2, 1));
+            path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L2_HEIGHT));
             return path;
         }
 
@@ -201,7 +206,7 @@ public class AutoPaths {
                 new AutoStep(AutoAction.DRIVE, getDriveDistance(), 8),
                 new AutoStep(AutoAction.TURN, getInitialTurnAngle()),
                 new AutoStep(AutoAction.ALIGN), 
-                new AutoStep(AutoAction.DRIVE, 0.25, 1), //TODO: test: 30 centimeters to reef after aligning??
+                new AutoStep(AutoAction.DRIVE, 0.72, 1),
                 new AutoStep(AutoAction.ELEVATOR, getAutoTargetHeight())));
         } else {
             return path;
@@ -209,7 +214,12 @@ public class AutoPaths {
 
         if (getIfSelected(placeCoral)) {
             path.add(new AutoStep(AutoAction.SHOOT, getAutoTargetHeight()));
-            //path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L2_HEIGHT)); // add back after testing
+            if (coralLevelChooser.getSelected() == CoralLevel.L4) {
+                path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L4_PUSH_HEIGHT));
+                path.add (new AutoStep(AutoAction.WAIT, 1));
+            }
+            path.add(new AutoStep(AutoAction.DRIVE, -0.2, 1));
+            path.add(new AutoStep(AutoAction.ELEVATOR, CoralConstants.L2_HEIGHT));
         } else {
             return path;
         }
@@ -218,6 +228,7 @@ public class AutoPaths {
             path.addAll(Arrays.asList(
                     new AutoStep(AutoAction.SIDE_DRIVE, 1, 2), // TODO: test side drive
                     new AutoStep(AutoAction.DRIVE, -4.9, 5)));
+                    new AutoStep(AutoAction.WAIT, 4);
                     
                     // without side drive is a mess
                     // new AutoStep(AutoAction.DRIVE, -1, 8),
